@@ -1,0 +1,9 @@
+services:
+  ecommerceportfolio.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfolioapi
+    build:
+      context: .
+      dockerfile: EcommercePortfolio.API/Dockerfile
+    ports:
+      - "5050:5050"
+      - "5051:5051"
