@@ -1,4 +1,4 @@
-﻿namespace EcommercePortfolio.Domain.Payment;
+﻿namespace EcommercePortfolio.Domain.Payments;
 
 public interface IPaymentService
 {

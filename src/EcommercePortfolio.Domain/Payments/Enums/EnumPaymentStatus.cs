@@ -1,4 +1,4 @@
-﻿namespace EcommercePortfolio.Domain.Payment.Enums;
+﻿namespace EcommercePortfolio.Domain.Payments.Enums;
 
 public enum EnumPaymentStatus
 {

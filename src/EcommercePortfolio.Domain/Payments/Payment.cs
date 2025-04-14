@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Core.Domain;
-using EcommercePortfolio.Domain.Payment.Enums;
+using EcommercePortfolio.Domain.Payments.Enums;
 
-namespace EcommercePortfolio.Domain.Payment;
+namespace EcommercePortfolio.Domain.Payments;
 
 public class Payment : Entity, IAggregateRoot
 {
