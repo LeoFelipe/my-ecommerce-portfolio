@@ -1,12 +1,13 @@
-﻿using EcommercePortfolio.Domain.Carts.Entities;
+﻿using EcommercePortfolio.Core.Data;
+using EcommercePortfolio.Domain.Carts.Entities;
 
 namespace EcommercePortfolio.Domain.Carts;
 
 public interface ICartRepository
 {
-    Task<Cart> GetById(Guid id);
     Task<IEnumerable<Cart>> GetByClientId(Guid clientId);
-    void Add(Cart order);
-    void Update(Cart order);
-    void Remove(Cart order);
+    Task<Cart> GetById(string id);
+    Task Add(Cart cart);
+    void Update(Cart cart);
+    void Remove(Cart cart);
 }

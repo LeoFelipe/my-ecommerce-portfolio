@@ -2,7 +2,7 @@
 
 namespace EcommercePortfolio.Domain.Carts.Entities;
 
-public class CartItem : Entity
+public class CartItem
 {
     public Guid ProductId { get; private set; }
     public string ProductName { get; private set; }

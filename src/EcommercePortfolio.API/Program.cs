@@ -11,15 +11,17 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddDbContext<MongoDbContext>(opt =>
+    opt.UseMongoDB("mongodb://mongo:mongo_password@localhost:27017/", "ecommerce-portfolio"));
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
 builder.Services.AddDependencyInjections();
 
 var section = builder.Configuration.GetSection("ExternalApiSettings");
 var settings = section.Get<ExternalApiSettings>();
 
 builder.Services.AddHttpClientConfiguration(settings);
-
-builder.Services.AddDbContextPool<PostgresDbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDbContext")));
 
 var app = builder.Build();
 
