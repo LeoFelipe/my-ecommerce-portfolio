@@ -3,7 +3,7 @@ using EcommercePortfolio.Domain.Orders.Enums;
 
 namespace EcommercePortfolio.Domain.Orders.Entities;
 
-public class Order : Entity, IAggregateRoot
+public class Order : SqlEntity, IAggregateRoot
 {
     public int? PaymentId { get; }
     public Guid ClientId { get; private set; }

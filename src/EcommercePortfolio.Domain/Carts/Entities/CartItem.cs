@@ -4,15 +4,13 @@ namespace EcommercePortfolio.Domain.Carts.Entities;
 
 public class CartItem
 {
-    public Guid ProductId { get; private set; }
+    public int ProductId { get; private set; }
     public string ProductName { get; private set; }
     public string Category { get; private set; }
     public int Quantity { get; private set; }
     public decimal Price { get; private set; }
 
-    public virtual Cart Cart { get; set; }
-
-    public CartItem(Guid productId, string productName, string category, int quantity, decimal price)
+    public CartItem(int productId, string productName, string category, int quantity, decimal price)
     {
         ProductId = productId;
         ProductName = productName;

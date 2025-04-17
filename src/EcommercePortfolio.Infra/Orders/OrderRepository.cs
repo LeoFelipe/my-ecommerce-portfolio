@@ -1,32 +1,34 @@
-﻿using EcommercePortfolio.Domain.Orders;
+﻿using EcommercePortfolio.Core.Data;
+using EcommercePortfolio.Domain.Orders;
 using EcommercePortfolio.Domain.Orders.Entities;
+using EcommercePortfolio.Infra.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommercePortfolio.Infra.Orders;
 
-public class OrderRepository : IOrderRepository
+public class OrderRepository(PostgresDbContext context) : IOrderRepository
 {
-    public Task AddAsync(Order order)
-    {
-        throw new NotImplementedException();
-    }
+    private readonly PostgresDbContext _context = context;
+    public IUnitOfWork UnitOfWork => _context;
 
-    public Task<IEnumerable<Order>> GetByClientId(Guid clientId)
+    public async Task<Order> GetById(Guid id)
     {
-        throw new NotImplementedException();
+        return await _context.Orders.FindAsync(id);
     }
-
-    public Task<Order> GetById(Guid id)
+    public async Task<IEnumerable<Order>> GetByClientId(Guid clientId)
     {
-        throw new NotImplementedException();
+        return await _context.Orders.Where(x => x.ClientId == clientId).ToListAsync();
     }
-
-    public Task<OrderItem> GetItem(Guid orderId, Guid itemId)
+    public async Task<OrderItem> GetItem(Guid orderId, Guid itemId)
     {
-        throw new NotImplementedException();
+        return await _context.OrderItems.FirstOrDefaultAsync(x => x.Id == itemId && x.OrderId == orderId);
     }
-
+    public async Task AddAsync(Order order)
+    {
+        await _context.Orders.AddAsync(order);
+    }
     public void Update(Order order)
     {
-        throw new NotImplementedException();
+        _context.Orders.Update(order);
     }
 }

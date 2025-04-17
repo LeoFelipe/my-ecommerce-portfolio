@@ -1,23 +1,27 @@
-﻿using EcommercePortfolio.Domain.Carts.Entities;
+﻿using EcommercePortfolio.Core.Data;
+using EcommercePortfolio.Domain.Carts.Entities;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
+using MongoDB.Bson;
 using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace EcommercePortfolio.Infra.Contexts;
 
-public class MongoDbContext(DbContextOptions options) : DbContext(options)
+public class MongoDbContext(DbContextOptions<MongoDbContext> options) : DbContext(options), IUnitOfWork
 {
     public DbSet<Cart> Carts { get; init; }
 
-    public static MongoDbContext Create(IMongoDatabase database) =>
-        new(new DbContextOptionsBuilder<MongoDbContext>()
-            .UseMongoDB(database.Client, database.DatabaseNamespace.DatabaseName)
-            .Options);
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Cart>(c =>
+        {
+            c.ToCollection("cart");
+            c.HasKey(c => c.Id);
+            c.Property(p => p.Id)
+                .HasConversion(id => ObjectId.Parse(id), oid => oid.ToString());
+        });
 
-        modelBuilder.Entity<Cart>().ToCollection("cart");
+        base.OnModelCreating(modelBuilder);
     }
+
+    public async Task<bool> Commit() => await base.SaveChangesAsync() > 0;
 }

@@ -1,11 +1,15 @@
 ﻿using FluentValidation.Results;
 using MediatR;
+using System.Text.Json.Serialization;
 
-namespace EcommercePortfolio.Core.Mediator.Messages;
+namespace EcommercePortfolio.Core.Messaging;
 
-public abstract class Command : IRequest<ValidationResult>
+public abstract record Command : IRequest
 {
+    [JsonIgnore]
     public DateTime Timestamp { get; private set; }
+
+    [JsonIgnore]
     public ValidationResult ValidationResult { get; set; }
 
     protected Command()

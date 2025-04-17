@@ -4,21 +4,23 @@ using EcommercePortfolio.Domain.Carts.Entities;
 using EcommercePortfolio.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcommercePortfolio.Infra.Orders;
+namespace EcommercePortfolio.Infra.Carts;
 
 public class CartRepository(MongoDbContext context) : ICartRepository
 {
     private readonly MongoDbContext _context = context;
+    public IUnitOfWork UnitOfWork => _context;
 
-    public async Task<IEnumerable<Cart>> GetByClientId(Guid clientId)
-    {
-        return await _context.Carts.Where(x => x.GuidId == clientId).ToListAsync();
-        //return await _context.Carts.Where(x => x.ClientId == clientId).ToListAsync();
-    }
+    private bool _disposed;
 
     public async Task<Cart> GetById(string id)
     {
         return await _context.Carts.FindAsync(id);
+    }
+
+    public async Task<IEnumerable<Cart>> GetByClientId(Guid clientId)
+    {
+        return await _context.Carts.Where(x => x.ClientId == clientId).ToListAsync();
     }
 
     public async Task Add(Cart cart)
@@ -36,5 +38,21 @@ public class CartRepository(MongoDbContext context) : ICartRepository
         _context.Carts.Remove(cart);
     }
 
-    public void Dispose() => _context.Dispose();
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _context?.Dispose();
+            }
+            _disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 }

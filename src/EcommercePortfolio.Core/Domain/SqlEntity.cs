@@ -1,10 +1,10 @@
 ﻿namespace EcommercePortfolio.Core.Domain;
 
-public abstract class Entity
+public abstract class SqlEntity
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; private set; }
 
-    protected Entity()
+    protected SqlEntity()
     {
         Id = Guid.CreateVersion7();
     }

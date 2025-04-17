@@ -3,7 +3,7 @@ using EcommercePortfolio.Domain.Payments.Enums;
 
 namespace EcommercePortfolio.Domain.Payments;
 
-public class Payment : Entity, IAggregateRoot
+public class Payment : SqlEntity, IAggregateRoot
 {
     public Guid OrderId { get; private set; }
     public decimal PaymentTotalValue { get; private set; }
