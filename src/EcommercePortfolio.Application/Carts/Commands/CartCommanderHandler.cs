@@ -47,7 +47,7 @@ public class CartCommanderHandler(
             return;
         }
 
-        cart.UpdateAllItems(command.Products.ToCartItems());
+        cart.UpdateAllItems(command.Products.MapToCartItems());
 
         _cartRepository.Update(cart);
 
@@ -70,13 +70,13 @@ public class CartCommanderHandler(
             return;
         }
 
-        if (!cart.HasItems(command.CartItem))
+        if (!cart.HasItems((CartItem)command.CartItem))
         {
             AddValidationError("Item does not exist in cart", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 
-        cart.UpdateItem(command.CartItem);
+        cart.UpdateItem((CartItem)command.CartItem);
 
         _cartRepository.Update(cart);
 

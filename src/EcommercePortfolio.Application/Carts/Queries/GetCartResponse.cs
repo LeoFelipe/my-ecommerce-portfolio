@@ -10,7 +10,7 @@ public record GetCartResponse(
     decimal TotalValue,
     IReadOnlyCollection<CartItemDto> CartItems)
 {
-    public static implicit operator GetCartResponse(Cart cart)
+    public static explicit operator GetCartResponse(Cart cart)
     {
         return new GetCartResponse(
             cart.Id,
@@ -23,6 +23,6 @@ public record GetCartResponse(
 
 public static class GetCartResponseExtensions
 {
-    public static IReadOnlyCollection<GetCartResponse> ToGetCartResponse(this IEnumerable<Cart> carts)
+    public static IReadOnlyCollection<GetCartResponse> MapToCartsResponse(this IEnumerable<Cart> carts)
         => [.. carts.Select(cart => (GetCartResponse)cart)];
 }

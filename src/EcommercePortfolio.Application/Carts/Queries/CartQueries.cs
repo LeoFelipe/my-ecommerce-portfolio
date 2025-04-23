@@ -22,6 +22,6 @@ public class CartQueries(
     public async Task<IReadOnlyCollection<GetCartResponse>> GetCartsByClientId(Guid clientId)
     {
         var carts = await _cartRepository.GetCartsByClientId(clientId);
-        return carts.ToGetCartResponse();
+        return carts.MapToCartsResponse();
     }
 }

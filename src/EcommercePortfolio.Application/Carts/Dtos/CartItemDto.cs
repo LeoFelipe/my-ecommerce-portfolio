@@ -12,7 +12,7 @@ public record CartItemDto(
     int Quantity, 
     decimal Price)
 {
-    public static implicit operator CartItem(CartItemDto cartItemDto)
+    public static explicit operator CartItem(CartItemDto cartItemDto)
     {
         return new CartItem(
             cartItemDto.ProductId,
@@ -22,7 +22,7 @@ public record CartItemDto(
             cartItemDto.Price);
     }
 
-    public static implicit operator CartItemDto(CartItem cartItem)
+    public static explicit operator CartItemDto(CartItem cartItem)
     {
         return new CartItemDto(
             cartItem.ProductId,
@@ -70,6 +70,6 @@ public record CartItemDto(
 
 public static class CartItemDtoExtensions
 {
-    public static List<CartItem> ToCartItems(this IEnumerable<CartItemDto> cartItemsDto)
-        => [.. cartItemsDto.Select(cartItemDto => cartItemDto)];
+    public static List<CartItem> MapToCartItems(this IEnumerable<CartItemDto> cartItemsDto)
+        => [.. cartItemsDto.Select(cartItemDto => (CartItem)cartItemDto)];
 }

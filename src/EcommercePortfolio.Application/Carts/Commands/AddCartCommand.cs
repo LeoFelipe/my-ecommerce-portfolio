@@ -9,9 +9,9 @@ public record AddCartCommand(
     Guid ClientId,
     List<CartItemDto> CartItems) : Command
 {
-    public static implicit operator Cart(AddCartCommand command)
+    public static explicit operator Cart(AddCartCommand command)
     {
-        return new Cart(command.ClientId, command.CartItems.ToCartItems());
+        return new Cart(command.ClientId, command.CartItems.MapToCartItems());
     }
 
     public override bool IsValid()
