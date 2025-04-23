@@ -26,19 +26,24 @@ public class Cart : NoSqlEntity, IAggregateRoot
 
     public bool HasItems(CartItem cartItem)
     {
-        return CartItems.Any(x => x.ProductId == cartItem.ProductId);
+        return HasItems(cartItem.ProductId);
+    }
+
+    public bool HasItems(int productId)
+    {
+        return CartItems.Any(x => x.ProductId == productId);
     }
 
     public CartItem GetProductById(int productId)
     {
-        return CartItems.FirstOrDefault(x => x.ProductId == productId);
+        return CartItems.SingleOrDefault(x => x.ProductId == productId);
     }
 
     public void AddItem(CartItem cartItem)
     {
         if (HasItems(cartItem))
         {
-            var existingItem = CartItems.FirstOrDefault(x => x.ProductId == cartItem.ProductId);
+            var existingItem = GetProductById(cartItem.ProductId);
             existingItem.AddQuantity(cartItem.Quantity);
             CalculateTotalOrderValue();
             return;
@@ -55,18 +60,26 @@ public class Cart : NoSqlEntity, IAggregateRoot
 
     public void RemoveItem(CartItem cartItem)
     {
-        CartItems.Remove(GetProductById(cartItem.ProductId));
+        RemoveItem(cartItem.ProductId);
+    }
+
+    public void RemoveItem(int productId)
+    {
+        CartItems.Remove(GetProductById(productId));
         CalculateTotalOrderValue();
     }
 
     public void UpdateItem(CartItem cartItem)
     {
-        var existingItem = GetProductById(cartItem.ProductId);
+        if (HasItems(cartItem))
+        {
+            var existingItem = GetProductById(cartItem.ProductId);
 
-        CartItems.Remove(existingItem);
-        CartItems.Add(cartItem);
+            CartItems.Remove(existingItem);
+            CartItems.Add(cartItem);
 
-        CalculateTotalOrderValue();
+            CalculateTotalOrderValue();
+        }
     }
 
     public void UpdateAllItems(List<CartItem> newCartItems)

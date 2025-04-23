@@ -1,10 +1,10 @@
 ﻿using EcommercePortfolio.Core.Data;
 using EcommercePortfolio.Domain.Orders;
 using EcommercePortfolio.Domain.Orders.Entities;
-using EcommercePortfolio.Infra.Contexts;
+using EcommercePortfolio.Infra.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcommercePortfolio.Infra.Orders;
+namespace EcommercePortfolio.Infra.Data.Orders;
 
 public class OrderRepository(PostgresDbContext context) : IOrderRepository
 {

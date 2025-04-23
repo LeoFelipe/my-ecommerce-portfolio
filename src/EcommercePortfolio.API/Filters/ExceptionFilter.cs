@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Net;
+using EcommercePortfolio.Application;
 
 namespace EcommercePortfolio.API.Filters;
 
@@ -49,11 +51,13 @@ public class ExceptionFilter(ILogger<ExceptionFilter> logger) : IExceptionFilter
         _logger.LogError(JsonSerializer.Serialize(problemDetails, jsonSerializerOptions));
 
         problemDetails.Extensions = null;
-        context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.HttpContext.Response.StatusCode = problemDetails.Status.Value;
 
-        context.Result = new JsonResult(problemDetails)
+        var response = new ResponseResult(false,  (HttpStatusCode)problemDetails.Status.Value, problemDetails);
+
+        context.Result = new JsonResult(response)
         {
-            StatusCode = StatusCodes.Status500InternalServerError
+            StatusCode = problemDetails.Status.Value
         };
     }
 }

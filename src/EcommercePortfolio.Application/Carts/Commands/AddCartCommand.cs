@@ -1,16 +1,17 @@
-﻿using EcommercePortfolio.Core.Messaging;
+﻿using EcommercePortfolio.Application.Carts.Dtos;
+using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.Domain.Carts.Entities;
 using FluentValidation;
 
-namespace EcommercePortfolio.API.Carts.Models;
+namespace EcommercePortfolio.Application.Carts.Commands;
 
 public record AddCartCommand(
     Guid ClientId,
-    List<ProductDto> Products) : Command
+    List<CartItemDto> CartItems) : Command
 {
     public static implicit operator Cart(AddCartCommand command)
     {
-        return new Cart(command.ClientId, command.Products.ToCartItems());
+        return new Cart(command.ClientId, command.CartItems.ToCartItems());
     }
 
     public override bool IsValid()
@@ -27,9 +28,13 @@ public record AddCartCommand(
                 .NotEqual(Guid.Empty)
                 .WithMessage("Invalid client id");
 
-            RuleFor(x => x.Products.Count)
+            RuleFor(x => x.CartItems.Count)
                 .GreaterThan(0)
                 .WithMessage("The cart needs to have at least 1 item");
+
+            RuleFor(x => x.CartItems)
+                .Must(x => x.All(p => p.IsValid()))
+                .WithMessage("Invalid cart item");
         }
     }
 }

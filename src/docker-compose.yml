@@ -10,15 +10,15 @@ services:
     networks:
       - ecommerce_network
     depends_on:
-      - postgres
+      - postgresdb
       - mongodb
+      - redisdb
       - rabbitmq
-      - redis
   
-  postgres:
+  postgresdb:
     image: postgres:latest
     restart: always
-    container_name: postgres
+    container_name: postgresdb
     environment:
       POSTGRES_DB: MyEcommercePortfolio
       POSTGRES_USER: postgres
@@ -43,6 +43,15 @@ services:
     networks: 
       - ecommerce_network
 
+  redisdb:
+    image: redis:latest
+    volumes:
+      - redis_data:/var/lib/redis/data
+    ports:
+      - 6379:6379
+    networks:
+      - ecommerce_network
+
   rabbitmq:
     image: rabbitmq:4.0.8-management-alpine
     container_name: rabbitmq
@@ -54,20 +63,11 @@ services:
     networks: 
       - ecommerce_network
 
-  redis:
-    image: redis:latest
-    volumes:
-      - redis_data:/var/lib/redis/data
-    ports:
-      - 6379:6379
-    networks:
-      - ecommerce_network
-
 volumes:  
   postgres_data:
   mongo_data:
-  rabbitmq_data:
   redis_data:
+  rabbitmq_data:
 
 networks:
   ecommerce_network:

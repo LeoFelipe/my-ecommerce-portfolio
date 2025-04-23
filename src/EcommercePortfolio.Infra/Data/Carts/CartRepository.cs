@@ -1,10 +1,10 @@
 ﻿using EcommercePortfolio.Core.Data;
 using EcommercePortfolio.Domain.Carts;
 using EcommercePortfolio.Domain.Carts.Entities;
-using EcommercePortfolio.Infra.Contexts;
+using EcommercePortfolio.Infra.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcommercePortfolio.Infra.Carts;
+namespace EcommercePortfolio.Infra.Data.Carts;
 
 public class CartRepository(MongoDbContext context) : ICartRepository
 {
@@ -18,7 +18,12 @@ public class CartRepository(MongoDbContext context) : ICartRepository
         return await _context.Carts.FindAsync(id);
     }
 
-    public async Task<IEnumerable<Cart>> GetByClientId(Guid clientId)
+    public async Task<Cart> GetByIdAndClientId(string id, Guid clientId)
+    {
+        return await _context.Carts.FirstOrDefaultAsync(x => x.Id == id && x.ClientId == clientId);
+    }
+
+    public async Task<IEnumerable<Cart>> GetCartsByClientId(Guid clientId)
     {
         return await _context.Carts.Where(x => x.ClientId == clientId).ToListAsync();
     }

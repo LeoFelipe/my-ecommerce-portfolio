@@ -13,20 +13,20 @@ public class NotificationContext : INotificationContext, IDisposable
         _disposed = false;
     }
 
-    public bool Has()
+    public bool Any()
         => _notifications.Count != 0;
 
-    public bool Has(EnumNotificationType notificationType)
+    public bool Any(EnumNotificationType notificationType)
         => _notifications.Any(n => n.NotificationType == notificationType);
 
-    public bool Has(EnumNotificationType notificationType, string messageKey)
+    public bool Any(EnumNotificationType notificationType, string messageKey)
         => _notifications.Any(n => n.NotificationType == notificationType && n.MessageKey == messageKey);
 
-    public bool HasAnyExcept(EnumNotificationType notificationType)
-        => Has() && !_notifications.Any(n => n.NotificationType == notificationType);
+    public bool AnyExcept(EnumNotificationType notificationType)
+        => Any() && !_notifications.Any(n => n.NotificationType == notificationType);
 
-    public bool HasAnyExcept(IReadOnlyCollection<EnumNotificationType> notificationsType)
-        => Has() && !_notifications.Any(n => notificationsType.Contains(n.NotificationType));
+    public bool AnyExcept(IReadOnlyCollection<EnumNotificationType> notificationsType)
+        => Any() && !_notifications.Any(n => notificationsType.Contains(n.NotificationType));
 
     public IReadOnlyCollection<Notification> Get()
         => _notifications.AsReadOnly();
@@ -88,5 +88,21 @@ public class NotificationContext : INotificationContext, IDisposable
     {
         Dispose(true);
         GC.SuppressFinalize(this);
+    }
+}
+
+public static class NotificationContextExtensions
+{
+    public static IReadOnlyCollection<string> GetMessagesWithMessageKey(this IReadOnlyCollection<Notification> notifications)
+    {
+        var errors = new List<string>();
+        foreach (var notificationError in notifications)
+        {
+            errors.Add(string.IsNullOrWhiteSpace(notificationError.MessageKey)
+                ? notificationError.Message
+                : $"{notificationError.MessageKey}: {notificationError.Message}");
+        }
+
+        return errors.AsReadOnly();
     }
 }

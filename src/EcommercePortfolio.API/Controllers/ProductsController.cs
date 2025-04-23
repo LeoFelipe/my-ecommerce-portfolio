@@ -1,7 +1,7 @@
 using EcommercePortfolio.Domain.Products;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EcommercePortfolio.API.Products;
+namespace EcommercePortfolio.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]

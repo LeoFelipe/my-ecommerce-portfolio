@@ -3,7 +3,7 @@ using EcommercePortfolio.Domain.Orders.Entities;
 using EcommercePortfolio.Domain.Payments;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcommercePortfolio.Infra.Contexts;
+namespace EcommercePortfolio.Infra.Data.Contexts;
 
 public class PostgresDbContext(DbContextOptions<PostgresDbContext> options) : DbContext(options), IUnitOfWork
 {

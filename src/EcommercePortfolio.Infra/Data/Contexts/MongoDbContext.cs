@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.EntityFrameworkCore.Extensions;
 
-namespace EcommercePortfolio.Infra.Contexts;
+namespace EcommercePortfolio.Infra.Data.Contexts;
 
 public class MongoDbContext(DbContextOptions<MongoDbContext> options) : DbContext(options), IUnitOfWork
 {

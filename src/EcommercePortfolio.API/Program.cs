@@ -1,8 +1,9 @@
-using EcommercePortfolio.API;
 using EcommercePortfolio.API.Configurations;
 using EcommercePortfolio.API.Filters;
-using EcommercePortfolio.Infra.Contexts;
+using EcommercePortfolio.Application.Carts.Commands;
+using EcommercePortfolio.Infra.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +24,21 @@ builder.Services.AddDbContextPool<MongoDbContext>(options =>
 builder.Services.AddDbContextPool<PostgresDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDbContext")));
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = builder.Configuration.GetConnectionString("RedisDbConnection"));
+
+builder.Services.AddHybridCache(options =>
+{
+    options.MaximumPayloadBytes = 1024 * 1024;
+    options.MaximumKeyLength = 1024;
+    options.DefaultEntryOptions = new HybridCacheEntryOptions
+    {
+        Expiration = TimeSpan.FromMinutes(5),
+        LocalCacheExpiration = TimeSpan.FromMinutes(5)
+    };
+});
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddCartCommand).Assembly));
 
 builder.Services.AddDependencyInjections();
 

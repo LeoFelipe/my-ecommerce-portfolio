@@ -1,19 +1,14 @@
-﻿using EcommercePortfolio.Core.Messaging;
-using EcommercePortfolio.Domain.Carts.Entities;
+﻿using EcommercePortfolio.Application.Carts.Dtos;
+using EcommercePortfolio.Core.Messaging;
 using FluentValidation;
 
-namespace EcommercePortfolio.API.Carts.Models;
+namespace EcommercePortfolio.Application.Carts.Commands;
 
 public record UpdateCartCommand(
     string Id,
     Guid ClientId,
-    List<ProductDto> Products) : Command
+    List<CartItemDto> Products) : Command
 {
-    public static implicit operator Cart(UpdateCartCommand command)
-    {
-        return new Cart(command.ClientId, command.Products.ToCartItems());
-    }
-
     public override bool IsValid()
     {
         ValidationResult = new UpdateCartValidation().Validate(this);

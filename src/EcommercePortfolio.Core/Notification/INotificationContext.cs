@@ -5,11 +5,11 @@ namespace EcommercePortfolio.Core.Notification;
 
 public interface INotificationContext
 {
-    bool Has();
-    bool Has(EnumNotificationType notificationType);
-    bool Has(EnumNotificationType notificationType, string messageKey);
-    bool HasAnyExcept(EnumNotificationType notificationType);
-    bool HasAnyExcept(IReadOnlyCollection<EnumNotificationType> notificationsType);
+    bool Any();
+    bool Any(EnumNotificationType notificationType);
+    bool Any(EnumNotificationType notificationType, string messageKey);
+    bool AnyExcept(EnumNotificationType notificationType);
+    bool AnyExcept(IReadOnlyCollection<EnumNotificationType> notificationsType);
 
     IReadOnlyCollection<Notification> Get();
     IReadOnlyCollection<Notification> Get(EnumNotificationType notificationType);

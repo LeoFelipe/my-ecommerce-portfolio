@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Core.Messaging;
 using FluentValidation;
 
-namespace EcommercePortfolio.API.Carts.Models;
+namespace EcommercePortfolio.Application.Carts.Commands;
 
 public record RemoveCartCommand(
     string Id,

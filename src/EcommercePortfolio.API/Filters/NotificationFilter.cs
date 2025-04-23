@@ -1,6 +1,8 @@
-﻿using EcommercePortfolio.Core.Notification;
+﻿using EcommercePortfolio.Application;
+using EcommercePortfolio.Core.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 using System.Text.Json;
 
 namespace EcommercePortfolio.API.Filters;
@@ -20,27 +22,27 @@ public class NotificationFilter(INotificationContext notification) : IAsyncResul
     {
         context.HttpContext.Response.ContentType = "application/json";
 
-        if (_notification.Has(EnumNotificationType.VALIDATION_ERROR))
+        if (_notification.Any(EnumNotificationType.VALIDATION_ERROR))
         {
             context.HttpContext.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
 
-            var response = CreateResponseError(_notification.Get(EnumNotificationType.VALIDATION_ERROR));
+            var response = CreateResponseError(_notification.Get(EnumNotificationType.VALIDATION_ERROR), StatusCodes.Status422UnprocessableEntity);
             await context.HttpContext.Response.WriteAsync(response);
             return;
         }
-        else if (_notification.Has(EnumNotificationType.NOT_FOUND_ERROR))
+        else if (_notification.Any(EnumNotificationType.NOT_FOUND_ERROR))
         {
             context.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
 
-            var response = CreateResponseError(_notification.Get(EnumNotificationType.NOT_FOUND_ERROR));
+            var response = CreateResponseError(_notification.Get(EnumNotificationType.NOT_FOUND_ERROR), StatusCodes.Status404NotFound);
             await context.HttpContext.Response.WriteAsync(response);
             return;
         }
-        else if (_notification.HasAnyExcept([EnumNotificationType.INFORMATION]))
+        else if (_notification.AnyExcept([EnumNotificationType.INFORMATION]))
         {
             context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            var response = CreateResponseError(_notification.GetAllExcept(EnumNotificationType.INFORMATION));
+            var response = CreateResponseError(_notification.GetAllExcept(EnumNotificationType.INFORMATION), StatusCodes.Status500InternalServerError);
             await context.HttpContext.Response.WriteAsync(response);
             return;
         }
@@ -48,20 +50,10 @@ public class NotificationFilter(INotificationContext notification) : IAsyncResul
         _ = await next();
     }
 
-    private string CreateResponseError(IReadOnlyCollection<Notification> notifications)
+    private string CreateResponseError(IReadOnlyCollection<Notification> notifications, int statusCode)
     {
-        var errors = new List<string>();
-        foreach (var notificationError in notifications)
-        {
-            errors.Add(string.IsNullOrWhiteSpace(notificationError.MessageKey)
-                ? notificationError.Message
-                : $"{notificationError.MessageKey}: {notificationError.Message}");
-        }
-
         return JsonSerializer.Serialize(
-            new ValidationProblemDetails(new Dictionary<string, string[]>
-            {
-                { "Messages", errors.ToArray() }
-            }), jsonSerializerOptions);
+            new ResponseResult(false, (HttpStatusCode)statusCode, notifications.GetMessagesWithMessageKey()), 
+            jsonSerializerOptions);
     }
 }
