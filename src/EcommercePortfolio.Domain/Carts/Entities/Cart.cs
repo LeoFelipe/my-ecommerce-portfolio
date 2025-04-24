@@ -16,7 +16,7 @@ public class Cart : NoSqlEntity, IAggregateRoot
     {
         ClientId = clientId;
         CartItems = cartItems;
-        CartDate = DateTime.UtcNow;
+        CartDate = DateTime.Now;
         ExpirationDate = CartDate.AddDays(7);
 
         CalculateTotalOrderValue();

@@ -5,7 +5,8 @@ namespace EcommercePortfolio.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductsController(IFakeStoreApiService fakeStoreApiService) : ControllerBase
+public class ProductsController(
+    IFakeStoreApiService fakeStoreApiService) : MainController
 {
     private readonly IFakeStoreApiService _fakeStoreApiService = fakeStoreApiService;
 

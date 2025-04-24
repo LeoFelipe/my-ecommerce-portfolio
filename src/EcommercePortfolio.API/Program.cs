@@ -1,8 +1,10 @@
 using EcommercePortfolio.API.Configurations;
 using EcommercePortfolio.API.Filters;
 using EcommercePortfolio.Application.Carts.Commands;
+using EcommercePortfolio.Application.Carts.Consumers;
 using EcommercePortfolio.Infra.Data.Contexts;
 using EcommercePortfolio.Infra.Data.Orders;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 using Scalar.AspNetCore;
@@ -24,6 +26,23 @@ builder.Services.AddControllers(options =>
         options.JsonSerializerOptions.MaxDepth = 5;
     });
 
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+    busConfigurator.AddConsumer<OrderAuthorizedConsumer>();
+
+    busConfigurator.UsingInMemory((context, config) =>
+    {
+        config.ConfigureEndpoints(context);
+    });
+
+    //x.UsingRabbitMq((context, cfg) =>
+    //{
+    //    cfg.Host(builder.Configuration.GetConnectionString("RabbitMqConnection"));
+    //    cfg.ConfigureEndpoints(context);
+    //});
+});
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

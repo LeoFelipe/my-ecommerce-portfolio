@@ -4,18 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace EcommercePortfolio.Core.Messaging;
 
-public abstract record Command : IRequest
+public abstract record Command : Message, IRequest
 {
     [JsonIgnore]
-    public DateTime Timestamp { get; private set; }
-
-    [JsonIgnore]
     public ValidationResult ValidationResult { get; set; }
-
-    protected Command()
-    {
-        Timestamp = DateTime.Now;
-    }
 
     public virtual bool IsValid()
     {

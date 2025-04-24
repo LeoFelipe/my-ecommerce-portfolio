@@ -1,6 +1,6 @@
 ﻿namespace EcommercePortfolio.Core.Domain;
 
-public abstract class SqlEntity
+public abstract class SqlEntity : Entity
 {
     public Guid Id { get; private set; }
 

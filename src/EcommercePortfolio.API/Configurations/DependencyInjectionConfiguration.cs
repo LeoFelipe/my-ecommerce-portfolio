@@ -1,5 +1,6 @@
 ﻿using EcommercePortfolio.Application.Carts.Queries;
 using EcommercePortfolio.Core.Messaging;
+using EcommercePortfolio.Core.Messaging.Mediator;
 using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.Domain.Caching;
 using EcommercePortfolio.Domain.Carts;
@@ -17,8 +18,9 @@ public static class DependencyInjectionConfiguration
 {
     public static void AddDependencyInjections(this IServiceCollection services)
     {
-        services.AddScoped<IMediatorHandler, MediatorHandler>();
         services.AddScoped<INotificationContext, NotificationContext>();
+        services.AddScoped<IMediatorHandler, MediatorHandler>();
+        services.AddScoped<IMessageBus, MessageBus>();
 
         services.AddScoped<ICartQueries, CartQueries>();
 
@@ -30,5 +32,6 @@ public static class DependencyInjectionConfiguration
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<ICartRepository, CartRepository>();
         services.AddScoped<IRedisRepository, RedisRepository>();
+        services.AddScoped<PostgresDbContext>();
     }
 }

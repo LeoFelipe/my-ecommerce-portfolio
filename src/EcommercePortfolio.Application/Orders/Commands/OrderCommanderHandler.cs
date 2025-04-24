@@ -1,4 +1,6 @@
-﻿using EcommercePortfolio.Core.Messaging;
+﻿using EcommercePortfolio.Application.Orders.Events;
+using EcommercePortfolio.Core.Messaging;
+using EcommercePortfolio.Core.Messaging.Mediator;
 using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.Domain.Carts;
 using EcommercePortfolio.Domain.Carts.Entities;
@@ -21,15 +23,15 @@ public class OrderCommanderHandler(
     private readonly IOrderRepository _orderRepository = orderRepository;
     private readonly IPaymentService _paymentService = paymentService;
 
-    public async Task Handle(AddOrderCommand command, CancellationToken cancellationToken)
+    public async Task Handle(AddOrderCommand message, CancellationToken cancellationToken)
     {
-        if (!command.IsValid())
+        if (!message.IsValid())
         {
-            AddError(command.ValidationResult);
+            AddError(message.ValidationResult);
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(command.CartId, command.ClientId);
+        var cart = await _cartRepository.GetByIdAndClientId(message.CartId, message.ClientId);
 
         if (cart == null)
         {
@@ -37,7 +39,7 @@ public class OrderCommanderHandler(
             return;
         }
 
-        var order = MapToOrder(cart, command);
+        var order = MapToOrder(cart, message);
 
         if (!IsOrderValid(order)) return;
 
@@ -45,7 +47,7 @@ public class OrderCommanderHandler(
             order.Id,
             order.ClientId,
             order.TotalValue,
-            command.PaymentMethod));
+            message.PaymentMethod));
 
         if (paymentDone.PaymentStatus != EnumPaymentStatus.AUTHORIZED)
         {
@@ -55,12 +57,14 @@ public class OrderCommanderHandler(
 
         order.PaymentAuthorized(paymentDone.Id);
 
-        await PersistData(_orderRepository.UnitOfWork);
+        order.AddEvent(new OrderAuthorizedEvent(message.CartId, order.Id, order.ClientId));
 
-        // Criar Event para remover Cart do Mongo 
+        await _orderRepository.AddAsync(order);
+
+        await PersistData(_orderRepository.UnitOfWork);
     }
 
-    private static Order MapToOrder(Cart cart, AddOrderCommand command)
+    private static Order MapToOrder(Cart cart, AddOrderCommand message)
     {
         var order = new Order(
             cart.ClientId,
@@ -68,11 +72,11 @@ public class OrderCommanderHandler(
 
         order.SetAddress(new Address
         {
-            ZipCode = command.Address.ZipCode,
-            State = command.Address.State,
-            City = command.Address.City,
-            StreetAddress = command.Address.StreetAddress,
-            NumberAddres = command.Address.NumberAddress
+            ZipCode = message.Address.ZipCode,
+            State = message.Address.State,
+            City = message.Address.City,
+            StreetAddress = message.Address.StreetAddress,
+            NumberAddres = message.Address.NumberAddress
         });
 
         return order;

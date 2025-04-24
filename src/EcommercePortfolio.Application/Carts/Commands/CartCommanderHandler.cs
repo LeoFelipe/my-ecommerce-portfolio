@@ -18,28 +18,28 @@ public class CartCommanderHandler(
 {
     private readonly ICartRepository _cartRepository = cartRepository;
 
-    public async Task Handle(AddCartCommand command, CancellationToken cancellationToken)
+    public async Task Handle(AddCartCommand message, CancellationToken cancellationToken)
     {
-        if (!command.IsValid())
+        if (!message.IsValid())
         {
-            AddError(command.ValidationResult);
+            AddError(message.ValidationResult);
             return;
         }
 
-        await _cartRepository.Add((Cart)command);
+        await _cartRepository.Add((Cart)message);
 
         await PersistData(_cartRepository.UnitOfWork);
     }
 
-    public async Task Handle(UpdateCartCommand command, CancellationToken cancellationToken)
+    public async Task Handle(UpdateCartCommand message, CancellationToken cancellationToken)
     {
-        if (!command.IsValid())
+        if (!message.IsValid())
         {
-            AddError(command.ValidationResult);
+            AddError(message.ValidationResult);
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(command.Id, command.ClientId);
+        var cart = await _cartRepository.GetByIdAndClientId(message.Id, message.ClientId);
 
         if (cart == null)
         {
@@ -47,22 +47,22 @@ public class CartCommanderHandler(
             return;
         }
 
-        cart.UpdateAllItems(command.Products.MapToCartItems());
+        cart.UpdateAllItems(message.Products.MapToCartItems());
 
         _cartRepository.Update(cart);
 
         await PersistData(_cartRepository.UnitOfWork);
     }
 
-    public async Task Handle(UpdateCartItemCommand command, CancellationToken cancellationToken)
+    public async Task Handle(UpdateCartItemCommand message, CancellationToken cancellationToken)
     {
-        if (!command.IsValid())
+        if (!message.IsValid())
         {
-            AddError(command.ValidationResult);
+            AddError(message.ValidationResult);
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(command.Id, command.ClientId);
+        var cart = await _cartRepository.GetByIdAndClientId(message.Id, message.ClientId);
 
         if (cart == null)
         {
@@ -70,28 +70,28 @@ public class CartCommanderHandler(
             return;
         }
 
-        if (!cart.HasItems((CartItem)command.CartItem))
+        if (!cart.HasItems((CartItem)message.CartItem))
         {
             AddError("Item does not exist in cart", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 
-        cart.UpdateItem((CartItem)command.CartItem);
+        cart.UpdateItem((CartItem)message.CartItem);
 
         _cartRepository.Update(cart);
 
         await PersistData(_cartRepository.UnitOfWork);
     }
 
-    public async Task Handle(RemoveCartCommand command, CancellationToken cancellationToken)
+    public async Task Handle(RemoveCartCommand message, CancellationToken cancellationToken)
     {
-        if (!command.IsValid())
+        if (!message.IsValid())
         {
-            AddError(command.ValidationResult);
+            AddError(message.ValidationResult);
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(command.Id, command.ClientId);
+        var cart = await _cartRepository.GetByIdAndClientId(message.Id, message.ClientId);
 
         if (cart == null)
         {
@@ -104,15 +104,15 @@ public class CartCommanderHandler(
         await PersistData(_cartRepository.UnitOfWork);
     }
 
-    public async Task Handle(RemoveCartItemCommand command, CancellationToken cancellationToken)
+    public async Task Handle(RemoveCartItemCommand message, CancellationToken cancellationToken)
     {
-        if (!command.IsValid())
+        if (!message.IsValid())
         {
-            AddError(command.ValidationResult);
+            AddError(message.ValidationResult);
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(command.Id, command.ClientId);
+        var cart = await _cartRepository.GetByIdAndClientId(message.Id, message.ClientId);
 
         if (cart == null)
         {
@@ -120,13 +120,13 @@ public class CartCommanderHandler(
             return;
         }
 
-        if (!cart.HasItems(command.ProductId))
+        if (!cart.HasItems(message.ProductId))
         {
             AddError("Item does not exist in cart", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 
-        cart.RemoveItem(command.ProductId);
+        cart.RemoveItem(message.ProductId);
 
         _cartRepository.Update(cart);
 

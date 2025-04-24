@@ -1,4 +1,5 @@
 ﻿using EcommercePortfolio.Core.Data;
+using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.Domain.Carts.Entities;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
@@ -12,6 +13,8 @@ public class MongoDbContext(DbContextOptions<MongoDbContext> options) : DbContex
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Ignore<Event>();
+
         modelBuilder.Entity<Cart>(c =>
         {
             c.ToCollection("cart");

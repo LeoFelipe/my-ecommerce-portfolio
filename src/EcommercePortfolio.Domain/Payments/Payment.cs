@@ -18,7 +18,7 @@ public class Payment : SqlEntity, IAggregateRoot
         ClientId = clientId;
         PaymentTotalValue = paymentTotalValue;
         PaymentMethod = paymentMethod;
-        PaymentDate = DateTime.UtcNow;
+        PaymentDate = DateTime.Now;
     }
 
     protected Payment() { }

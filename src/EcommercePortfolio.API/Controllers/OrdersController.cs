@@ -1,20 +1,20 @@
-using EcommercePortfolio.Infra.Data.Orders;
+using EcommercePortfolio.Application.Orders.Commands;
+using EcommercePortfolio.Core.Messaging.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EcommercePortfolio.API.Controllers
+namespace EcommercePortfolio.API.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class OrdersController(
+    IMediatorHandler mediatorHandler) : MainController
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class OrdersController(PostgresDbContext dbContext) : ControllerBase
+    private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
+
+    [HttpPost(Name = "Add Order")]
+    public async Task<IActionResult> AddOrder(AddOrderCommand message)
     {
-        private readonly PostgresDbContext _dbContext = dbContext;
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            var orders = _dbContext.Orders.ToList();
-
-            return Ok(orders);
-        }
+        await _mediatorHandler.SendCommand(message);
+        return Created();
     }
 }
