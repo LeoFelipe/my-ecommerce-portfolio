@@ -2,9 +2,11 @@ using EcommercePortfolio.API.Configurations;
 using EcommercePortfolio.API.Filters;
 using EcommercePortfolio.Application.Carts.Commands;
 using EcommercePortfolio.Infra.Data.Contexts;
+using EcommercePortfolio.Infra.Data.Orders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 using Scalar.AspNetCore;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,15 @@ builder.Services.AddControllers(options =>
 {
     _ = options.Filters.Add<ExceptionFilter>();
     _ = options.Filters.Add<NotificationFilter>();
-});
+})
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.MaxDepth = 5;
+    });
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -22,7 +32,10 @@ builder.Services.AddDbContextPool<MongoDbContext>(options =>
     options.UseMongoDB(builder.Configuration.GetConnectionString("MongoDbConnection"), "ecommerce-portfolio"));
 
 builder.Services.AddDbContextPool<PostgresDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDbContext")));
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDbContext"));
+    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+});
 
 builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration.GetConnectionString("RedisDbConnection"));
@@ -49,11 +62,14 @@ builder.Services.AddHttpClientConfiguration(settings);
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    DbMigrationConfiguration.Configure(app);
 }
 
 app.UseHttpsRedirection();

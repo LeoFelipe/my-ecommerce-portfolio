@@ -1,7 +1,6 @@
 ﻿using EcommercePortfolio.Core.Data;
 using EcommercePortfolio.Domain.Orders;
 using EcommercePortfolio.Domain.Orders.Entities;
-using EcommercePortfolio.Infra.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommercePortfolio.Infra.Data.Orders;
@@ -10,6 +9,8 @@ public class OrderRepository(PostgresDbContext context) : IOrderRepository
 {
     private readonly PostgresDbContext _context = context;
     public IUnitOfWork UnitOfWork => _context;
+
+    private bool _disposed;
 
     public async Task<Order> GetById(Guid id)
     {
@@ -30,5 +31,23 @@ public class OrderRepository(PostgresDbContext context) : IOrderRepository
     public void Update(Order order)
     {
         _context.Orders.Update(order);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _context?.Dispose();
+            }
+            _disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

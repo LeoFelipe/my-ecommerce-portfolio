@@ -1,8 +1,10 @@
-﻿using EcommercePortfolio.Domain.Orders.Entities;
+﻿using EcommercePortfolio.Core.Data;
+using EcommercePortfolio.Domain.Carts.Entities;
+using EcommercePortfolio.Domain.Orders.Entities;
 
 namespace EcommercePortfolio.Domain.Orders;
 
-public interface IOrderRepository
+public interface IOrderRepository : IRepository<Order>
 {
     Task<Order> GetById(Guid id);
     Task<IEnumerable<Order>> GetByClientId(Guid clientId);

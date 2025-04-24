@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Orders\" />
-    <Folder Include="Products\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EcommercePortfolio.Domain\EcommercePortfolio.Domain.csproj" />
     <ProjectReference Include="..\EcommercePortfolio.Infra\EcommercePortfolio.Infra.csproj" />
   </ItemGroup>

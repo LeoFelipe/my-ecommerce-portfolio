@@ -6,16 +6,19 @@ namespace EcommercePortfolio.Domain.Payments;
 public class Payment : SqlEntity, IAggregateRoot
 {
     public Guid OrderId { get; private set; }
+    public Guid ClientId { get; private set; }
     public decimal PaymentTotalValue { get; private set; }
     public DateTime PaymentDate { get; }
     public EnumPaymentMethod PaymentMethod { get; private set; }
     public EnumPaymentStatus PaymentStatus { get; private set; }
 
-    public Payment(Guid orderId, decimal paymentTotalValue, EnumPaymentMethod paymentMethod)
+    public Payment(Guid orderId, Guid clientId, decimal paymentTotalValue, EnumPaymentMethod paymentMethod)
     {
         OrderId = orderId;
+        ClientId = clientId;
         PaymentTotalValue = paymentTotalValue;
         PaymentMethod = paymentMethod;
+        PaymentDate = DateTime.UtcNow;
     }
 
     protected Payment() { }

@@ -8,12 +8,12 @@ public abstract class CommandHandler(INotificationContext notification)
 {
     protected readonly INotificationContext _notification = notification;
 
-    protected void AddValidationError(string message, EnumNotificationType? notificationType = null)
+    protected void AddError(string message, EnumNotificationType? notificationType = null)
     {
         _notification.Add(notificationType ?? EnumNotificationType.VALIDATION_ERROR, message);
     }
 
-    protected void AddValidationError(ValidationResult validationResult)
+    protected void AddError(ValidationResult validationResult)
     {
         _notification.Add(EnumNotificationType.VALIDATION_ERROR, validationResult);
     }

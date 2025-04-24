@@ -32,34 +32,34 @@ services:
 
   mongodb:
     image: mongo:latest
-    volumes:
-      - mongo_data:/var/lib/mongo/data
     restart: always
     ports:
       - "27017:27017"
     environment: 
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: mongo_password
+    volumes:
+      - mongo_data:/var/lib/mongo/data
     networks: 
       - ecommerce_network
 
   redisdb:
     image: redis:latest
-    volumes:
-      - redis_data:/var/lib/redis/data
     ports:
       - 6379:6379
+    volumes:
+      - redis_data:/var/lib/redis/data
     networks:
       - ecommerce_network
 
   rabbitmq:
     image: rabbitmq:4.0.8-management-alpine
     container_name: rabbitmq
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq/mnesia
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/mnesia
     networks: 
       - ecommerce_network
 

@@ -22,7 +22,7 @@ public class CartCommanderHandler(
     {
         if (!command.IsValid())
         {
-            AddValidationError(command.ValidationResult);
+            AddError(command.ValidationResult);
             return;
         }
 
@@ -35,7 +35,7 @@ public class CartCommanderHandler(
     {
         if (!command.IsValid())
         {
-            AddValidationError(command.ValidationResult);
+            AddError(command.ValidationResult);
             return;
         }
 
@@ -43,7 +43,7 @@ public class CartCommanderHandler(
 
         if (cart == null)
         {
-            AddValidationError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
+            AddError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 
@@ -58,7 +58,7 @@ public class CartCommanderHandler(
     {
         if (!command.IsValid())
         {
-            AddValidationError(command.ValidationResult);
+            AddError(command.ValidationResult);
             return;
         }
 
@@ -66,13 +66,13 @@ public class CartCommanderHandler(
 
         if (cart == null)
         {
-            AddValidationError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
+            AddError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 
         if (!cart.HasItems((CartItem)command.CartItem))
         {
-            AddValidationError("Item does not exist in cart", EnumNotificationType.NOT_FOUND_ERROR);
+            AddError("Item does not exist in cart", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 
@@ -87,7 +87,7 @@ public class CartCommanderHandler(
     {
         if (!command.IsValid())
         {
-            AddValidationError(command.ValidationResult);
+            AddError(command.ValidationResult);
             return;
         }
 
@@ -95,7 +95,7 @@ public class CartCommanderHandler(
 
         if (cart == null)
         {
-            AddValidationError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
+            AddError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 
@@ -108,7 +108,7 @@ public class CartCommanderHandler(
     {
         if (!command.IsValid())
         {
-            AddValidationError(command.ValidationResult);
+            AddError(command.ValidationResult);
             return;
         }
 
@@ -116,13 +116,13 @@ public class CartCommanderHandler(
 
         if (cart == null)
         {
-            AddValidationError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
+            AddError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 
         if (!cart.HasItems(command.ProductId))
         {
-            AddValidationError("Item does not exist in cart", EnumNotificationType.NOT_FOUND_ERROR);
+            AddError("Item does not exist in cart", EnumNotificationType.NOT_FOUND_ERROR);
             return;
         }
 

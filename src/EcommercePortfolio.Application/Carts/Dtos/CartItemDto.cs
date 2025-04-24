@@ -37,13 +37,13 @@ public record CartItemDto(
 
     public bool IsValid()
     {
-        ValidationResult = new AddCartItemValidation().Validate(this);
+        ValidationResult = new CartItemDtoValidation().Validate(this);
         return ValidationResult.IsValid;
     }
 
-    public class AddCartItemValidation : AbstractValidator<CartItemDto>
+    public class CartItemDtoValidation : AbstractValidator<CartItemDto>
     {
-        public AddCartItemValidation()
+        public CartItemDtoValidation()
         {
             RuleFor(x => x.ProductId)
                 .NotEmpty()
