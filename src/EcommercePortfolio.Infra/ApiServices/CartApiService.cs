@@ -3,6 +3,7 @@ using EcommercePortfolio.Domain.Orders.ApiServices;
 using EcommercePortfolio.Domain.Products;
 using System.Net.Http.Json;
 using System.Runtime.Serialization;
+using System.Text.Json;
 
 namespace EcommercePortfolio.Infra.ApiServices;
 
@@ -17,7 +18,13 @@ public class CartApiService(HttpClient _httpClient, INotificationContext notific
             var response = await _httpClient.GetAsync($"/carts/{clientId}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<GetCartByClientIdResponse>();
+            var cart = await response.Content
+                .ReadFromJsonAsync<CartApiResponse<GetCartByClientIdResponse>>(new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+
+            return cart.Response;
         }
         catch (Exception ex)
         {

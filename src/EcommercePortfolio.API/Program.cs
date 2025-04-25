@@ -72,7 +72,7 @@ builder.Services.AddDependencyInjections();
 var section = builder.Configuration.GetSection("ExternalApiSettings");
 var settings = section.Get<ExternalApiSettings>();
 
-builder.Services.AddHttpClientConfiguration(settings);
+builder.Services.AddHttpClientConfiguration(settings, builder.Environment.IsDevelopment());
 
 var app = builder.Build();
 

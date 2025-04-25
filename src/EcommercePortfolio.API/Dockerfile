@@ -2,11 +2,12 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
+USER root
 WORKDIR /app
+RUN apt-get update && apt-get install -y curl
+USER $APP_UID
 EXPOSE 5050
 EXPOSE 5051
-
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build

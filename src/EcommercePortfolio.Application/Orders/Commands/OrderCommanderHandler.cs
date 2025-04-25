@@ -30,7 +30,7 @@ public class OrderCommanderHandler(
         }
 
         var cart = await _cartApiService.GetCartByClientId(message.ClientId);
-        if (cart == null)
+        if (cart == null || string.IsNullOrWhiteSpace(cart.Id))
         {
             AddError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
             return;

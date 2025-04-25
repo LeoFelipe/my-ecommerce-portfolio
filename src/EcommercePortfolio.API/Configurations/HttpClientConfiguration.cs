@@ -10,7 +10,7 @@ namespace EcommercePortfolio.API.Configurations;
 
 public static class HttpClientConfiguration
 {
-    public static void AddHttpClientConfiguration(this IServiceCollection services, ExternalApiSettings externalApiSettings)
+    public static void AddHttpClientConfiguration(this IServiceCollection services, ExternalApiSettings externalApiSettings, bool isDevelopment)
     {
         services.AddHttpClient<IFakeStoreApiService, FakeStoreApiService>("FakeStoreApi", httpClient =>
         {
@@ -21,9 +21,22 @@ public static class HttpClientConfiguration
 
         services.AddHttpClient<ICartApiService, CartApiService>("CartApi", httpClient =>
         {
-            httpClient.BaseAddress = new Uri(externalApiSettings.FakeStoreApiUrl);
+            var baseUrl = isDevelopment
+                ? externalApiSettings.CartApiUrl.Replace("https://", "http://").Replace(":5051", ":5050")    
+                : externalApiSettings.CartApiUrl;
+
+            httpClient.BaseAddress = new Uri(baseUrl);
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         })
+            .ConfigurePrimaryHttpMessageHandler(() => 
+            {
+                return isDevelopment
+                    ? new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    }
+                    : new HttpClientHandler();
+            })
             .AddPolicyHandler(PollyExtensions.WaitAndRetry());
     }
 

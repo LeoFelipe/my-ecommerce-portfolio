@@ -1,6 +1,7 @@
 services:
   ecommerceportfolio.api:
     image: ${DOCKER_REGISTRY-}ecommerceportfolioapi
+    container_name: ecommerceportfolio.api
     build:
       context: .
       dockerfile: EcommercePortfolio.API/Dockerfile

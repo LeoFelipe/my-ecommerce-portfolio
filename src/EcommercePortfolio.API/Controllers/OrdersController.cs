@@ -22,5 +22,7 @@ public class OrdersController(
     // TO DO: Create endpoints for GetById, GetByClientId, UpdateOrder, UpdateOrderItem, DeleteOrder, DeleteOrderItem
     // TO DO: Create OrderQueries for GetById, GetByClientId
     // TO DO: Refactor Configuration Files
+    // TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID
+    // TO DO: Configure Logs
 
 }
