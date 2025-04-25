@@ -19,12 +19,12 @@ builder.Services.AddControllers(options =>
     _ = options.Filters.Add<ExceptionFilter>();
     _ = options.Filters.Add<NotificationFilter>();
 })
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        options.JsonSerializerOptions.MaxDepth = 5;
-    });
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.JsonSerializerOptions.MaxDepth = 5;
+});
 
 builder.Services.AddMassTransit(busConfigurator =>
 {
@@ -32,16 +32,11 @@ builder.Services.AddMassTransit(busConfigurator =>
 
     busConfigurator.AddConsumer<OrderAuthorizedConsumer>();
 
-    busConfigurator.UsingInMemory((context, config) =>
+    busConfigurator.UsingRabbitMq((context, config) =>
     {
+        config.Host(builder.Configuration.GetConnectionString("RabbitMqConnection"));
         config.ConfigureEndpoints(context);
     });
-
-    //x.UsingRabbitMq((context, cfg) =>
-    //{
-    //    cfg.Host(builder.Configuration.GetConnectionString("RabbitMqConnection"));
-    //    cfg.ConfigureEndpoints(context);
-    //});
 });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

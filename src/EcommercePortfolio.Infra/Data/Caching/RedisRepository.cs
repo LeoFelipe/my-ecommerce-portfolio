@@ -7,37 +7,32 @@ public class RedisRepository(HybridCache hybridCache) : IRedisRepository
 {
     private readonly HybridCache _hybridCache = hybridCache;
 
-    public async Task<T> GetData<T>(Func<Task<T>> GetData, string key = "ecommerce-portfolio", TimeSpan? expiration = null)
+    public async Task<T> GetData<T>(Func<Task<T>> fetchData, string key = "ecommerce-portfolio", TimeSpan? expiration = null)
     {
-        if (expiration.HasValue)
-        {
-            return await _hybridCache.GetOrCreateAsync(key,
-                async cancellationToken => await GetData(),
-                new HybridCacheEntryOptions
-                {
-                    Expiration = TimeSpan.FromSeconds(10),
-                    LocalCacheExpiration = TimeSpan.FromSeconds(10),
-                });
-        }
+        ArgumentNullException.ThrowIfNull(fetchData);
 
-        return await _hybridCache.GetOrCreateAsync(key, async cancellationToken => await GetData());
+        var cacheOptions = expiration.HasValue
+            ? new HybridCacheEntryOptions
+            {
+                Expiration = expiration.Value,
+                LocalCacheExpiration = expiration.Value,
+            }
+            : null;
+
+        return await _hybridCache.GetOrCreateAsync(key, async _ => await fetchData(), cacheOptions);
     }
 
     public async Task SetData<T>(T value, string key = "ecommerce-portfolio", TimeSpan? expiration = null)
     {
-        if (expiration.HasValue)
-        {
-            await _hybridCache.SetAsync(key,
-            value,
-            new HybridCacheEntryOptions
+        var cacheOptions = expiration.HasValue
+            ? new HybridCacheEntryOptions
             {
                 Expiration = expiration.Value,
                 LocalCacheExpiration = expiration.Value,
-            });
-            return;
-        }
+            }
+            : null;
 
-        await _hybridCache.SetAsync(key, value);
+        await _hybridCache.SetAsync(key, value, cacheOptions);
     }
 
     public async Task Remove(string key = "ecommerce-portfolio")

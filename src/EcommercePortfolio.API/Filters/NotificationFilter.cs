@@ -1,6 +1,5 @@
 ﻿using EcommercePortfolio.Application;
 using EcommercePortfolio.Core.Notification;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 using System.Text.Json;

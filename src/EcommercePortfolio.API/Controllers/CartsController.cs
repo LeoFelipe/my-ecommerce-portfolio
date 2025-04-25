@@ -17,15 +17,15 @@ public class CartsController(
     [HttpGet("{id}", Name = "Get Cart by Id")]
     public async Task<IActionResult> GetById(string id)
     {
-        var cart = await _cartQuery.GetCartById(id);
+        var cart = await _cartQuery.GetById(id);
         return OkResponse(cart);
     }
 
-    [HttpGet("{clientId:guid}", Name = "Get Carts by ClientId")]
-    public async Task<IActionResult> GetCartsByClientId(Guid clientId)
+    [HttpGet("{clientId:guid}", Name = "Get Cart by ClientId")]
+    public async Task<IActionResult> GetByClientId(Guid clientId)
     {
-        var carts = await _cartQuery.GetCartsByClientId(clientId);
-        return OkResponse(carts);
+        var cart = await _cartQuery.GetByClientId(clientId);
+        return OkResponse(cart);
     }
 
     [HttpPost(Name = "Create Cart")]

@@ -1,33 +1,33 @@
 ﻿using EcommercePortfolio.Core.Notification;
-using EcommercePortfolio.Domain.Carts;
+using EcommercePortfolio.Domain.Orders.ApiServices;
 using EcommercePortfolio.Domain.Products;
 using System.Net.Http.Json;
 using System.Runtime.Serialization;
 
 namespace EcommercePortfolio.Infra.ApiServices;
 
-public class FakeStoreApiService(HttpClient _httpClient, INotificationContext notification) : IFakeStoreApiService
+public class CartApiService(HttpClient _httpClient, INotificationContext notification) : ICartApiService
 {
     private readonly INotificationContext _notification = notification;
 
-    public async Task<IEnumerable<string>> GetCategories()
+    public async Task<GetCartByClientIdResponse> GetCartByClientId(Guid clientId)
     {
         try
         {
-            var response = await _httpClient.GetAsync("/products/categories");
+            var response = await _httpClient.GetAsync($"/carts/{clientId}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<List<string>>();
+            return await response.Content.ReadFromJsonAsync<GetCartByClientIdResponse>();
         }
         catch (Exception ex)
         {
             switch(ex)
             {
                 case SerializationException:
-                    _notification.Add(EnumNotificationType.EXCEPTION_ERROR, "Error deserializing categories response", "FakeStore:GetCategories");
+                    _notification.Add(EnumNotificationType.EXCEPTION_ERROR, "Error deserializing cart response", "CartApiService:GetCartByClientId");
                     break;
                 default:
-                    _notification.Add(EnumNotificationType.EXCEPTION_ERROR, "Error fetching categories", "FakeStore:GetCategories");
+                    _notification.Add(EnumNotificationType.EXCEPTION_ERROR, "Error fetching cart", "CartApiService:GetCartByClientId");
                     break;
             }
 

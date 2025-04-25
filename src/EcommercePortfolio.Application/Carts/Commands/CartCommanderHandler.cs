@@ -26,6 +26,14 @@ public class CartCommanderHandler(
             return;
         }
 
+        var cart = await _cartRepository.GetByClientId(message.ClientId);
+
+        if (cart != null)
+        {
+            AddError("Cart already exists", EnumNotificationType.VALIDATION_ERROR);
+            return;
+        }
+
         await _cartRepository.Add((Cart)message);
 
         await PersistData(_cartRepository.UnitOfWork);
@@ -39,7 +47,7 @@ public class CartCommanderHandler(
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(message.Id, message.ClientId);
+        var cart = await _cartRepository.GetByClientId(message.ClientId);
 
         if (cart == null)
         {
@@ -62,7 +70,7 @@ public class CartCommanderHandler(
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(message.Id, message.ClientId);
+        var cart = await _cartRepository.GetByClientId(message.ClientId);
 
         if (cart == null)
         {
@@ -91,7 +99,7 @@ public class CartCommanderHandler(
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(message.Id, message.ClientId);
+        var cart = await _cartRepository.GetByClientId(message.ClientId);
 
         if (cart == null)
         {
@@ -112,7 +120,7 @@ public class CartCommanderHandler(
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(message.Id, message.ClientId);
+        var cart = await _cartRepository.GetByClientId(message.ClientId);
 
         if (cart == null)
         {

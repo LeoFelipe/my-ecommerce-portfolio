@@ -1,10 +1,8 @@
 ﻿using EcommercePortfolio.Application.Orders.Events;
 using EcommercePortfolio.Core.Messaging;
-using EcommercePortfolio.Core.Messaging.Mediator;
 using EcommercePortfolio.Core.Notification;
-using EcommercePortfolio.Domain.Carts;
-using EcommercePortfolio.Domain.Carts.Entities;
 using EcommercePortfolio.Domain.Orders;
+using EcommercePortfolio.Domain.Orders.ApiServices;
 using EcommercePortfolio.Domain.Orders.Entities;
 using EcommercePortfolio.Domain.Payments;
 using EcommercePortfolio.Domain.Payments.Enums;
@@ -13,13 +11,13 @@ using MediatR;
 namespace EcommercePortfolio.Application.Orders.Commands;
 
 public class OrderCommanderHandler(
-    ICartRepository cartRepository,
+    ICartApiService cartApiService,
     IOrderRepository orderRepository,
     IPaymentService paymentService,
     INotificationContext notification) : CommandHandler(notification),
     IRequestHandler<AddOrderCommand>
 {
-    private readonly ICartRepository _cartRepository = cartRepository;
+    private readonly ICartApiService _cartApiService = cartApiService;
     private readonly IOrderRepository _orderRepository = orderRepository;
     private readonly IPaymentService _paymentService = paymentService;
 
@@ -31,8 +29,7 @@ public class OrderCommanderHandler(
             return;
         }
 
-        var cart = await _cartRepository.GetByIdAndClientId(message.CartId, message.ClientId);
-
+        var cart = await _cartApiService.GetCartByClientId(message.ClientId);
         if (cart == null)
         {
             AddError("Cart not found", EnumNotificationType.NOT_FOUND_ERROR);
@@ -40,7 +37,6 @@ public class OrderCommanderHandler(
         }
 
         var order = MapToOrder(cart, message);
-
         if (!IsOrderValid(order)) return;
 
         var paymentDone = await _paymentService.DoPayment(new Payment(
@@ -57,18 +53,18 @@ public class OrderCommanderHandler(
 
         order.PaymentAuthorized(paymentDone.Id);
 
-        order.AddEvent(new OrderAuthorizedEvent(message.CartId, order.Id, order.ClientId));
+        order.AddEvent(new OrderAuthorizedEvent(order.ClientId));
 
         await _orderRepository.AddAsync(order);
 
         await PersistData(_orderRepository.UnitOfWork);
     }
 
-    private static Order MapToOrder(Cart cart, AddOrderCommand message)
+    private static Order MapToOrder(GetCartByClientIdResponse cart, AddOrderCommand message)
     {
         var order = new Order(
             cart.ClientId,
-            [.. cart.CartItems.Select(x => new OrderItem(x.ProductId, x.ProductName, x.Category, x.Quantity, x.Price))]);
+            [.. cart.CartItems.Select(x => new OrderItem(x.ProductId, x.Name, x.Category, x.Quantity, x.Price))]);
 
         order.SetAddress(new Address
         {

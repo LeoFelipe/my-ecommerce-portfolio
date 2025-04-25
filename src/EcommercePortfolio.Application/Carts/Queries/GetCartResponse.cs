@@ -20,9 +20,3 @@ public record GetCartResponse(
             [.. cart.CartItems.Select(x => (CartItemDto)x)]);
     }
 }
-
-public static class GetCartResponseExtensions
-{
-    public static IReadOnlyCollection<GetCartResponse> MapToCartsResponse(this IEnumerable<Cart> carts)
-        => [.. carts.Select(cart => (GetCartResponse)cart)];
-}

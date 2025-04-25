@@ -1,4 +1,6 @@
-﻿using EcommercePortfolio.Domain.Products;
+﻿using EcommercePortfolio.Domain.Carts;
+using EcommercePortfolio.Domain.Orders.ApiServices;
+using EcommercePortfolio.Domain.Products;
 using EcommercePortfolio.Infra.ApiServices;
 using Polly;
 using Polly.Extensions.Http;
@@ -11,6 +13,13 @@ public static class HttpClientConfiguration
     public static void AddHttpClientConfiguration(this IServiceCollection services, ExternalApiSettings externalApiSettings)
     {
         services.AddHttpClient<IFakeStoreApiService, FakeStoreApiService>("FakeStoreApi", httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(externalApiSettings.FakeStoreApiUrl);
+            httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        })
+            .AddPolicyHandler(PollyExtensions.WaitAndRetry());
+
+        services.AddHttpClient<ICartApiService, CartApiService>("CartApi", httpClient =>
         {
             httpClient.BaseAddress = new Uri(externalApiSettings.FakeStoreApiUrl);
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");

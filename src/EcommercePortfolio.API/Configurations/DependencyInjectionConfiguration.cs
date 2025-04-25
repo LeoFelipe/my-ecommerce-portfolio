@@ -5,6 +5,7 @@ using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.Domain.Caching;
 using EcommercePortfolio.Domain.Carts;
 using EcommercePortfolio.Domain.Orders;
+using EcommercePortfolio.Domain.Orders.ApiServices;
 using EcommercePortfolio.Domain.Payments;
 using EcommercePortfolio.Domain.Products;
 using EcommercePortfolio.Infra.ApiServices;
@@ -26,6 +27,7 @@ public static class DependencyInjectionConfiguration
 
         services.AddScoped<IFakeStoreApiService, FakeStoreApiService>();
         services.AddScoped<IPaymentApiService, PaymentApiService>();
+        services.AddScoped<ICartApiService, CartApiService>();
 
         services.AddScoped<IPaymentService, PaymentService>();
 

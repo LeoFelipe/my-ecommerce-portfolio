@@ -17,4 +17,10 @@ public class OrdersController(
         await _mediatorHandler.SendCommand(message);
         return Created();
     }
+
+
+    // TO DO: Create endpoints for GetById, GetByClientId, UpdateOrder, UpdateOrderItem, DeleteOrder, DeleteOrderItem
+    // TO DO: Create OrderQueries for GetById, GetByClientId
+    // TO DO: Refactor Configuration Files
+
 }

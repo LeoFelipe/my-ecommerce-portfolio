@@ -2,7 +2,4 @@
 
 namespace EcommercePortfolio.Application.Orders.Events;
 
-public record OrderAuthorizedEvent(
-    string CartId,
-    Guid OrderId,
-    Guid ClientId) : Event;
+public record OrderAuthorizedEvent(Guid ClientId) : Event;

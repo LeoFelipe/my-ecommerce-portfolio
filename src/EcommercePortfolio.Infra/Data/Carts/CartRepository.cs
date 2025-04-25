@@ -18,14 +18,9 @@ public class CartRepository(MongoDbContext context) : ICartRepository
         return await _context.Carts.FindAsync(id);
     }
 
-    public async Task<Cart> GetByIdAndClientId(string id, Guid clientId)
+    public async Task<Cart> GetByClientId(Guid clientId)
     {
-        return await _context.Carts.FirstOrDefaultAsync(x => x.Id == id && x.ClientId == clientId);
-    }
-
-    public async Task<IEnumerable<Cart>> GetCartsByClientId(Guid clientId)
-    {
-        return await _context.Carts.Where(x => x.ClientId == clientId).ToListAsync();
+        return await _context.Carts.SingleOrDefaultAsync(x => x.ClientId == clientId);
     }
 
     public async Task Add(Cart cart)

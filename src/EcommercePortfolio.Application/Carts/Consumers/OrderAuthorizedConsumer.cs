@@ -11,7 +11,7 @@ public class OrderAuthorizedConsumer(
 
     public async Task Consume(ConsumeContext<OrderAuthorizedIntegrationEvent> context)
     {
-        var cart = await _cartRepository.GetByIdAndClientId(context.Message.CartId, context.Message.ClientId);
+        var cart = await _cartRepository.GetByClientId(context.Message.ClientId);
 
         if (cart != null)
         {

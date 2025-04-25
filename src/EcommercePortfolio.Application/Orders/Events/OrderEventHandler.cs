@@ -11,6 +11,6 @@ public class OrderEventHandler(IMessageBus messageBus) :
 
     public async Task Handle(OrderAuthorizedEvent message, CancellationToken cancellationToken)
     {
-        await _messageBus.Publish(new OrderAuthorizedIntegrationEvent(message.CartId, message.ClientId));
+        await _messageBus.Publish(new OrderAuthorizedIntegrationEvent(message.ClientId));
     }
 }   

@@ -1,5 +1,3 @@
 ﻿namespace EcommercePortfolio.Core.Messaging.Integration;
 
-public record OrderAuthorizedIntegrationEvent(
-    string CartId,
-    Guid ClientId): IntegrationEvent;
+public record OrderAuthorizedIntegrationEvent(Guid ClientId): IntegrationEvent;
