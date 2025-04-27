@@ -1,0 +1,28 @@
+﻿using EcommercePortfolio.Core.Messaging;
+
+namespace EcommercePortfolio.Carts.API.Application.Commands;
+
+public record RemoveCartCommand(
+    string Id,
+    Guid ClientId) : Command
+{
+    //public override bool IsValid()
+    //{
+    //    ValidationResult = new RemoveCartValidation().Validate(this);
+    //    return ValidationResult.IsValid;
+    //}
+
+    //public class RemoveCartValidation : AbstractValidator<RemoveCartCommand>
+    //{
+    //    public RemoveCartValidation()
+    //    {
+    //        RuleFor(x => x.Id)
+    //            .NotEmpty()
+    //            .WithMessage("Invalid cart id");
+
+    //        RuleFor(x => x.ClientId)
+    //            .NotEqual(Guid.Empty)
+    //            .WithMessage("Invalid client id");
+    //    }
+    //}
+}

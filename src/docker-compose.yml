@@ -1,17 +1,45 @@
 services:
-  ecommerceportfolio.api:
-    image: ${DOCKER_REGISTRY-}ecommerceportfolioapi
-    container_name: ecommerceportfolio.api
+  ecommerceportfolio.orders.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfolioordersapi
     build:
       context: .
-      dockerfile: EcommercePortfolio.API/Dockerfile
+      dockerfile: services/Orders/EcommercePortfolio.Order.API/Dockerfile
     ports:
-      - "5050:5050"
-      - "5051:5051"
+      - "5010:5010"
+      - "5011:5011"
     networks:
       - ecommerce_network
     depends_on:
       - postgresdb
+      - redisdb
+      - rabbitmq
+
+  ecommerceportfolio.deliveries.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfoliodeliveriesapi
+    build:
+      context: .
+      dockerfile: services/Deliveries/EcommercePortfolio.Delivery.API/Dockerfile
+    ports:
+      - "5020:5020"
+      - "5021:5021"
+    networks:
+      - ecommerce_network
+    depends_on:
+      - postgresdb
+      - redisdb
+      - rabbitmq
+
+  ecommerceportfolio.carts.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfoliocartsapi
+    build:
+      context: .
+      dockerfile: services/Carts/EcommercePortfolio.Carts.API/Dockerfile
+    ports:
+      - "5030:5030"
+      - "5031:5031"
+    networks:
+      - ecommerce_network
+    depends_on:
       - mongodb
       - redisdb
       - rabbitmq
@@ -74,3 +102,4 @@ volumes:
 
 networks:
   ecommerce_network:
+    
