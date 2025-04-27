@@ -10,6 +10,12 @@ using Microsoft.Extensions.Caching.Hybrid;
 using Scalar.AspNetCore;
 using System.Text.Json;
 
+// TO DO: Create a new queue so that when the order is authorized, the order can be sent for delivery tracking and update order status to delivered
+// TO DO: Create OrderQueries for GetById, GetByClientId
+// TO DO: Refactor Configuration Files
+// TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID
+// TO DO: Configure Logs
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -45,9 +51,15 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContextPool<MongoDbContext>(options =>
     options.UseMongoDB(builder.Configuration.GetConnectionString("MongoDbConnection"), "ecommerce-portfolio"));
 
-builder.Services.AddDbContextPool<PostgresDbContext>(options =>
+builder.Services.AddDbContextPool<OrderPostgresDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDbContext"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("OrderPostgresDbContext"));
+    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+});
+
+builder.Services.AddDbContextPool<OrderPostgresDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DeliveryPostgresDbContext"));
     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
 });
 
@@ -65,7 +77,7 @@ builder.Services.AddHybridCache(options =>
     };
 });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddCartCommand).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCartCommand).Assembly));
 
 builder.Services.AddDependencyInjections();
 

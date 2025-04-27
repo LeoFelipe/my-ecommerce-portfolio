@@ -1,4 +1,5 @@
-﻿using EcommercePortfolio.Infra.Data.Orders;
+﻿using EcommercePortfolio.Infra.Data.Deliveries;
+using EcommercePortfolio.Infra.Data.Orders;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommercePortfolio.API.Configurations;
@@ -16,7 +17,8 @@ public static class DbMigrationConfiguration
 
         using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
-        ApplyMigration<PostgresDbContext>(scope);
+        ApplyMigration<OrderPostgresDbContext>(scope);
+        ApplyMigration<DeliveryPostgresDbContext>(scope);
     }
 
     public static void ApplyMigration<TDbContext>(IServiceScope scope) where TDbContext : DbContext

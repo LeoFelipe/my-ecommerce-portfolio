@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using EcommercePortfolio.Core.Messaging;
+using MediatR;
 
-namespace EcommercePortfolio.Core.Messaging.Mediator;
+namespace EcommercePortfolio.Core.Mediator;
 
 public class MediatorHandler(IMediator mediator) : IMediatorHandler
 {

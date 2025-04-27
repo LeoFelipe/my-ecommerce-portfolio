@@ -1,4 +1,5 @@
-﻿using EcommercePortfolio.Application.Orders.Events;
+﻿using EcommercePortfolio.Application.Orders.Commands;
+using EcommercePortfolio.Application.Orders.Events;
 using EcommercePortfolio.Core.Domain;
 using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.Core.Notification;
@@ -11,20 +12,20 @@ using EcommercePortfolio.Domain.Payments;
 using EcommercePortfolio.Domain.Payments.Enums;
 using MediatR;
 
-namespace EcommercePortfolio.Application.Orders.Commands;
+namespace EcommercePortfolio.Application.Deliveries.Commands;
 
-public class OrderCommanderHandler(
+public class DeliveryCommanderHandler(
     ICartApiService cartApiService,
     IOrderRepository orderRepository,
     IPaymentService paymentService,
     INotificationContext notification) : CommandHandler(notification),
-    IRequestHandler<CreateOrderCommand>
+    IRequestHandler<CreateDeliveryCommand>
 {
     private readonly ICartApiService _cartApiService = cartApiService;
     private readonly IOrderRepository _orderRepository = orderRepository;
     private readonly IPaymentService _paymentService = paymentService;
 
-    public async Task Handle(CreateOrderCommand message, CancellationToken cancellationToken)
+    public async Task Handle(CreateDeliveryCommand message, CancellationToken cancellationToken)
     {
         if (!message.IsValid())
         {
@@ -65,7 +66,7 @@ public class OrderCommanderHandler(
         await PersistData(_orderRepository.UnitOfWork);
     }
 
-    private static Order MapToOrder(GetCartByClientIdResponse cart, CreateOrderCommand message)
+    private static Order MapToOrder(GetCartByClientIdResponse cart, DeliveryCommander message)
     {
         var order = Order.CreateOrder(
             cart.ClientId,

@@ -5,11 +5,11 @@ using FluentValidation;
 
 namespace EcommercePortfolio.Application.Carts.Commands;
 
-public record AddCartCommand(
+public record CreateCartCommand(
     Guid ClientId,
     List<CartItemDto> CartItems) : Command
 {
-    public static explicit operator Cart(AddCartCommand message)
+    public static explicit operator Cart(CreateCartCommand message)
     {
         return new Cart(message.ClientId, message.CartItems.MapToCartItems());
     }
@@ -20,7 +20,7 @@ public record AddCartCommand(
         return ValidationResult.IsValid;
     }
 
-    public class AddCartValidation : AbstractValidator<AddCartCommand>
+    public class AddCartValidation : AbstractValidator<CreateCartCommand>
     {
         public AddCartValidation()
         {

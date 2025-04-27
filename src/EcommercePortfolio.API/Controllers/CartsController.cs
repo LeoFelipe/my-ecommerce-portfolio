@@ -1,6 +1,6 @@
 using EcommercePortfolio.Application.Carts.Commands;
 using EcommercePortfolio.Application.Carts.Queries;
-using EcommercePortfolio.Core.Messaging.Mediator;
+using EcommercePortfolio.Core.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommercePortfolio.API.Controllers;
@@ -14,22 +14,19 @@ public class CartsController(
     private readonly ICartQueries _cartQuery = cartQuery;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
 
-    [HttpGet("{id}", Name = "Get Cart by Id")]
-    public async Task<IActionResult> GetById(string id)
-    {
-        var cart = await _cartQuery.GetById(id);
-        return OkResponse(cart);
-    }
-
     [HttpGet("{clientId:guid}", Name = "Get Cart by ClientId")]
     public async Task<IActionResult> GetByClientId(Guid clientId)
     {
         var cart = await _cartQuery.GetByClientId(clientId);
+
+        if (cart == null)
+            return NotFoundResponse("Cart not found");
+
         return OkResponse(cart);
     }
 
     [HttpPost(Name = "Create Cart")]
-    public async Task<IActionResult> CreateCart(AddCartCommand message)
+    public async Task<IActionResult> CreateCart(CreateCartCommand message)
     {
         await _mediatorHandler.SendCommand(message);
         return Created();

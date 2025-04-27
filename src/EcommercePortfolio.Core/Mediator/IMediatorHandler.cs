@@ -1,6 +1,6 @@
 ﻿using EcommercePortfolio.Core.Messaging;
 
-namespace EcommercePortfolio.Core.Messaging.Mediator;
+namespace EcommercePortfolio.Core.Mediator;
 
 public interface IMediatorHandler
 {

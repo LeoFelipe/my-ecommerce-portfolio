@@ -1,26 +1,25 @@
 ﻿using EcommercePortfolio.Core.Data;
 using EcommercePortfolio.Core.Domain;
+using EcommercePortfolio.Core.Mediator;
 using EcommercePortfolio.Core.Messaging;
-using EcommercePortfolio.Core.Messaging.Mediator;
-using EcommercePortfolio.Domain.Orders.Entities;
+using EcommercePortfolio.Domain.Deliveries.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcommercePortfolio.Infra.Data.Orders;
+namespace EcommercePortfolio.Infra.Data.Deliveries;
 
-public class PostgresDbContext(
-    DbContextOptions<PostgresDbContext> options,
+public class DeliveryPostgresDbContext(
+    DbContextOptions<DeliveryPostgresDbContext> options,
     IMediatorHandler mediatorHandler) : DbContext(options), IUnitOfWork
 {
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
 
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<Delivery> Delivery { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Ignore<Event>();
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PostgresDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DeliveryPostgresDbContext).Assembly);
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {

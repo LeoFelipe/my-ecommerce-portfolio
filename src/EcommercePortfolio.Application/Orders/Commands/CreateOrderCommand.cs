@@ -1,11 +1,12 @@
-﻿using EcommercePortfolio.Application.Orders.Dtos;
+﻿using EcommercePortfolio.Application.Deliveries.Dtos;
+using EcommercePortfolio.Application.Orders.Dtos;
 using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.Domain.Payments.Enums;
 using FluentValidation;
 
 namespace EcommercePortfolio.Application.Orders.Commands;
 
-public record AddOrderCommand(
+public record CreateOrderCommand(
     string CartId,
     Guid ClientId,
     EnumPaymentMethod PaymentMethod,
@@ -13,13 +14,13 @@ public record AddOrderCommand(
 {
     public override bool IsValid()
     {
-        ValidationResult = new AddOrderValidation().Validate(this);
+        ValidationResult = new CreateOrderValidation().Validate(this);
         return ValidationResult.IsValid;
     }
 
-    public class AddOrderValidation : AbstractValidator<AddOrderCommand>
+    public class CreateOrderValidation : AbstractValidator<CreateOrderCommand>
     {
-        public AddOrderValidation()
+        public CreateOrderValidation()
         {
             RuleFor(x => x.CartId)
                 .NotEmpty()

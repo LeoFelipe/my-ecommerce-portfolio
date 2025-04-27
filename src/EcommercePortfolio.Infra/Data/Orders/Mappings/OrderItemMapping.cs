@@ -13,8 +13,8 @@ public class OrderItemMapping : IEntityTypeConfiguration<OrderItem>
         builder.HasKey(c => c.Id);
 
         builder.Property(c => c.OrderId)
-            .IsRequired()
-            .HasColumnName("order_id");
+            .HasColumnName("order_id")
+            .IsRequired();
 
         builder.Property(c => c.ProductId)
             .IsRequired()
@@ -42,7 +42,7 @@ public class OrderItemMapping : IEntityTypeConfiguration<OrderItem>
             .HasColumnType("decimal(18,2)");
 
         builder.HasOne(c => c.Order)
-            .WithMany(c => c.OrderItems);
-
+            .WithMany(c => c.OrderItems)
+            .IsRequired();
     }
 }

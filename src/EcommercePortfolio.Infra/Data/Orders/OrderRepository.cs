@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EcommercePortfolio.Infra.Data.Orders;
 
-public class OrderRepository(PostgresDbContext context) : IOrderRepository
+public class OrderRepository(OrderPostgresDbContext context) : IOrderRepository
 {
-    private readonly PostgresDbContext _context = context;
+    private readonly OrderPostgresDbContext _context = context;
     public IUnitOfWork UnitOfWork => _context;
 
     private bool _disposed;

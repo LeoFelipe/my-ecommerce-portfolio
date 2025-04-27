@@ -1,5 +1,5 @@
-﻿using EcommercePortfolio.Core.Messaging;
-using EcommercePortfolio.Core.Messaging.Integration;
+﻿using EcommercePortfolio.Core.MessageBus;
+using EcommercePortfolio.Core.Messaging.Integrations;
 using MediatR;
 
 namespace EcommercePortfolio.Application.Orders.Events;
@@ -11,6 +11,8 @@ public class OrderEventHandler(IMessageBus messageBus) :
 
     public async Task Handle(OrderAuthorizedEvent message, CancellationToken cancellationToken)
     {
-        await _messageBus.Publish(new OrderAuthorizedIntegrationEvent(message.ClientId));
+        await _messageBus.Publish(new UpdateCartForOrderAuthorizedIntegrationMessage(message.ClientId));
+
+
     }
 }   

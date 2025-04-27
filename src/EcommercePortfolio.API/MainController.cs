@@ -15,4 +15,9 @@ public abstract class MainController : ControllerBase
     {
         return BadRequest(new ResponseResult(false, System.Net.HttpStatusCode.BadRequest, response));
     }
+
+    protected IActionResult NotFoundResponse(object response)
+    {
+        return BadRequest(new ResponseResult(false, System.Net.HttpStatusCode.NotFound, response));
+    }
 }

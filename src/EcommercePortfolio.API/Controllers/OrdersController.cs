@@ -1,5 +1,6 @@
 using EcommercePortfolio.Application.Orders.Commands;
-using EcommercePortfolio.Core.Messaging.Mediator;
+using EcommercePortfolio.Application.Orders.Queries;
+using EcommercePortfolio.Core.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommercePortfolio.API.Controllers;
@@ -7,22 +8,35 @@ namespace EcommercePortfolio.API.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class OrdersController(
+    IOrderQueries orderQuery,
     IMediatorHandler mediatorHandler) : MainController
 {
+    private readonly IOrderQueries _orderQuery = orderQuery;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
 
-    [HttpPost(Name = "Add Order")]
-    public async Task<IActionResult> AddOrder(AddOrderCommand message)
+    [HttpGet("{id:guid}", Name = "Get Order by id")]
+    public async Task<IActionResult> GetOrderById(Guid id)
+    {
+        var order = await _orderQuery.GetOrderById(id);
+
+        if (order == null)
+            return NotFoundResponse("Cart not found");
+
+        return OkResponse(order);
+    }
+
+    [HttpGet("client/{clientId:guid}", Name = "Get Orders by ClientId")]
+    public async Task<IActionResult> GetOrdersByClientId(Guid clientId)
+    {
+        var orders = await _orderQuery.GetOrdersByClientId(clientId);
+        return OkResponse(orders);
+    }
+
+    [HttpPost(Name = "Create Order")]
+    public async Task<IActionResult> CreateOrder(CreateOrderCommand message)
     {
         await _mediatorHandler.SendCommand(message);
         return Created();
     }
-
-
-    // TO DO: Create endpoints for GetById, GetByClientId, UpdateOrder, UpdateOrderItem, DeleteOrder, DeleteOrderItem
-    // TO DO: Create OrderQueries for GetById, GetByClientId
-    // TO DO: Refactor Configuration Files
-    // TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID
-    // TO DO: Configure Logs
 
 }

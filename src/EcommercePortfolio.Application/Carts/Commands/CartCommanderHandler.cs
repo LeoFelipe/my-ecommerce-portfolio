@@ -10,7 +10,7 @@ namespace EcommercePortfolio.Application.Carts.Commands;
 public class CartCommanderHandler(
     ICartRepository cartRepository,
     INotificationContext notification) : CommandHandler(notification), 
-    IRequestHandler<AddCartCommand>,
+    IRequestHandler<CreateCartCommand>,
     IRequestHandler<UpdateCartCommand>,
     IRequestHandler<UpdateCartItemCommand>,
     IRequestHandler<RemoveCartCommand>,
@@ -18,7 +18,7 @@ public class CartCommanderHandler(
 {
     private readonly ICartRepository _cartRepository = cartRepository;
 
-    public async Task Handle(AddCartCommand message, CancellationToken cancellationToken)
+    public async Task Handle(CreateCartCommand message, CancellationToken cancellationToken)
     {
         if (!message.IsValid())
         {
