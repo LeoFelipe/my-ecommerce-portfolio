@@ -1,7 +1,6 @@
-using EcommercePortfolio.Carts.API.Application.Commands;
-using EcommercePortfolio.Carts.API.Application.Consumers;
-using EcommercePortfolio.Carts.API.Configurations;
-using EcommercePortfolio.Carts.Infra.Data;
+using EcommercePortfolio.Orders.API.Application.Commands;
+using EcommercePortfolio.Orders.API.Configurations;
+using EcommercePortfolio.Orders.Infra.Data;
 using EcommercePortfolio.Services.Filters;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +11,7 @@ using System.Text.Json;
 // TO DO: Create a new queue so that when the order is authorized, the order can be sent for delivery tracking and update order status to delivered
 // TO DO: Refactor Configuration Files
 // TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID
+// TO DO: Create Aspire Project
 // TO DO: Configure Logs
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,8 +34,6 @@ builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
 
-    busConfigurator.AddConsumer<OrderAuthorizedConsumer>();
-
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.Host(builder.Configuration.GetConnectionString("RabbitMqConnection"));
@@ -46,8 +44,11 @@ builder.Services.AddMassTransit(busConfigurator =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContextPool<MongoDbContext>(options =>
-    options.UseMongoDB(builder.Configuration.GetConnectionString("MongoDbConnection"), "ecommerce-portfolio"));
+builder.Services.AddDbContextPool<OrderPostgresDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("OrderPostgresDbContext"));
+    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+});
 
 builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration.GetConnectionString("RedisDbConnection"));
@@ -63,7 +64,7 @@ builder.Services.AddHybridCache(options =>
     };
 });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCartCommand).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateOrderCommand).Assembly));
 
 builder.Services.AddDependencyInjections();
 
@@ -80,6 +81,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    DbMigrationConfiguration.Configure(app);
 }
 
 app.UseHttpsRedirection();

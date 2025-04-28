@@ -4,5 +4,5 @@ namespace EcommercePortfolio.Core.MessageBus;
 
 public interface IMessageBus
 {
-    Task Publish<T>(T message) where T : IntegrationMessage;
+    Task Publish<T>(T message) where T : IntegrationEvent;
 }

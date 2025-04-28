@@ -1,7 +1,6 @@
-using EcommercePortfolio.Carts.API.Application.Commands;
-using EcommercePortfolio.Carts.API.Application.Consumers;
-using EcommercePortfolio.Carts.API.Configurations;
-using EcommercePortfolio.Carts.Infra.Data;
+using EcommercePortfolio.Deliveries.API.Application.Commands;
+using EcommercePortfolio.Deliveries.API.Configurations;
+using EcommercePortfolio.Deliveries.Infra.Data;
 using EcommercePortfolio.Services.Filters;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -34,8 +33,6 @@ builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
 
-    busConfigurator.AddConsumer<OrderAuthorizedConsumer>();
-
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.Host(builder.Configuration.GetConnectionString("RabbitMqConnection"));
@@ -46,8 +43,11 @@ builder.Services.AddMassTransit(busConfigurator =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContextPool<MongoDbContext>(options =>
-    options.UseMongoDB(builder.Configuration.GetConnectionString("MongoDbConnection"), "ecommerce-portfolio"));
+builder.Services.AddDbContextPool<DeliveryPostgresDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DeliveryPostgresDbContext"));
+    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+});
 
 builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration.GetConnectionString("RedisDbConnection"));
@@ -63,7 +63,7 @@ builder.Services.AddHybridCache(options =>
     };
 });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCartCommand).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateDeliveryCommand).Assembly));
 
 builder.Services.AddDependencyInjections();
 
@@ -80,6 +80,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    DbMigrationConfiguration.Configure(app);
 }
 
 app.UseHttpsRedirection();

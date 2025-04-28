@@ -8,7 +8,7 @@ namespace EcommercePortfolio.Carts.API.Configurations;
 
 public static class HttpClientConfiguration
 {
-    public static void AddHttpClientConfiguration(this IServiceCollection services, ExternalApiSettings externalApiSettings, bool isDevelopment)
+    public static void AddHttpClientConfiguration(this IServiceCollection services, ExternalApiSettings externalApiSettings)
     {
         services.AddHttpClient<IFakeStoreApiService, FakeStoreApiService>("FakeStoreApi", httpClient =>
         {

@@ -29,23 +29,27 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Carts.Do
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Carts.Infra", "services\Carts\EcommercePortfolio.Carts.Infra\EcommercePortfolio.Carts.Infra.csproj", "{82741C0C-821C-48B3-AD1B-E84D7724815B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Deliveries.Infra", "services\Deliveries\EcommercePortfolio.Delivery.Infra\EcommercePortfolio.Deliveries.Infra.csproj", "{F7A88E14-75D8-421B-B2BC-3A49D6F8B962}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Deliveries.Infra", "services\Deliveries\EcommercePortfolio.Deliveries.Infra\EcommercePortfolio.Deliveries.Infra.csproj", "{F7A88E14-75D8-421B-B2BC-3A49D6F8B962}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Deliveries.Domain", "services\Deliveries\EcommercePortfolio.Delivery.Domain\EcommercePortfolio.Deliveries.Domain.csproj", "{B2F83EC8-E297-489B-9C09-4499A5C76A91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Deliveries.Domain", "services\Deliveries\EcommercePortfolio.Deliveries.Domain\EcommercePortfolio.Deliveries.Domain.csproj", "{B2F83EC8-E297-489B-9C09-4499A5C76A91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.Infra", "services\Orders\EcommercePortfolio.Order.Infra\EcommercePortfolio.Orders.Infra.csproj", "{0967E0F1-102D-45DE-A176-F7F6B769486F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.Infra", "services\Orders\EcommercePortfolio.Orders.Infra\EcommercePortfolio.Orders.Infra.csproj", "{0967E0F1-102D-45DE-A176-F7F6B769486F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.Domain", "services\Orders\EcommercePortfolio.Order.Domain\EcommercePortfolio.Orders.Domain.csproj", "{09C2C051-F7D0-4997-84CD-F396A39B9DBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.Domain", "services\Orders\EcommercePortfolio.Orders.Domain\EcommercePortfolio.Orders.Domain.csproj", "{09C2C051-F7D0-4997-84CD-F396A39B9DBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.API", "services\Orders\EcommercePortfolio.Order.API\EcommercePortfolio.Orders.API.csproj", "{849C8CFB-8575-4EAD-B44E-106C47FEAAEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.API", "services\Orders\EcommercePortfolio.Orders.API\EcommercePortfolio.Orders.API.csproj", "{849C8CFB-8575-4EAD-B44E-106C47FEAAEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Deliveries.API", "services\Deliveries\EcommercePortfolio.Delivery.API\EcommercePortfolio.Deliveries.API.csproj", "{85DF5EEC-E386-422E-8BB0-584D2F2BB4A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Deliveries.API", "services\Deliveries\EcommercePortfolio.Deliveries.API\EcommercePortfolio.Deliveries.API.csproj", "{85DF5EEC-E386-422E-8BB0-584D2F2BB4A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Core", "building-blocks\EcommercePortfolio.Core\EcommercePortfolio.Core.csproj", "{262C540E-59F7-4209-B336-CBC6A9D65014}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Services", "building-blocks\EcommercePortfolio.Services\EcommercePortfolio.Services.csproj", "{344D44BE-07A7-41CD-BFB9-BD1042CC028A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Core.ExternalServices", "building-blocks\EcommercePortfolio.Core.ExternalServices\EcommercePortfolio.Core.ExternalServices.csproj", "{25C27C05-EEE9-451D-BF20-C4D2E0F4A5C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_docker", "_docker", "{4A9DD85C-74F8-4D1F-BFD4-15DBF49780AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_aspire", "_aspire", "{BE2AB7EA-7638-4EF6-B210-4882B0A94EF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,7 +114,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{81DDED9D-158B-E303-5F62-77A2896D2A5A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A} = {4A9DD85C-74F8-4D1F-BFD4-15DBF49780AC}
 		{710E6347-3568-4D2E-BD85-2BD13EA675D2} = {5F6112B9-D4CA-40F6-BB38-BA6D68E66EF0}
 		{6A015560-14A3-4D87-8E28-9B0FDA98A8B9} = {5F6112B9-D4CA-40F6-BB38-BA6D68E66EF0}
 		{F9464E14-56B6-452D-966A-4F8E25EE988B} = {6A015560-14A3-4D87-8E28-9B0FDA98A8B9}

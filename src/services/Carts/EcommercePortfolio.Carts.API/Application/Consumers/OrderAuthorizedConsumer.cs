@@ -1,22 +1,17 @@
-﻿using EcommercePortfolio.Carts.Domain.Carts;
+﻿using EcommercePortfolio.Carts.API.Application.Commands;
 using EcommercePortfolio.Core.Messaging.Integrations;
 using MassTransit;
+using MassTransit.Mediator;
 
 namespace EcommercePortfolio.Carts.API.Application.Consumers;
 
 public class OrderAuthorizedConsumer(
-    ICartRepository cartRepository) : IConsumer<UpdateCartForOrderAuthorizedIntegrationMessage>
+    IMediator mediator) : IConsumer<RemoveCartQueueMessage>
 {
-    private readonly ICartRepository _cartRepository = cartRepository;
+    private readonly IMediator _mediator = mediator;
 
-    public async Task Consume(ConsumeContext<UpdateCartForOrderAuthorizedIntegrationMessage> context)
+    public async Task Consume(ConsumeContext<RemoveCartQueueMessage> context)
     {
-        var cart = await _cartRepository.GetByClientId(context.Message.ClientId);
-
-        if (cart != null)
-        {
-            _cartRepository.Remove(cart);
-            await _cartRepository.UnitOfWork.Commit();
-        }
+        await _mediator.Send(new RemoveCartCommand(context.Message.ClientId));
     }
 }

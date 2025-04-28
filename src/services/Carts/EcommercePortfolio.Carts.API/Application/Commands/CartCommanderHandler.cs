@@ -3,27 +3,28 @@ using EcommercePortfolio.Carts.Domain.Carts;
 using EcommercePortfolio.Carts.Domain.Entities;
 using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.Core.Notification;
+using MediatR;
 
 namespace EcommercePortfolio.Carts.API.Application.Commands;
 
 public class CartCommanderHandler(
     ICartRepository cartRepository,
-    INotificationContext notification) : CommandHandler(notification) 
-    //IRequestHandler<CreateCartCommand>,
-    //IRequestHandler<UpdateCartCommand>,
-    //IRequestHandler<UpdateCartItemCommand>,
-    //IRequestHandler<RemoveCartCommand>,
-    //IRequestHandler<RemoveCartItemCommand>
+    INotificationContext notification) : CommandHandler(notification)
+    IRequestHandler<CreateCartCommand>,
+    IRequestHandler<UpdateCartCommand>,
+    IRequestHandler<UpdateCartItemCommand>,
+    IRequestHandler<RemoveCartCommand>,
+    IRequestHandler<RemoveCartItemCommand>
 {
     private readonly ICartRepository _cartRepository = cartRepository;
 
     public async Task Handle(CreateCartCommand message, CancellationToken cancellationToken)
     {
-        //if (!message.IsValid())
-        //{
-        //    AddError(message.ValidationResult);
-        //    return;
-        //}
+        if (!message.IsValid())
+        {
+            AddError(message.ValidationResult);
+            return;
+        }
 
         var cart = await _cartRepository.GetByClientId(message.ClientId);
 
@@ -40,11 +41,11 @@ public class CartCommanderHandler(
 
     public async Task Handle(UpdateCartCommand message, CancellationToken cancellationToken)
     {
-        //if (!message.IsValid())
-        //{
-        //    AddError(message.ValidationResult);
-        //    return;
-        //}
+        if (!message.IsValid())
+        {
+            AddError(message.ValidationResult);
+            return;
+        }
 
         var cart = await _cartRepository.GetByClientId(message.ClientId);
 
@@ -63,11 +64,11 @@ public class CartCommanderHandler(
 
     public async Task Handle(UpdateCartItemCommand message, CancellationToken cancellationToken)
     {
-        //if (!message.IsValid())
-        //{
-        //    AddError(message.ValidationResult);
-        //    return;
-        //}
+        if (!message.IsValid())
+        {
+            AddError(message.ValidationResult);
+            return;
+        }
 
         var cart = await _cartRepository.GetByClientId(message.ClientId);
 
@@ -92,11 +93,11 @@ public class CartCommanderHandler(
 
     public async Task Handle(RemoveCartCommand message, CancellationToken cancellationToken)
     {
-        //if (!message.IsValid())
-        //{
-        //    AddError(message.ValidationResult);
-        //    return;
-        //}
+        if (!message.IsValid())
+        {
+            AddError(message.ValidationResult);
+            return;
+        }
 
         var cart = await _cartRepository.GetByClientId(message.ClientId);
 
@@ -113,11 +114,11 @@ public class CartCommanderHandler(
 
     public async Task Handle(RemoveCartItemCommand message, CancellationToken cancellationToken)
     {
-        //if (!message.IsValid())
-        //{
-        //    AddError(message.ValidationResult);
-        //    return;
-        //}
+        if (!message.IsValid())
+        {
+            AddError(message.ValidationResult);
+            return;
+        }
 
         var cart = await _cartRepository.GetByClientId(message.ClientId);
 
