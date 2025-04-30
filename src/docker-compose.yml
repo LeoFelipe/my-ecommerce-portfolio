@@ -1,9 +1,10 @@
 services:
   ecommerceportfolio.orders.api:
     image: ${DOCKER_REGISTRY-}ecommerceportfolioordersapi
+    container_name: ecommerce-portfolio-orders-api
     build:
       context: .
-      dockerfile: services/Orders/EcommercePortfolio.Order.API/Dockerfile
+      dockerfile: services/Orders/EcommercePortfolio.Orders.API/Dockerfile
     ports:
       - "5010:5010"
       - "5011:5011"
@@ -16,9 +17,10 @@ services:
 
   ecommerceportfolio.deliveries.api:
     image: ${DOCKER_REGISTRY-}ecommerceportfoliodeliveriesapi
+    container_name: ecommerce-portfolio-deliveries-api
     build:
       context: .
-      dockerfile: services/Deliveries/EcommercePortfolio.Delivery.API/Dockerfile
+      dockerfile: services/Deliveries/EcommercePortfolio.Deliveries.API/Dockerfile
     ports:
       - "5020:5020"
       - "5021:5021"
@@ -31,6 +33,7 @@ services:
 
   ecommerceportfolio.carts.api:
     image: ${DOCKER_REGISTRY-}ecommerceportfoliocartsapi
+    container_name: ecommerce-portfolio-carts-api
     build:
       context: .
       dockerfile: services/Carts/EcommercePortfolio.Carts.API/Dockerfile
@@ -46,10 +49,10 @@ services:
   
   postgresdb:
     image: postgres:latest
-    container_name: postgresdb
+    container_name: ecommerce-portfolio-postgres-db
     restart: always
     environment:
-      POSTGRES_DB: MyEcommercePortfolio
+      POSTGRES_DB: EcommercePortfolio
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -61,7 +64,7 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: mongodb
+    container_name: ecommerce-portfolio-mongo-db
     restart: always
     ports:
       - "27017:27017"
@@ -75,7 +78,7 @@ services:
 
   redisdb:
     image: redis:latest
-    container_name: redisdb
+    container_name: ecommerce-portfolio-redis-db
     ports:
       - 6379:6379
     volumes:
@@ -85,7 +88,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:4.0.8-management-alpine
-    container_name: rabbitmq
+    container_name: ecommerce-portfolio-rabbit-mq
     ports:
       - "5672:5672"
       - "15672:15672"

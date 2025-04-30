@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Core.ExternalServices\EcommercePortfolio.ExternalServices.csproj" />
 		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Core\EcommercePortfolio.Core.csproj" />
 		<ProjectReference Include="..\EcommercePortfolio.Deliveries.Domain\EcommercePortfolio.Deliveries.Domain.csproj" />
 	</ItemGroup>

@@ -1,7 +1,7 @@
-﻿using EcommercePortfolio.Core.ExternalServices.MyFakePay;
-using EcommercePortfolio.Core.Mediator;
+﻿using EcommercePortfolio.Core.Mediator;
 using EcommercePortfolio.Core.MessageBus;
 using EcommercePortfolio.Core.Notification;
+using EcommercePortfolio.ExternalServices.MyFakePayApi;
 using EcommercePortfolio.Orders.API.Application.Queries;
 using EcommercePortfolio.Orders.Domain;
 using EcommercePortfolio.Orders.Domain.ApiServices;
@@ -21,9 +21,8 @@ public static class DependencyInjectionConfiguration
 
         services.AddScoped<IOrderQueries, OrderQueries>();
 
-        services.AddScoped<IFakeStoreApiService, FakeStoreApiService>();
-        services.AddScoped<IPaymentApiService, PaymentApiService>();
         services.AddScoped<ICartApiService, CartApiService>();
+        services.AddScoped<IPaymentApiService, PaymentApiService>();
 
         services.AddScoped<IPaymentService, PaymentService>();
 

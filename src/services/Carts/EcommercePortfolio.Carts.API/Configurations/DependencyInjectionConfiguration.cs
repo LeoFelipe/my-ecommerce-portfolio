@@ -3,6 +3,7 @@ using EcommercePortfolio.Carts.Domain.Carts;
 using EcommercePortfolio.Carts.Infra.Data;
 using EcommercePortfolio.Core.Mediator;
 using EcommercePortfolio.Core.Notification;
+using EcommercePortfolio.ExternalServices.FakeStoreApi;
 using EcommercePortfolio.Services.Caching;
 
 namespace EcommercePortfolio.Carts.API.Configurations;
@@ -16,7 +17,7 @@ public static class DependencyInjectionConfiguration
 
         services.AddScoped<ICartQueries, CartQueries>();
 
-        //services.AddScoped<IFakeStoreApiService, FakeStoreApiService>();
+        services.AddScoped<IFakeStoreApiService, FakeStoreApiService>();
 
         services.AddScoped<ICartRepository, CartRepository>();
         services.AddScoped<IRedisRepository, RedisRepository>();

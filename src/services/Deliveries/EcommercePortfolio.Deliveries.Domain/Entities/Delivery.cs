@@ -14,7 +14,7 @@ public class Delivery : SqlEntity, IAggregateRoot
     public EnumDeliveryStatus DeliveryStatus { get; private set; }
     public virtual Address Address { get; private set; }
 
-    public Delivery(Guid orderId, Guid clientId, DateTime expectedDate)
+    private Delivery(Guid orderId, Guid clientId, DateTime expectedDate)
     {
         OrderId = orderId;
         ClientId = clientId;
@@ -24,7 +24,11 @@ public class Delivery : SqlEntity, IAggregateRoot
 
     protected Delivery() { }
 
-    public void SetExpectedDate(DateTime expectedDate) => ExpectedDate = expectedDate;
+    public static Delivery CreateDelivery(Guid orderId, Guid clientId)
+    {
+        return new Delivery(orderId, clientId, DateTime.Now.AddDays(30));
+    }
+
     public void SetDateMade(DateTime dateMade) => DateMade = dateMade;
     public void SetAddress(Address address) => Address = address;
 }

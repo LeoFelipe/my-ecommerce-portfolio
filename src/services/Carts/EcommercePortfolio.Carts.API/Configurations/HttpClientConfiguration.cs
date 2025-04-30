@@ -1,41 +1,19 @@
-﻿using EcommercePortfolio.Orders.Domain.ApiServices;
-using EcommercePortfolio.Orders.Infra.ApiServices;
-using Polly;
-using Polly.Extensions.Http;
-using Polly.Retry;
+﻿using EcommercePortfolio.ExternalServices.FakeStoreApi;
+using EcommercePortfolio.Services.Configurations;
 
 namespace EcommercePortfolio.Carts.API.Configurations;
 
 public static class HttpClientConfiguration
 {
-    public static void AddHttpClientConfiguration(this IServiceCollection services, ExternalApiSettings externalApiSettings)
+    public static void AddHttpClientConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
+        var externalApiSettings = configuration.GetSection("ExternalApiSettings").Get<ExternalApiSettings>();
+
         services.AddHttpClient<IFakeStoreApiService, FakeStoreApiService>("FakeStoreApi", httpClient =>
         {
             httpClient.BaseAddress = new Uri(externalApiSettings.FakeStoreApiUrl);
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         })
             .AddPolicyHandler(PollyExtensions.WaitAndRetry());
-    }
-
-    public static class PollyExtensions
-    {
-        public static AsyncRetryPolicy<HttpResponseMessage> WaitAndRetry()
-        {
-            var retry = HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .WaitAndRetryAsync(
-                [
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(5),
-                    TimeSpan.FromSeconds(10),
-                ], (outcome, timespan, retryCount, context) =>
-                {
-                    Console.WriteLine($"Trying for {retryCount} time!");
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                });
-
-            return retry;
-        }
     }
 }

@@ -24,6 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Core.ExternalServices\EcommercePortfolio.ExternalServices.csproj" />
 		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Core\EcommercePortfolio.Core.csproj" />
 		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Services\EcommercePortfolio.Services.csproj" />
 		<ProjectReference Include="..\..\Orders\EcommercePortfolio.Orders.Domain\EcommercePortfolio.Orders.Domain.csproj" />

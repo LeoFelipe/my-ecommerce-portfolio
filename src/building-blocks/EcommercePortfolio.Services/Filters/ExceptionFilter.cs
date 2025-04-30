@@ -1,23 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Net;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
 using EcommercePortfolio.Services.ObjectResponses;
+using EcommercePortfolio.Services.Configurations;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace EcommercePortfolio.Services.Filters;
 
 public class ExceptionFilter(ILogger<ExceptionFilter> logger) : IExceptionFilter
 {
     private readonly ILogger<ExceptionFilter> _logger = logger;
-
-    private readonly JsonSerializerOptions jsonSerializerOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        MaxDepth = 5
-    };
 
     public void OnException(ExceptionContext context)
     {
@@ -44,15 +38,15 @@ public class ExceptionFilter(ILogger<ExceptionFilter> logger) : IExceptionFilter
             Status = StatusCodes.Status500InternalServerError
         };
 
-        _logger.LogError(JsonSerializer.Serialize(context.Exception, jsonSerializerOptions));
+        _logger.LogError(JsonSerializer.Serialize(context.Exception, new JsonSerializerOptions().Default()));
 
         context.HttpContext.Response.StatusCode = problemDetails.Status.Value;
 
         var response = new ResponseResult(false,  (HttpStatusCode)problemDetails.Status.Value, problemDetails);
 
-        //context.Result = new JsonResult(response)
-        //{
-        //    StatusCode = problemDetails.Status.Value
-        //};
+        context.Result = new JsonResult(response)
+        {
+            StatusCode = problemDetails.Status.Value
+        };
     }
 }

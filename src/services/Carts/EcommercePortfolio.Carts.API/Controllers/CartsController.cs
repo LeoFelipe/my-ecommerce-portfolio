@@ -33,55 +33,55 @@ public class CartsController(
         return Created();
     }
 
-    [HttpPut("{id}", Name = "Update Cart")]
-    public async Task<IActionResult> UpdateCart(string id, [FromBody] UpdateCartCommand message)
+    [HttpPut("{clientId:guid}", Name = "Update Cart")]
+    public async Task<IActionResult> UpdateCart(Guid clientId, [FromBody] UpdateCartCommand message)
     {
-        if (string.IsNullOrWhiteSpace(id))
-            return BadRequestResponse("Id cannot be null or empty");
+        if (clientId == Guid.Empty)
+            return BadRequestResponse("ClientId cannot be null or empty");
 
-        if (id != message.Id)
-            return BadRequestResponse($"Id {id} does not match with command's Id {message.Id}");
+        if (clientId != message.ClientId)
+            return BadRequestResponse($"ClientId {clientId} does not match with command's ClientId {message.ClientId}");
 
         await _mediatorHandler.SendCommand(message);
 
         return NoContent();
     }
 
-    [HttpPut("{id}/item", Name = "Update Cart Item")]
-    public async Task<IActionResult> UpdateCartItem(string id, [FromBody] UpdateCartItemCommand message)
+    [HttpDelete("{clientId:guid}", Name = "Remove Cart")]
+    public async Task<IActionResult> RemoveCart(Guid clientId, [FromBody] RemoveCartCommand message)
     {
-        if (string.IsNullOrWhiteSpace(id))
-            return BadRequestResponse("Id cannot be null or empty");
+        if (clientId == Guid.Empty)
+            return BadRequestResponse("ClientId cannot be null or empty");
 
-        if (id != message.Id)
-            return BadRequestResponse($"Id {id} does not match with command's Id {message.Id}");
+        if (clientId != message.ClientId)
+            return BadRequestResponse($"ClientId {clientId} does not match with command's ClientId {message.ClientId}");
+
+        await _mediatorHandler.SendCommand(message);
+        return NoContent();
+    }
+
+    [HttpPut("{clientId:guid}/item", Name = "Update Cart Item")]
+    public async Task<IActionResult> UpdateCartItem(Guid clientId, [FromBody] UpdateCartItemCommand message)
+    {
+        if (clientId == Guid.Empty)
+            return BadRequestResponse("ClientId cannot be null or empty");
+
+        if (clientId != message.ClientId)
+            return BadRequestResponse($"ClientId {clientId} does not match with command's ClientId {message.ClientId}");
 
         await _mediatorHandler.SendCommand(message);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}", Name = "Remove Cart")]
-    public async Task<IActionResult> RemoveCart(string id, [FromBody] RemoveCartCommand message)
+    [HttpDelete("{clientId:guid}/item", Name = "Remove Cart Item")]
+    public async Task<IActionResult> RemoveCartItem(Guid clientId, [FromBody] RemoveCartItemCommand message)
     {
-        if (string.IsNullOrWhiteSpace(id))
-            return BadRequestResponse("Id cannot be null or empty");
+        if (clientId == Guid.Empty)
+            return BadRequestResponse("ClientId cannot be null or empty");
 
-        if (id != message.Id)
-            return BadRequestResponse($"Id {id} does not match with command's Id {message.Id}");
-
-        await _mediatorHandler.SendCommand(message);
-        return NoContent();
-    }
-
-    [HttpDelete("{id}/item", Name = "Remove Cart Item")]
-    public async Task<IActionResult> RemoveCartItem(string id, [FromBody] RemoveCartItemCommand message)
-    {
-        if (string.IsNullOrWhiteSpace(id))
-            return BadRequestResponse("Id cannot be null or empty");
-
-        if (id != message.Id)
-            return BadRequestResponse($"Id {id} does not match with command's Id {message.Id}");
+        if (clientId != message.ClientId)
+            return BadRequestResponse($"ClientId {clientId} does not match with command's ClientId {message.ClientId}");
 
         await _mediatorHandler.SendCommand(message);
         return NoContent();

@@ -1,5 +1,6 @@
 ﻿using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.Deliveries.Domain.ApiServices;
+using EcommercePortfolio.Services.Configurations;
 using System.Net.Http.Json;
 using System.Runtime.Serialization;
 using System.Text.Json;
@@ -18,10 +19,7 @@ public class OrderApiService(HttpClient _httpClient, INotificationContext notifi
             response.EnsureSuccessStatusCode();
 
             var cart = await response.Content
-                .ReadFromJsonAsync<OrderApiResponse<GetOrderByIdResponse>>(new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
+                .ReadFromJsonAsync<OrderApiResponse<GetOrderByIdResponse>>(new JsonSerializerOptions().Default());
 
             return cart.Response;
         }

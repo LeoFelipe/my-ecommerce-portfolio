@@ -1,11 +1,12 @@
-﻿using EcommercePortfolio.Deliveries.Domain.Entities;
+﻿using EcommercePortfolio.Core.Data;
+using EcommercePortfolio.Deliveries.Domain.Entities;
 
 namespace EcommercePortfolio.Deliveries.Domain;
 
-public interface IDeliveryRepository : IDisposable
+public interface IDeliveryRepository : IRepository<Delivery>
 {
     Task<Delivery> GetById(Guid id);
-    Task<IEnumerable<Delivery>> GetByClientId(Guid clientId);
+    Task<Delivery> GetByOrderIdAndClientId(Guid orderId, Guid clientId);
     Task AddAsync(Delivery delivery);
     void Update(Delivery delivery);
 }
