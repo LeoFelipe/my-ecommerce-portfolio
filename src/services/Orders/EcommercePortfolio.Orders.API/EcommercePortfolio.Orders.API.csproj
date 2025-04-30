@@ -23,6 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\aspire\EcommercePortfolio.ServiceDefaults\EcommercePortfolio.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Core.ExternalServices\EcommercePortfolio.ExternalServices.csproj" />
 		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Services\EcommercePortfolio.Services.csproj" />
 		<ProjectReference Include="..\EcommercePortfolio.Orders.Domain\EcommercePortfolio.Orders.Domain.csproj" />

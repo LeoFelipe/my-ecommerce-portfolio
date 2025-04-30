@@ -7,6 +7,8 @@ using EcommercePortfolio.Orders.API.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Services.AddApiConfig();
 
 builder.Services.AddMessageBus(builder.Configuration);
@@ -23,6 +25,8 @@ builder.Services.AddHttpClientConfiguration(builder.Configuration, builder.Envir
 
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.UseApiConfiguration(app.Environment);
 

@@ -1,6 +1,7 @@
 services:
   ecommerceportfolio.orders.api:
     image: ${DOCKER_REGISTRY-}ecommerceportfolioordersapi
+    restart: always
     build:
       context: .
       dockerfile: services/Orders/EcommercePortfolio.Orders.API/Dockerfile
@@ -10,12 +11,13 @@ services:
     networks:
       - ecommerce_network
     depends_on:
-      - postgresdb
-      - redisdb
-      - rabbitmq
+      - ecommerceportfolio.postgres.db
+      - ecommerceportfolio.redis.db
+      - ecommerceportfolio.rabbit.mq
 
   ecommerceportfolio.deliveries.api:
     image: ${DOCKER_REGISTRY-}ecommerceportfoliodeliveriesapi
+    restart: always
     build:
       context: .
       dockerfile: services/Deliveries/EcommercePortfolio.Deliveries.API/Dockerfile
@@ -25,12 +27,13 @@ services:
     networks:
       - ecommerce_network
     depends_on:
-      - postgresdb
-      - redisdb
-      - rabbitmq
+      - ecommerceportfolio.postgres.db
+      - ecommerceportfolio.redis.db
+      - ecommerceportfolio.rabbit.mq
 
   ecommerceportfolio.carts.api:
     image: ${DOCKER_REGISTRY-}ecommerceportfoliocartsapi
+    restart: always
     build:
       context: .
       dockerfile: services/Carts/EcommercePortfolio.Carts.API/Dockerfile
@@ -40,13 +43,12 @@ services:
     networks:
       - ecommerce_network
     depends_on:
-      - mongodb
-      - redisdb
-      - rabbitmq
+      - ecommerceportfolio.mongo.db
+      - ecommerceportfolio.redis.db
+      - ecommerceportfolio.rabbit.mq
   
   ecommerceportfolio.postgres.db:
     image: postgres:latest
-    restart: always
     environment:
       POSTGRES_DB: EcommercePortfolio
       POSTGRES_USER: postgres
@@ -60,7 +62,6 @@ services:
 
   ecommerceportfolio.mongo.db:
     image: mongo:latest
-    restart: always
     ports:
       - "27017:27017"
     environment: 
@@ -71,7 +72,7 @@ services:
     networks: 
       - ecommerce_network
 
-  ecommerceportfolio.redisdb:
+  ecommerceportfolio.redis.db:
     image: redis:latest
     ports:
       - 6379:6379
@@ -89,12 +90,17 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq/mnesia
     networks: 
       - ecommerce_network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:  
-  postgres_data:
-  mongo_data:
-  redis_data:
-  rabbitmq_data:
+  postgres_data: {}
+  mongo_data: {}
+  redis_data: {}
+  rabbitmq_data: {}
 
 networks:
   ecommerce_network:
