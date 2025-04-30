@@ -1,4 +1,4 @@
-using EcommercePortfolio.Orders.API.Application.Commands;
+using EcommercePortfolio.Orders.API.Applications.Commands;
 using EcommercePortfolio.Orders.API.Configurations;
 
 // TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID

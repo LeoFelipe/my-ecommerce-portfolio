@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Orders.Domain;
 using EcommercePortfolio.Services.Caching;
 
-namespace EcommercePortfolio.Orders.API.Application.Queries;
+namespace EcommercePortfolio.Orders.API.Applications.Queries;
 
 public interface IOrderQueries
 {

@@ -1,7 +1,7 @@
-﻿using EcommercePortfolio.Orders.API.Application.Dtos;
+﻿using EcommercePortfolio.Orders.API.Applications.Dtos;
 using EcommercePortfolio.Orders.Domain.Entities;
 
-namespace EcommercePortfolio.Orders.API.Application.Queries;
+namespace EcommercePortfolio.Orders.API.Applications.Queries;
 
 public record GetOrderResponse(
     Guid Id,

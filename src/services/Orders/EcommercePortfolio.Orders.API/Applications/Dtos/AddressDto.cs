@@ -2,7 +2,7 @@
 using FluentValidation.Results;
 using System.Text.Json.Serialization;
 
-namespace EcommercePortfolio.Orders.API.Application.Dtos;
+namespace EcommercePortfolio.Orders.API.Applications.Dtos;
 
 public record AddressDto(
     string ZipCode,

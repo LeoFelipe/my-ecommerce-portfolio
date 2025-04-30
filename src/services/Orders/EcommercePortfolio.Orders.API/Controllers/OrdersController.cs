@@ -1,6 +1,6 @@
 using EcommercePortfolio.Core.Mediator;
-using EcommercePortfolio.Orders.API.Application.Commands;
-using EcommercePortfolio.Orders.API.Application.Queries;
+using EcommercePortfolio.Orders.API.Applications.Commands;
+using EcommercePortfolio.Orders.API.Applications.Queries;
 using EcommercePortfolio.Services.Controllers;
 using Microsoft.AspNetCore.Mvc;
 

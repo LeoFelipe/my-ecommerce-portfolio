@@ -1,6 +1,6 @@
 ﻿using EcommercePortfolio.Orders.Domain.Entities;
 
-namespace EcommercePortfolio.Orders.API.Application.Dtos;
+namespace EcommercePortfolio.Orders.API.Applications.Dtos;
 
 public record OrderItemDto(
     int ProductId,

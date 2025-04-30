@@ -4,13 +4,13 @@ using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.Domain.ValueObjects;
 using EcommercePortfolio.ExternalServices.MyFakePay.Enums;
 using EcommercePortfolio.ExternalServices.MyFakePayApi;
-using EcommercePortfolio.Orders.API.Application.Events;
+using EcommercePortfolio.Orders.API.Applications.Events;
 using EcommercePortfolio.Orders.Domain;
 using EcommercePortfolio.Orders.Domain.ApiServices;
 using EcommercePortfolio.Orders.Domain.Entities;
 using MediatR;
 
-namespace EcommercePortfolio.Orders.API.Application.Commands;
+namespace EcommercePortfolio.Orders.API.Applications.Commands;
 
 public class OrderCommanderHandler(
     ICartApiService cartApiService,

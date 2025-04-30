@@ -2,7 +2,7 @@
 using EcommercePortfolio.Core.Messaging.Integrations;
 using MediatR;
 
-namespace EcommercePortfolio.Orders.API.Application.Events;
+namespace EcommercePortfolio.Orders.API.Applications.Events;
 
 public class OrderEventHandler(
     IMessageBus messageBus) : 

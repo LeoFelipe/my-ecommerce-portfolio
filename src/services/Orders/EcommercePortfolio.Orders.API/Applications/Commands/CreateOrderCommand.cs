@@ -1,9 +1,9 @@
 ﻿using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.ExternalServices.MyFakePay.Enums;
-using EcommercePortfolio.Orders.API.Application.Dtos;
+using EcommercePortfolio.Orders.API.Applications.Dtos;
 using FluentValidation;
 
-namespace EcommercePortfolio.Orders.API.Application.Commands;
+namespace EcommercePortfolio.Orders.API.Applications.Commands;
 
 public record CreateOrderCommand(
     string CartId,
