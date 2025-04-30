@@ -90,11 +90,6 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq/mnesia
     networks: 
       - ecommerce_network
-    healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 volumes:  
   postgres_data: {}
