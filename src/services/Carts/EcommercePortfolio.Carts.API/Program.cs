@@ -2,7 +2,6 @@ using EcommercePortfolio.Carts.API.Application.Commands;
 using EcommercePortfolio.Carts.API.Configurations;
 
 // TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID
-// TO DO: Create Aspire Project
 // TO DO: Configure Logs
 
 var builder = WebApplication.CreateBuilder(args);

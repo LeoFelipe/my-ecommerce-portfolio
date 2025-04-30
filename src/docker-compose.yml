@@ -1,5 +1,5 @@
 services:
-  ecommerceportfolio.orders.api:
+  ecommerceportfolio-orders-api:
     image: ${DOCKER_REGISTRY-}ecommerceportfolioordersapi
     restart: always
     build:
@@ -11,11 +11,11 @@ services:
     networks:
       - ecommerce_network
     depends_on:
-      - ecommerceportfolio.postgres.db
-      - ecommerceportfolio.redis.db
-      - ecommerceportfolio.rabbit.mq
+      - ecommerceportfolio-postgres-db
+      - ecommerceportfolio-redis-db
+      - ecommerceportfolio-rabbit-mq
 
-  ecommerceportfolio.deliveries.api:
+  ecommerceportfolio-deliveries-api:
     image: ${DOCKER_REGISTRY-}ecommerceportfoliodeliveriesapi
     restart: always
     build:
@@ -27,11 +27,11 @@ services:
     networks:
       - ecommerce_network
     depends_on:
-      - ecommerceportfolio.postgres.db
-      - ecommerceportfolio.redis.db
-      - ecommerceportfolio.rabbit.mq
+      - ecommerceportfolio-postgres-db
+      - ecommerceportfolio-redis-db
+      - ecommerceportfolio-rabbit-mq
 
-  ecommerceportfolio.carts.api:
+  ecommerceportfolio-carts-api:
     image: ${DOCKER_REGISTRY-}ecommerceportfoliocartsapi
     restart: always
     build:
@@ -43,11 +43,11 @@ services:
     networks:
       - ecommerce_network
     depends_on:
-      - ecommerceportfolio.mongo.db
-      - ecommerceportfolio.redis.db
-      - ecommerceportfolio.rabbit.mq
+      - ecommerceportfolio-mongo-db
+      - ecommerceportfolio-redis-db
+      - ecommerceportfolio-rabbit-mq
   
-  ecommerceportfolio.postgres.db:
+  ecommerceportfolio-postgres-db:
     image: postgres:latest
     environment:
       POSTGRES_DB: EcommercePortfolio
@@ -60,7 +60,7 @@ services:
     networks:
       - ecommerce_network
 
-  ecommerceportfolio.mongo.db:
+  ecommerceportfolio-mongo-db:
     image: mongo:latest
     ports:
       - "27017:27017"
@@ -72,7 +72,7 @@ services:
     networks: 
       - ecommerce_network
 
-  ecommerceportfolio.redis.db:
+  ecommerceportfolio-redis-db:
     image: redis:latest
     ports:
       - 6379:6379
@@ -81,7 +81,7 @@ services:
     networks:
       - ecommerce_network
 
-  ecommerceportfolio.rabbit.mq:
+  ecommerceportfolio-rabbit-mq:
     image: rabbitmq:4.0.8-management-alpine
     ports:
       - "5672:5672"
