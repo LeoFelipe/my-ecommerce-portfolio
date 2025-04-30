@@ -1,27 +1,56 @@
 services:
-  ecommerceportfolio.api:
-    image: ${DOCKER_REGISTRY-}ecommerceportfolioapi
-    container_name: ecommerceportfolio.api
+  ecommerceportfolio.orders.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfolioordersapi
+    restart: always
     build:
       context: .
-      dockerfile: EcommercePortfolio.API/Dockerfile
+      dockerfile: services/Orders/EcommercePortfolio.Orders.API/Dockerfile
     ports:
-      - "5050:5050"
-      - "5051:5051"
+      - "5010:5010"
+      - "5011:5011"
     networks:
       - ecommerce_network
     depends_on:
-      - postgresdb
-      - mongodb
-      - redisdb
-      - rabbitmq
-  
-  postgresdb:
-    image: postgres:latest
-    container_name: postgresdb
+      - ecommerceportfolio.postgres.db
+      - ecommerceportfolio.redis.db
+      - ecommerceportfolio.rabbit.mq
+
+  ecommerceportfolio.deliveries.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfoliodeliveriesapi
     restart: always
+    build:
+      context: .
+      dockerfile: services/Deliveries/EcommercePortfolio.Deliveries.API/Dockerfile
+    ports:
+      - "5020:5020"
+      - "5021:5021"
+    networks:
+      - ecommerce_network
+    depends_on:
+      - ecommerceportfolio.postgres.db
+      - ecommerceportfolio.redis.db
+      - ecommerceportfolio.rabbit.mq
+
+  ecommerceportfolio.carts.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfoliocartsapi
+    restart: always
+    build:
+      context: .
+      dockerfile: services/Carts/EcommercePortfolio.Carts.API/Dockerfile
+    ports:
+      - "5030:5030"
+      - "5031:5031"
+    networks:
+      - ecommerce_network
+    depends_on:
+      - ecommerceportfolio.mongo.db
+      - ecommerceportfolio.redis.db
+      - ecommerceportfolio.rabbit.mq
+  
+  ecommerceportfolio.postgres.db:
+    image: postgres:latest
     environment:
-      POSTGRES_DB: MyEcommercePortfolio
+      POSTGRES_DB: EcommercePortfolio
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -31,10 +60,8 @@ services:
     networks:
       - ecommerce_network
 
-  mongodb:
+  ecommerceportfolio.mongo.db:
     image: mongo:latest
-    container_name: mongodb
-    restart: always
     ports:
       - "27017:27017"
     environment: 
@@ -45,9 +72,8 @@ services:
     networks: 
       - ecommerce_network
 
-  redisdb:
+  ecommerceportfolio.redis.db:
     image: redis:latest
-    container_name: redisdb
     ports:
       - 6379:6379
     volumes:
@@ -55,9 +81,8 @@ services:
     networks:
       - ecommerce_network
 
-  rabbitmq:
+  ecommerceportfolio.rabbit.mq:
     image: rabbitmq:4.0.8-management-alpine
-    container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -67,10 +92,11 @@ services:
       - ecommerce_network
 
 volumes:  
-  postgres_data:
-  mongo_data:
-  redis_data:
-  rabbitmq_data:
+  postgres_data: {}
+  mongo_data: {}
+  redis_data: {}
+  rabbitmq_data: {}
 
 networks:
   ecommerce_network:
+    
