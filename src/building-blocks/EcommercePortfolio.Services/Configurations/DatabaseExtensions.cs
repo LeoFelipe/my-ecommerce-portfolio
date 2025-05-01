@@ -20,22 +20,19 @@ public static class DatabaseExtensions
 
     public static void AddPostgresDatabase<TDbContext>(
         this IServiceCollection services, 
-        IConfiguration configuration, 
-        string serviceNameForConnectionString) where TDbContext : DbContext
+        IConfiguration configuration,
+        string databaseName) where TDbContext : DbContext
     {
-        var conn = configuration.GetConnectionString(serviceNameForConnectionString);
         services.AddDbContextPool<TDbContext>(options =>
-            options.UseNpgsql(conn));
+            options.UseNpgsql(configuration.GetConnectionString(databaseName)));
     }
 
     public static void AddMongoDatabase<TDbContext>(
         this IServiceCollection services, 
-        IConfiguration configuration, 
-        string serviceNameForConnectionString, 
+        IConfiguration configuration,
         string databaseName) where TDbContext : DbContext
     {
-        var conn = configuration.GetConnectionString(serviceNameForConnectionString);
         services.AddDbContextPool<TDbContext>(options =>
-            options.UseMongoDB(configuration.GetConnectionString(serviceNameForConnectionString), databaseName));
+            options.UseMongoDB(configuration.GetConnectionString(databaseName), databaseName));
     }
 }

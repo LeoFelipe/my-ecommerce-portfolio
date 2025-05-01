@@ -14,8 +14,7 @@ builder.Services.AddApiConfig();
 
 builder.Services.AddMessageBus(builder.Configuration);
 
-var conn = builder.Configuration.GetConnectionString("ecommerceportfolio-mongo-db");
-builder.Services.AddMongoDatabase<MongoDbContext>(builder.Configuration, "MongoDbConnection", "EcommercePortfolioCart");
+builder.Services.AddMongoDatabase<MongoDbContext>(builder.Configuration, "EcommercePortfolioCart");
 
 builder.Services.AddCache(builder.Configuration);
 

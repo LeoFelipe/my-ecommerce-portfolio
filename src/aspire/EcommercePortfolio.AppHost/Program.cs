@@ -5,7 +5,8 @@ var postgresdb = builder.AddPostgres("ecommerceportfolio-postgres-db")
     .WithPgAdmin();
 
 var mongodb = builder.AddMongoDB("ecommerceportfolio-mongo-db")
-    .WithDataVolume();
+    .WithDataVolume()
+    .WithMongoExpress();
 
 var redisdb = builder.AddRedis("ecommerceportfolio-redis-db");
 
