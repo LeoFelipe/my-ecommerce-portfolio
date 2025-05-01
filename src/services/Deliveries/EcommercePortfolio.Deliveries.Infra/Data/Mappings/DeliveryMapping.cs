@@ -16,6 +16,10 @@ public class DeliveryMapping : IEntityTypeConfiguration<Delivery>
             .HasColumnName("order_id")
             .IsRequired();
 
+        builder.Property(c => c.ClientId)
+            .HasColumnName("client_id")
+            .IsRequired();
+
         builder.Property(c => c.ExpectedDate)
             .HasColumnName("expected_date")
             .HasColumnType("timestamp")
@@ -39,7 +43,7 @@ public class DeliveryMapping : IEntityTypeConfiguration<Delivery>
         builder.OwnsOne(p => p.Address, e =>
         {
             e.Property(pe => pe.ZipCode)
-                .HasColumnName("zipCode")
+                .HasColumnName("zip_code")
                 .HasColumnType("varchar(20)")
                 .IsRequired();
 

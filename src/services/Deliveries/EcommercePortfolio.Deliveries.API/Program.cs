@@ -1,5 +1,7 @@
 using EcommercePortfolio.Deliveries.API.Applications.Commands;
 using EcommercePortfolio.Deliveries.API.Configurations;
+using EcommercePortfolio.Deliveries.Infra.Data;
+using EcommercePortfolio.Services.Configurations;
 
 // TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID
 // TO DO: Configure Logs
@@ -12,7 +14,7 @@ builder.Services.AddApiConfig();
 
 builder.Services.AddMessageBus(builder.Configuration);
 
-builder.Services.AddDatabases(builder.Configuration);
+builder.Services.AddPostgresDatabase<DeliveryPostgresDbContext>(builder.Configuration, "EcommercePortfolioDelivery");
 
 builder.Services.AddCache(builder.Configuration);
 

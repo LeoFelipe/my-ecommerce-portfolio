@@ -39,7 +39,7 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
         builder.OwnsOne(p => p.Address, e =>
         {
             e.Property(pe => pe.ZipCode)
-                .HasColumnName("zipCode")
+                .HasColumnName("zip_code")
                 .HasColumnType("varchar(20)")
                 .IsRequired();
 

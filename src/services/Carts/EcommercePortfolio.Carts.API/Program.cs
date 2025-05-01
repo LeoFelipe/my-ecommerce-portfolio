@@ -1,5 +1,7 @@
 using EcommercePortfolio.Carts.API.Application.Commands;
 using EcommercePortfolio.Carts.API.Configurations;
+using EcommercePortfolio.Carts.Infra.Data;
+using EcommercePortfolio.Services.Configurations;
 
 // TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID
 // TO DO: Configure Logs
@@ -12,7 +14,8 @@ builder.Services.AddApiConfig();
 
 builder.Services.AddMessageBus(builder.Configuration);
 
-builder.Services.AddDatabases(builder.Configuration);
+var conn = builder.Configuration.GetConnectionString("ecommerceportfolio-mongo-db");
+builder.Services.AddMongoDatabase<MongoDbContext>(builder.Configuration, "MongoDbConnection", "EcommercePortfolioCart");
 
 builder.Services.AddCache(builder.Configuration);
 

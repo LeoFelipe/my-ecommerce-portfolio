@@ -12,7 +12,7 @@ public static class MessageBusConfiguration
 
             busConfigurator.UsingRabbitMq((context, config) =>
             {
-                config.Host(configuration.GetConnectionString("RabbitMqConnection"));
+                config.Host(configuration.GetConnectionString("ecommerceportfolio-rabbit-mq"));
             });
         });
     }

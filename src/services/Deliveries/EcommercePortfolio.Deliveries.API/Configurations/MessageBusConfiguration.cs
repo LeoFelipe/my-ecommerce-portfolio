@@ -19,14 +19,12 @@ public static class MessageBusConfiguration
                 // Disables exchange creation for base types
                 config.MessageTopology.SetEntityNameFormatter(new CustomEntityNameFormatter());
 
-                config.Host(configuration.GetConnectionString("RabbitMqConnection"));
+                config.Host(configuration.GetConnectionString("ecommerceportfolio-rabbit-mq"));
 
                 config.ReceiveEndpoint("create-delivery-for-order-authorized", endpoint =>
                 {
                     endpoint.ConfigureConsumer<CreateDeliveryConsumer>(context);
                 });
-
-                config.Host(configuration.GetConnectionString("RabbitMqConnection"));
             });
         });
     }

@@ -3,6 +3,7 @@ using EcommercePortfolio.Core.Data;
 using EcommercePortfolio.Core.Messaging;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace EcommercePortfolio.Carts.Infra.Data;
@@ -10,6 +11,11 @@ namespace EcommercePortfolio.Carts.Infra.Data;
 public class MongoDbContext(DbContextOptions<MongoDbContext> options) : DbContext(options), IUnitOfWork
 {
     public DbSet<Cart> Carts { get; init; }
+
+    public static MongoDbContext Create(IMongoDatabase database) =>
+        new(new DbContextOptionsBuilder<MongoDbContext>()
+            .UseMongoDB(database.Client, database.DatabaseNamespace.DatabaseName)
+            .Options);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

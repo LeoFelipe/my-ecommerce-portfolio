@@ -27,8 +27,6 @@ public class ExceptionFilter(ILogger<ExceptionFilter> logger) : IExceptionFilter
             exceptionsTreeList.Add(exception);
         }
 
-        var logId = Guid.CreateVersion7().ToString();
-
         var problemDetails = new ProblemDetails
         {
             Title = "An error occurred while processing your request.",
@@ -37,8 +35,6 @@ public class ExceptionFilter(ILogger<ExceptionFilter> logger) : IExceptionFilter
             Type = exception.GetType().Name,
             Status = StatusCodes.Status500InternalServerError
         };
-
-        _logger.LogError(JsonSerializer.Serialize(context.Exception, new JsonSerializerOptions().Default()));
 
         context.HttpContext.Response.StatusCode = problemDetails.Status.Value;
 

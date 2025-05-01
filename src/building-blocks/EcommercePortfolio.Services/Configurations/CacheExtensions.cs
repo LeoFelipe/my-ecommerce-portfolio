@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace EcommercePortfolio.Carts.API.Configurations;
+namespace EcommercePortfolio.Services.Configurations;
 
-public static class CacheConfiguration
+public static class CacheExtensions
 {
     public static void AddCache(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddStackExchangeRedisCache(options =>
-            options.Configuration = configuration.GetConnectionString("RedisDbConnection"));
+            options.Configuration = configuration.GetConnectionString("ecommerceportfolio-redis-db"));
 
         services.AddHybridCache(options =>
         {
