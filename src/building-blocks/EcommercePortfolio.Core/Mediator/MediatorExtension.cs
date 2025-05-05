@@ -14,12 +14,15 @@ public static class MediatorExtension
 
         entities.ToList().ForEach(entity => entity.Entity.ClearEvents());
 
-        var tasks = entityEvents
-            .Select(async (entityEvent) =>
-            {
-                await mediator.PublishEvent(entityEvent);
-            });
+        if (entityEvents.Count == 0)
+        {
+            var tasks = entityEvents
+                .Select(async (entityEvent) =>
+                {
+                    await mediator.PublishEvent(entityEvent);
+                });
 
-        await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
+        }
     }
 }

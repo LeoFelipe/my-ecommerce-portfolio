@@ -1,9 +1,9 @@
-﻿using EcommercePortfolio.Carts.API.Application.Dtos;
+﻿using EcommercePortfolio.Carts.API.Applications.Dtos;
 using EcommercePortfolio.Carts.Domain.Entities;
 using EcommercePortfolio.Core.Messaging;
 using FluentValidation;
 
-namespace EcommercePortfolio.Carts.API.Application.Commands;
+namespace EcommercePortfolio.Carts.API.Applications.Commands;
 
 public record CreateCartCommand(
     Guid ClientId,

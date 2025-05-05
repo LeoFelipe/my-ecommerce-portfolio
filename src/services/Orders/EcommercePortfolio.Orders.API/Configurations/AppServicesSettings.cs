@@ -1,6 +1,6 @@
 ﻿namespace EcommercePortfolio.Orders.API.Configurations;
 
-public class ExternalApiSettings
+public class ApiSettings
 {
     public string CartApiUrl { get; set; }
 }

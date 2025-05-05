@@ -1,9 +1,9 @@
-﻿using EcommercePortfolio.Carts.API.Application.Commands;
+﻿using EcommercePortfolio.Carts.API.Applications.Commands;
 using EcommercePortfolio.Core.Mediator;
 using EcommercePortfolio.Core.Messaging.Integrations;
 using MassTransit;
 
-namespace EcommercePortfolio.Carts.API.Application.Consumers;
+namespace EcommercePortfolio.Carts.API.Applications.Consumers;
 
 public class RemoveCartConsumer(
     IMediatorHandler mediatorHandler) : IConsumer<OrderAuthorizedQueueMessage>

@@ -1,7 +1,7 @@
-﻿using EcommercePortfolio.Carts.API.Application.Dtos;
+﻿using EcommercePortfolio.Carts.API.Applications.Dtos;
 using EcommercePortfolio.Carts.Domain.Entities;
 
-namespace EcommercePortfolio.Carts.API.Application.Queries;
+namespace EcommercePortfolio.Carts.API.Applications.Queries;
 
 public record GetCartResponse(
     string Id,

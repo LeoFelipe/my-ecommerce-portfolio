@@ -1,44 +1,46 @@
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
-var postgresdb = builder.AddPostgres("ecommerceportfolio-postgres-db")
+var postgresDb = builder.AddPostgres("ecommerceportfolio-postgres-db")
     .WithDataVolume()
     .WithPgAdmin();
 
-var mongodb = builder.AddMongoDB("ecommerceportfolio-mongo-db")
+var mongoDb = builder.AddMongoDB("ecommerceportfolio-mongo-db")
     .WithDataVolume()
     .WithMongoExpress();
 
-var redisdb = builder.AddRedis("ecommerceportfolio-redis-db");
+var redisDb = builder.AddRedis("ecommerceportfolio-redis-db");
 
-var rabbitmq = builder.AddRabbitMQ("ecommerceportfolio-rabbit-mq")
+var rabbitMq = builder.AddRabbitMQ("ecommerceportfolio-rabbit-mq")
     .WithManagementPlugin();
 
-var deliveryDb = postgresdb.AddDatabase("EcommercePortfolioDelivery");
-var orderDb = postgresdb.AddDatabase("EcommercePortfolioOrder");
-var cartDb = mongodb.AddDatabase("EcommercePortfolioCart");
+var deliveryDb = postgresDb.AddDatabase("EcommercePortfolioDelivery");
+var orderDb = postgresDb.AddDatabase("EcommercePortfolioOrder");
+var cartDb = mongoDb.AddDatabase("EcommercePortfolioCart");
 
-builder.AddProject<Projects.EcommercePortfolio_Carts_API>("ecommerceportfolio-carts-api")
+var cartsApi = builder.AddProject<Projects.EcommercePortfolio_Carts_API>("ecommerceportfolio-carts-api")
+    .WaitFor(mongoDb)
+    .WaitFor(redisDb)
+    .WaitFor(rabbitMq)
     .WithReference(cartDb)
-    .WithReference(redisdb)
-    .WithReference(rabbitmq)
-    .WaitFor(mongodb)
-    .WaitFor(redisdb)
-    .WaitFor(rabbitmq);
+    .WithReference(redisDb)
+    .WithReference(rabbitMq);
 
-builder.AddProject<Projects.EcommercePortfolio_Orders_API>("ecommerceportfolio-orders-api")
+var ordersApi = builder.AddProject<Projects.EcommercePortfolio_Orders_API>("ecommerceportfolio-orders-api")
+    .WaitFor(postgresDb)
+    .WaitFor(redisDb)
+    .WaitFor(rabbitMq)
+    .WithReference(cartsApi)
     .WithReference(orderDb)
-    .WithReference(redisdb)
-    .WithReference(rabbitmq)
-    .WaitFor(postgresdb)
-    .WaitFor(redisdb)
-    .WaitFor(rabbitmq);
+    .WithReference(redisDb)
+    .WithReference(rabbitMq);
 
 builder.AddProject<Projects.EcommercePortfolio_Deliveries_API>("ecommerceportfolio-deliveries-api")
+    .WaitFor(postgresDb)
+    .WaitFor(redisDb)
+    .WaitFor(rabbitMq)
+    .WithReference(ordersApi)
     .WithReference(deliveryDb)
-    .WithReference(redisdb)
-    .WithReference(rabbitmq)
-    .WaitFor(postgresdb)
-    .WaitFor(redisdb)
-    .WaitFor(rabbitmq);
+    .WithReference(redisDb)
+    .WithReference(rabbitMq);
 
 await builder.Build().RunAsync();

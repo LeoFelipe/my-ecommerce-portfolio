@@ -1,5 +1,5 @@
-using EcommercePortfolio.Carts.API.Application.Commands;
-using EcommercePortfolio.Carts.API.Application.Queries;
+using EcommercePortfolio.Carts.API.Applications.Commands;
+using EcommercePortfolio.Carts.API.Applications.Queries;
 using EcommercePortfolio.Core.Mediator;
 using EcommercePortfolio.Services.Controllers;
 using Microsoft.AspNetCore.Mvc;

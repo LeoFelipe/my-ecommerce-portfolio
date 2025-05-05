@@ -3,7 +3,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using System.Text.Json.Serialization;
 
-namespace EcommercePortfolio.Carts.API.Application.Dtos;
+namespace EcommercePortfolio.Carts.API.Applications.Dtos;
 
 public record CartItemDto(
     int ProductId, 

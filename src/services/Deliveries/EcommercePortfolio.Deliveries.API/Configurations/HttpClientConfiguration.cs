@@ -8,26 +8,13 @@ public static class HttpClientConfiguration
 {
     public static void AddHttpClientConfiguration(this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
     {
-        var externalApiSettings = configuration.GetSection("ExternalApiSettings").Get<ExternalApiSettings>();
+        var apiSettings = configuration.GetSection("ApiSettings").Get<ApiSettings>();
 
         services.AddHttpClient<IOrderApiService, OrderApiService>("OrderApi", httpClient =>
         {
-            var baseUrl = isDevelopment
-                ? externalApiSettings.OrderApiUrl.Replace("https://", "http://").Replace(":5011", ":5010")
-                : externalApiSettings.OrderApiUrl;
-
-            httpClient.BaseAddress = new Uri(baseUrl);
+            httpClient.BaseAddress = new Uri(apiSettings.OrderApiUrl);
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         })
-            .ConfigurePrimaryHttpMessageHandler(() =>
-            {
-                return isDevelopment
-                    ? new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    }
-                    : new HttpClientHandler();
-            })
             .AddPolicyHandler(PollyExtensions.WaitAndRetry());
     }
 }

@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Carts.Domain.Carts;
 using EcommercePortfolio.Services.Caching;
 
-namespace EcommercePortfolio.Carts.API.Application.Queries;
+namespace EcommercePortfolio.Carts.API.Applications.Queries;
 
 public interface ICartQueries
 {

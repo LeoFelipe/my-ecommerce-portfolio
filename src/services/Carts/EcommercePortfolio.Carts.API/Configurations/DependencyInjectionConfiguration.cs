@@ -1,4 +1,4 @@
-﻿using EcommercePortfolio.Carts.API.Application.Queries;
+﻿using EcommercePortfolio.Carts.API.Applications.Queries;
 using EcommercePortfolio.Carts.Domain.Carts;
 using EcommercePortfolio.Carts.Infra.Data;
 using EcommercePortfolio.Core.Mediator;

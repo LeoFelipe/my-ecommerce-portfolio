@@ -1,11 +1,11 @@
-﻿using EcommercePortfolio.Carts.API.Application.Dtos;
+﻿using EcommercePortfolio.Carts.API.Applications.Dtos;
 using EcommercePortfolio.Carts.Domain.Carts;
 using EcommercePortfolio.Carts.Domain.Entities;
 using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.Core.Notification;
 using MediatR;
 
-namespace EcommercePortfolio.Carts.API.Application.Commands;
+namespace EcommercePortfolio.Carts.API.Applications.Commands;
 
 public class CartCommanderHandler(
     ICartRepository cartRepository,

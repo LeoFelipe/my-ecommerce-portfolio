@@ -1,6 +1,6 @@
 ﻿namespace EcommercePortfolio.Carts.API.Configurations;
 
-public class ExternalApiSettings
+public class ApiSettings
 {
     public string FakeStoreApiUrl { get; set; }
 }

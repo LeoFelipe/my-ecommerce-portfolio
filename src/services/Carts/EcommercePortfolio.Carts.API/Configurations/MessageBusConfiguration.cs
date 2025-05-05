@@ -1,4 +1,4 @@
-﻿using EcommercePortfolio.Carts.API.Application.Consumers;
+﻿using EcommercePortfolio.Carts.API.Applications.Consumers;
 using EcommercePortfolio.Services.Configurations;
 using MassTransit;
 

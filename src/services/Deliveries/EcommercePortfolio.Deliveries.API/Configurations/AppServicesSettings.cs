@@ -1,6 +1,6 @@
 ﻿namespace EcommercePortfolio.Deliveries.API.Configurations;
 
-public class ExternalApiSettings
+public class ApiSettings
 {
     public string OrderApiUrl { get; set; }
 }
