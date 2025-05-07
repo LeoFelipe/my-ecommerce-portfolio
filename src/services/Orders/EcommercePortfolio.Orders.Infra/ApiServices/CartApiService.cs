@@ -1,6 +1,7 @@
 ﻿using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.Orders.Domain.ApiServices;
 using EcommercePortfolio.Services.Configurations;
+using System.Net;
 using System.Net.Http.Json;
 using System.Runtime.Serialization;
 using System.Text.Json;
@@ -16,9 +17,11 @@ public class CartApiService(HttpClient _httpClient, INotificationContext notific
         try
         {
             var response = await _httpClient.GetAsync($"/carts/{clientId}");
-            response.EnsureSuccessStatusCode();
 
-            var jsonString = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                return null;
+
+            response.EnsureSuccessStatusCode();
 
             var cart = await response.Content
                 .ReadFromJsonAsync<CartApiResponse<GetCartByClientIdResponse>>(new JsonSerializerOptions().Default());

@@ -1,5 +1,5 @@
 ﻿using EcommercePortfolio.Core.Domain;
-using EcommercePortfolio.Domain.ValueObjects;
+using EcommercePortfolio.Core.Domain.ValueObjects;
 using EcommercePortfolio.Orders.Domain.Enums;
 
 namespace EcommercePortfolio.Orders.Domain.Entities;
@@ -66,6 +66,9 @@ public class Order : SqlEntity, IAggregateRoot
 
         if (OrderStatus != EnumOrderStatus.AUTHORIZED)
             return "The order is not authorized";
+
+        if (Address == null)
+            return "The address order is not informed";
 
         return string.Empty;
     }

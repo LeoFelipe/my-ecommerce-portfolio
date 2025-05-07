@@ -2,5 +2,5 @@
 
 public interface IOrderApiService
 {
-    Task<GetOrderByIdResponse> GetOrderById(Guid id);
+    Task<GetAddressOrderByIdResponse> GetAddressOrderById(Guid id);
 }

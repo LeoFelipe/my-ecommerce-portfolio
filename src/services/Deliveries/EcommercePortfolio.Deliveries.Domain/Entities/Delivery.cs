@@ -1,6 +1,6 @@
 ﻿using EcommercePortfolio.Core.Domain;
+using EcommercePortfolio.Core.Domain.ValueObjects;
 using EcommercePortfolio.Deliveries.Domain.Enums;
-using EcommercePortfolio.Domain.ValueObjects;
 
 namespace EcommercePortfolio.Deliveries.Domain.Entities;
 
@@ -22,7 +22,7 @@ public class Delivery : SqlEntity, IAggregateRoot
         DeliveryStatus = EnumDeliveryStatus.PENDING;
     }
 
-    protected Delivery() { }
+    public Delivery() { }
 
     public static Delivery CreateDelivery(Guid orderId, Guid clientId)
     {
@@ -31,4 +31,18 @@ public class Delivery : SqlEntity, IAggregateRoot
 
     public void SetDateMade(DateTime dateMade) => DateMade = dateMade;
     public void SetAddress(Address address) => Address = address;
+
+    public string ValidateForCreation()
+    {
+        if (DeliveryStatus != EnumDeliveryStatus.PENDING)
+            return "The delivery status it is not PENDING";
+
+        if (DateMade != null)
+            return "The order date made is informed on create";
+
+        if (Address == null)
+            return "The address order is not informed";
+
+        return string.Empty;
+    }
 }

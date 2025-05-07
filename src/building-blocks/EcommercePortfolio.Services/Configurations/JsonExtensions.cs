@@ -9,7 +9,7 @@ public static class JsonExtensions
     {
         options.PropertyNameCaseInsensitive = true;
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        options.MaxDepth = 5;
+        options.MaxDepth = 10;
         options.Converters.Add(new JsonStringEnumConverter());
 
         return options;

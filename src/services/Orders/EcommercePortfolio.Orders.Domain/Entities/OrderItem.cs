@@ -1,5 +1,4 @@
 ﻿using EcommercePortfolio.Core.Domain;
-
 namespace EcommercePortfolio.Orders.Domain.Entities;
 
 public class OrderItem : SqlEntity
@@ -22,7 +21,7 @@ public class OrderItem : SqlEntity
         Price = price;
     }
 
-    protected OrderItem() { }
+    public OrderItem() { }
 
     internal decimal CalculateTotalAmount() => Quantity * Price;
 

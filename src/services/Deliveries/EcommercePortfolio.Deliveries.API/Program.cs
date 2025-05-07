@@ -1,4 +1,4 @@
-using EcommercePortfolio.Deliveries.API.Applications.Commands;
+using EcommercePortfolio.Deliveries.API.Application.Commands;
 using EcommercePortfolio.Deliveries.API.Configurations;
 using EcommercePortfolio.Deliveries.Infra.Data;
 using EcommercePortfolio.Services.Configurations;

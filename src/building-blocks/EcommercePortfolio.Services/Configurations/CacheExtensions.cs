@@ -19,7 +19,7 @@ public static class CacheExtensions
             options.DefaultEntryOptions = new HybridCacheEntryOptions
             {
                 Expiration = TimeSpan.FromMinutes(5),
-                LocalCacheExpiration = TimeSpan.FromMinutes(5)
+                LocalCacheExpiration = TimeSpan.FromMinutes(5),
             };
         });
     }

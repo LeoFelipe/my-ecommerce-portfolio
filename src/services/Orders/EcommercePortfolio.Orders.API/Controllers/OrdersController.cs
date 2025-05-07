@@ -1,6 +1,6 @@
 using EcommercePortfolio.Core.Mediator;
-using EcommercePortfolio.Orders.API.Applications.Commands;
-using EcommercePortfolio.Orders.API.Applications.Queries;
+using EcommercePortfolio.Orders.API.Application.Commands;
+using EcommercePortfolio.Orders.API.Application.Queries;
 using EcommercePortfolio.Services.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +26,17 @@ public class OrdersController(
         return OkResponse(order);
     }
 
+    [HttpGet("{id:guid}/address", Name = "Get Address's Order by id")]
+    public async Task<IActionResult> GetAddressById(Guid id)
+    {
+        var address = await _orderQuery.GetAddressById(id);
+
+        if (address == null)
+            return NotFoundResponse("Address not found");
+
+        return OkResponse(address);
+    }
+
     [HttpGet("client/{clientId:guid}", Name = "Get Orders by ClientId")]
     public async Task<IActionResult> GetByClientId(Guid clientId)
     {
@@ -39,5 +50,4 @@ public class OrdersController(
         await _mediatorHandler.SendCommand(message);
         return Created();
     }
-
 }

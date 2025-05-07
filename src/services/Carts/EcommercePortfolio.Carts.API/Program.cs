@@ -1,4 +1,4 @@
-using EcommercePortfolio.Carts.API.Applications.Commands;
+using EcommercePortfolio.Carts.API.Application.Commands;
 using EcommercePortfolio.Carts.API.Configurations;
 using EcommercePortfolio.Carts.Infra.Data;
 using EcommercePortfolio.Services.Configurations;

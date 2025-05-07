@@ -6,7 +6,7 @@ namespace EcommercePortfolio.Deliveries.Domain;
 public interface IDeliveryRepository : IRepository<Delivery>
 {
     Task<Delivery> GetById(Guid id);
-    Task<Delivery> GetByOrderIdAndClientId(Guid orderId, Guid clientId);
+    Task<Delivery> GetByOrderId(Guid orderId);
     Task AddAsync(Delivery delivery);
     void Update(Delivery delivery);
 }

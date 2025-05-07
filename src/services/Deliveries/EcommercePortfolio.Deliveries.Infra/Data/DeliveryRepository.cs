@@ -16,16 +16,17 @@ public class DeliveryRepository(DeliveryPostgresDbContext context) : IDeliveryRe
     {
         return await _context.Delivery.FindAsync(id);
     }
-    public async Task<Delivery> GetByOrderIdAndClientId(Guid orderId, Guid clientId)
+
+    public async Task<Delivery> GetByOrderId(Guid orderId)
     {
-        return await _context.Delivery
-            .SingleOrDefaultAsync(x => x.OrderId == orderId && x.ClientId == clientId);
+        return await _context.Delivery.SingleOrDefaultAsync(x => x.OrderId == orderId);
     }
     
     public async Task AddAsync(Delivery delivery)
     {
         await _context.Delivery.AddAsync(delivery);
     }
+
     public void Update(Delivery delivery)
     {
         _context.Delivery.Update(delivery);

@@ -1,3 +1,4 @@
+using EcommercePortfolio.Deliveries.API.Application.Queries;
 using EcommercePortfolio.Services.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,11 +6,15 @@ namespace EcommercePortfolio.Deliveries.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class DeliveriesController : MainController
+public class DeliveriesController(
+    IDeliveryQueries deliveryQuery) : MainController
 {
-    [HttpGet(Name = "Get Delivery")]
-    public IActionResult GetDelivery()
+    private readonly IDeliveryQueries _deliveryQuery = deliveryQuery;
+
+    [HttpGet("order/{orderId:guid}", Name = "Get Delivery")]
+    public async Task<IActionResult> GetDeliveryByOrderId(Guid orderId)
     {
-        return Ok("Delivered");
+        var delivery = await _deliveryQuery.GetByOrderId(orderId);
+        return Ok(delivery);
     }
 }

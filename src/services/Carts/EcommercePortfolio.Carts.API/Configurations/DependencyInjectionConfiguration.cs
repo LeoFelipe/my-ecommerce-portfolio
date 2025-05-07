@@ -1,4 +1,4 @@
-﻿using EcommercePortfolio.Carts.API.Applications.Queries;
+﻿using EcommercePortfolio.Carts.API.Application.Queries;
 using EcommercePortfolio.Carts.Domain.Carts;
 using EcommercePortfolio.Carts.Infra.Data;
 using EcommercePortfolio.Core.Mediator;
@@ -13,13 +13,12 @@ public static class DependencyInjectionConfiguration
     public static void AddDependencyInjections(this IServiceCollection services)
     {
         services.AddScoped<INotificationContext, NotificationContext>();
+        services.AddScoped<IRedisRepository, RedisRepository>();
         services.AddScoped<IMediatorHandler, MediatorHandler>();
-
-        services.AddScoped<ICartQueries, CartQueries>();
 
         services.AddScoped<IFakeStoreApiService, FakeStoreApiService>();
 
         services.AddScoped<ICartRepository, CartRepository>();
-        services.AddScoped<IRedisRepository, RedisRepository>();
+        services.AddScoped<ICartQueries, CartQueries>();
     }
 }

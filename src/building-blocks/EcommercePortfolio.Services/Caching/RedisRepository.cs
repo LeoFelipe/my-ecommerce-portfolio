@@ -18,7 +18,18 @@ public class RedisRepository(HybridCache hybridCache) : IRedisRepository
             }
             : null;
 
-        return await _hybridCache.GetOrCreateAsync(key, async _ => await fetchData(), cacheOptions);
+        var fetchedData = await fetchData();
+
+        if (EqualityComparer<T>.Default.Equals(fetchedData, default))
+            return default;
+
+        // Explicitly specify the type arguments for GetOrCreateAsync to resolve CS0411
+        return await _hybridCache.GetOrCreateAsync<string, T>(
+            key,
+            key, // Pass the key as the state
+            (_, _) => ValueTask.FromResult(fetchedData), // Factory function
+            cacheOptions
+        );
     }
 
     public async Task SetData<T>(T value, string key = "ecommerce-portfolio", TimeSpan? expiration = null)

@@ -8,6 +8,9 @@ public abstract class MainController : ControllerBase
 {
     protected IActionResult OkResponse(object response)
     {
+        if (response == null)
+            return NotFoundResponse(response);
+
         return Ok(new ResponseResult(true, System.Net.HttpStatusCode.OK, response));
     }
 
@@ -18,6 +21,6 @@ public abstract class MainController : ControllerBase
 
     protected IActionResult NotFoundResponse(object response)
     {
-        return BadRequest(new ResponseResult(false, System.Net.HttpStatusCode.NotFound, response));
+        return NotFound(new ResponseResult(false, System.Net.HttpStatusCode.NotFound, response));
     }
 }

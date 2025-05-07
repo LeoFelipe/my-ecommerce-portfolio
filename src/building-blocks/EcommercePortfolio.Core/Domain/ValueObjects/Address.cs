@@ -1,6 +1,4 @@
-﻿using EcommercePortfolio.Core.Domain;
-
-namespace EcommercePortfolio.Domain.ValueObjects;
+﻿namespace EcommercePortfolio.Core.Domain.ValueObjects;
 
 public class Address
 {
@@ -10,10 +8,7 @@ public class Address
     public string StreetAddress { get; private set; }
     public int NumberAddres { get; private set; }
 
-    protected Address()
-    {
-        
-    }
+    public Address() { }
 
     public static Address CreateAddress(string zipCode, string state, string city, string streetAddress, int numberAddress)
     {

@@ -14,7 +14,7 @@ public static class MediatorExtension
 
         entities.ToList().ForEach(entity => entity.Entity.ClearEvents());
 
-        if (entityEvents.Count == 0)
+        if (entityEvents.Count > 0)
         {
             var tasks = entityEvents
                 .Select(async (entityEvent) =>

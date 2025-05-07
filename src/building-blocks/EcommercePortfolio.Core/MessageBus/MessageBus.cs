@@ -3,12 +3,12 @@ using MassTransit;
 
 namespace EcommercePortfolio.Core.MessageBus;
 
-public class MessageBus(IBus messageBus) : IMessageBus
+public class MessageBus(IBus bus) : IMessageBus
 {
-    private readonly IBus _messageBus = messageBus;
+    private readonly IBus _bus = bus;
 
     public async Task Publish<T>(T message) where T : IntegrationEvent
     {
-        await _messageBus.Publish(message);
+        await _bus.Publish(message);
     }
 }

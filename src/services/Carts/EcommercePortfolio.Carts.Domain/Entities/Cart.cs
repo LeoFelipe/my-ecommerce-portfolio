@@ -22,7 +22,7 @@ public class Cart : NoSqlEntity, IAggregateRoot
         CalculateTotalOrderValue();
     }
 
-    protected Cart() { }
+    public Cart() { }
 
     public bool HasItems(CartItem cartItem)
     {

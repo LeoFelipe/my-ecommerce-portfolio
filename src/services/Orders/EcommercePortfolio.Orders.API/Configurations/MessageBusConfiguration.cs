@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using EcommercePortfolio.Services.Configurations;
+using MassTransit;
 
 namespace EcommercePortfolio.Orders.API.Configurations;
 
@@ -12,6 +13,9 @@ public static class MessageBusConfiguration
 
             busConfigurator.UsingRabbitMq((context, config) =>
             {
+                // Disables exchange creation for base types
+                config.MessageTopology.SetEntityNameFormatter(new CustomEntityNameFormatter());
+
                 config.Host(configuration.GetConnectionString("ecommerceportfolio-rabbit-mq"));
             });
         });
