@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Factories\" />
+    <Folder Include="EntitiesTests\" />
+    <Folder Include="ApiServicesTests\" />
+    <Folder Include="ControllersTests\" />
+    <Folder Include="CommandsTests\" />
+  </ItemGroup>
+
+</Project>
