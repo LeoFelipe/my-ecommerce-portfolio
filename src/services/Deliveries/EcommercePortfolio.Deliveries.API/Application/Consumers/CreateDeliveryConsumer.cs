@@ -6,8 +6,10 @@ using MassTransit;
 namespace EcommercePortfolio.Deliveries.API.Application.Consumers;
 
 public class CreateDeliveryConsumer(
+    ILogger<CreateDeliveryConsumer> logger,
     IMediatorHandler mediatorHandler) : IConsumer<OrderAuthorizedQueueMessage>
 {
+    private readonly ILogger<CreateDeliveryConsumer> _logger = logger;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
 
     public async Task Consume(ConsumeContext<OrderAuthorizedQueueMessage> context)
@@ -19,8 +21,11 @@ public class CreateDeliveryConsumer(
         }
         catch (Exception ex)
         {
-            // TO DO: Log
-            var logMessage = ex.Message;
+            _logger.LogError(
+                ex,
+                "CreateDeliveryConsumer - OrderId: {OrderId}, ClientId: {ClientId}",
+                context.Message.OrderId,
+                context.Message.ClientId);
             throw;
         }
     }

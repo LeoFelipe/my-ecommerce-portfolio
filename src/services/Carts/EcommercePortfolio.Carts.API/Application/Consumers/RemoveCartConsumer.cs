@@ -6,8 +6,10 @@ using MassTransit;
 namespace EcommercePortfolio.Carts.API.Application.Consumers;
 
 public class RemoveCartConsumer(
+    ILogger<RemoveCartConsumer> logger,
     IMediatorHandler mediatorHandler) : IConsumer<OrderAuthorizedQueueMessage>
 {
+    private readonly ILogger<RemoveCartConsumer> _logger = logger;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
 
     public async Task Consume(ConsumeContext<OrderAuthorizedQueueMessage> context)
@@ -18,8 +20,11 @@ public class RemoveCartConsumer(
         }
         catch (Exception ex)
         {
-            // TO DO: Log
-            var logMessage = ex.Message;
+            _logger.LogError(
+                ex, 
+                "RemoveCartConsumer - OrderId: {OrderId}, ClientId: {ClientId}",
+                context.Message.OrderId,
+                context.Message.ClientId);
             throw;
         }
     }

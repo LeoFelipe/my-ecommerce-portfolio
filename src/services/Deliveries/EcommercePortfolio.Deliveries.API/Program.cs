@@ -3,9 +3,6 @@ using EcommercePortfolio.Deliveries.API.Configurations;
 using EcommercePortfolio.Deliveries.Infra.Data;
 using EcommercePortfolio.Services.Configurations;
 
-// TO DO: Refactor Entity for not instance a new ID on Get register on Database and map the Entity with a different ID
-// TO DO: Configure Logs
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();

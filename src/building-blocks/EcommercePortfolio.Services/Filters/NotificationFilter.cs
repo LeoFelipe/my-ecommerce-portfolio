@@ -2,13 +2,17 @@
 using EcommercePortfolio.Services.ObjectResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
 
 namespace EcommercePortfolio.Services.Filters;
 
-public class NotificationFilter(INotificationContext notification) : IAsyncResultFilter
+public class NotificationFilter(
+    ILogger<NotificationFilter> logger,
+    INotificationContext notification) : IAsyncResultFilter
 {
+    private readonly ILogger<NotificationFilter> _logger = logger;
     private readonly INotificationContext _notification = notification;
 
     private readonly JsonSerializerOptions jsonSerializerOptions = new()
@@ -28,6 +32,9 @@ public class NotificationFilter(INotificationContext notification) : IAsyncResul
 
             var response = CreateResponseError(_notification.Get(EnumNotificationType.VALIDATION_ERROR), StatusCodes.Status422UnprocessableEntity);
             await context.HttpContext.Response.WriteAsync(response);
+
+            _logger.LogWarning(response);
+
             return;
         }
         else if (_notification.Any(EnumNotificationType.NOT_FOUND_ERROR))
@@ -36,6 +43,9 @@ public class NotificationFilter(INotificationContext notification) : IAsyncResul
 
             var response = CreateResponseError(_notification.Get(EnumNotificationType.NOT_FOUND_ERROR), StatusCodes.Status404NotFound);
             await context.HttpContext.Response.WriteAsync(response);
+
+            _logger.LogWarning(response);
+
             return;
         }
         else if (_notification.AnyExcept([EnumNotificationType.INFORMATION]))
@@ -44,6 +54,9 @@ public class NotificationFilter(INotificationContext notification) : IAsyncResul
 
             var response = CreateResponseError(_notification.GetAllExcept(EnumNotificationType.INFORMATION), StatusCodes.Status500InternalServerError);
             await context.HttpContext.Response.WriteAsync(response);
+
+            _logger.LogWarning(response);
+
             return;
         }
 

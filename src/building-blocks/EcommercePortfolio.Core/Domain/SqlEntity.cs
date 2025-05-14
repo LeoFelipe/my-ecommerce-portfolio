@@ -6,6 +6,7 @@ public abstract class SqlEntity : Entity
 
     protected SqlEntity()
     {
-        Id = Guid.CreateVersion7();
+        if (Id == Guid.Empty)
+            Id = Guid.CreateVersion7();
     }
 }

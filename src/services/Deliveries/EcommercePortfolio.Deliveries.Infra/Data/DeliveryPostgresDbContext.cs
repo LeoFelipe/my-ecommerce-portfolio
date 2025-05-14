@@ -47,8 +47,9 @@ public class DeliveryPostgresDbContext(
             }
         }
 
-        var sucess = await base.SaveChangesAsync() > 0;
-        if (sucess)
+        var success = await base.SaveChangesAsync() > 0;
+
+        if (success)
         {
             await _mediatorHandler.PublishEvents(this);
         }
@@ -59,6 +60,6 @@ public class DeliveryPostgresDbContext(
                 "An error occurred while trying to persist data");
         }
 
-        return sucess;
+        return success;
     }
 }

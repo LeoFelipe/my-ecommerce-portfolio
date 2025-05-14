@@ -8,6 +8,7 @@ public abstract class NoSqlEntity : Entity
 
     protected NoSqlEntity()
     {
-        Id = ObjectId.GenerateNewId().ToString();
+        if (string.IsNullOrWhiteSpace(Id))
+            Id = ObjectId.GenerateNewId().ToString();
     }
 }

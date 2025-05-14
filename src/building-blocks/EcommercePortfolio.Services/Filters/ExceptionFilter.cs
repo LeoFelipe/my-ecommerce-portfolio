@@ -1,8 +1,6 @@
-﻿using System.Text.Json;
-using System.Net;
+﻿using System.Net;
 using Microsoft.Extensions.Logging;
 using EcommercePortfolio.Services.ObjectResponses;
-using EcommercePortfolio.Services.Configurations;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -35,6 +33,8 @@ public class ExceptionFilter(ILogger<ExceptionFilter> logger) : IExceptionFilter
             Type = exception.GetType().Name,
             Status = StatusCodes.Status500InternalServerError
         };
+
+        _logger.LogError(exception, problemDetails.Title);
 
         context.HttpContext.Response.StatusCode = problemDetails.Status.Value;
 
