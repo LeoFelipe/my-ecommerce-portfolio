@@ -1,5 +1,5 @@
 ﻿using EcommercePortfolio.Core.Domain;
-using EcommercePortfolio.Orders.Domain.Entities;
+using EcommercePortfolio.Orders.UnitTests.Factories.Orders;
 
 namespace EcommercePortfolio.Orders.UnitTests.EntitiesTests;
 
@@ -8,8 +8,8 @@ public class OrderItemTests
     [Fact]
     public void CreateOrderItem_AllRequiredPropertiesValid_OrderItemCreatedSuccessfully()
     {
-        // Act
-        var orderItem = OrderItem.CreateOrderItem(1, "Product A", "Category A", 2, 10.0m);
+        // Arrange + Act
+        var orderItem = OrderEntityFactory.BuildValidOrderItem();
 
         // Assert
         Assert.NotNull(orderItem);
@@ -18,9 +18,9 @@ public class OrderItemTests
     [Fact]
     public void CreateOrderItem_ProductIdInvalid_ThrowDomainException()
     {
-        // Act 
+        // Arrange + Act 
         var exception = Assert.Throws<DomainException>(() =>
-            OrderItem.CreateOrderItem(0, "Product A", "Category A", 2, 10.0m)
+            OrderEntityFactory.BuildOrderItem(0, "Product A", "Category A", 2, 10.0m)
         );
 
         // Assert
@@ -30,9 +30,9 @@ public class OrderItemTests
     [Fact]
     public void CreateOrderItem_ProductNameInvalid_ThrowDomainException()
     {
-        // Act
+        // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
-            OrderItem.CreateOrderItem(1, "", "Category A", 2, 10.0m)
+            OrderEntityFactory.BuildOrderItem(1, "", "Category A", 2, 10.0m)
         );
 
         // Assert
@@ -42,9 +42,9 @@ public class OrderItemTests
     [Fact]
     public void CreateOrderItem_CategoryInvalid_ThrowDomainException()
     {
-        // Act
+        // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
-            OrderItem.CreateOrderItem(1, "Product A", "", 2, 10.0m)
+            OrderEntityFactory.BuildOrderItem(1, "Product A", "", 2, 10.0m)
         );
 
         // Assert
@@ -54,9 +54,9 @@ public class OrderItemTests
     [Fact]
     public void CreateOrderItem_QuantityInvalid_ThrowDomainException()
     {
-        // Act
+        // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
-            OrderItem.CreateOrderItem(1, "Product A", "Category A", 0, 10.0m)
+            OrderEntityFactory.BuildOrderItem(1, "Product A", "Category A", 0, 10.0m)
         );
 
         // Assert
@@ -66,9 +66,9 @@ public class OrderItemTests
     [Fact]
     public void CreateOrderItem_PriceInvalid_ThrowDomainException()
     {
-        // Act
+        // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
-            OrderItem.CreateOrderItem(1, "Product A", "Category A", 2, 0m)
+            OrderEntityFactory.BuildOrderItem(1, "Product A", "Category A", 2, 0m)
         );
 
         // Assert

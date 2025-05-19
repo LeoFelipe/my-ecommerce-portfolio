@@ -1,25 +1,16 @@
 ﻿using EcommercePortfolio.ExternalServices.MyFakePay.Enums;
-using EcommercePortfolio.Orders.API.Application.Commands;
-using EcommercePortfolio.Orders.API.Application.Dtos;
+using EcommercePortfolio.Orders.UnitTests.Factories.Orders;
 using MongoDB.Bson;
 
 namespace EcommercePortfolio.Orders.UnitTests.CommandsTests;
 
 public class CreateOrderCommandTests
 {
-    private static AddressDto CreateValidAddress() =>
-        new ("49000-000", "Sergipe", "Aracaju", "Av. Teste", 123);
-
     [Fact]
     public void CreateOrderCommand_ValidCommand_ShouldBeValid()
     {
         // Arrange
-        var command = new CreateOrderCommand(
-            new ObjectId().ToString(),
-            Guid.NewGuid(),
-            EnumPaymentMethod.PIX,
-            CreateValidAddress()
-        );
+        var command = OrderCommandFactory.BuildValidCreateOrderCommand();
 
         // Act
         var isValid = command.IsValid();
@@ -32,15 +23,16 @@ public class CreateOrderCommandTests
     [Fact]
     public void CreateOrderCommand_EmptyCartId_ShouldBeInvalid()
     {
-        var command = new CreateOrderCommand(
-            "",
-            Guid.NewGuid(),
+        // Arrange
+        var command = OrderCommandFactory.BuildCreateOrderCommand(
             EnumPaymentMethod.CREDIT_CARD,
-            CreateValidAddress()
-        );
+            "",
+            Guid.NewGuid());
 
+        // Act
         var isValid = command.IsValid();
 
+        // Assert
         Assert.False(isValid);
         Assert.Contains(command.ValidationResult.Errors, x => x.ErrorMessage == "Invalid cart id");
     }
@@ -48,15 +40,16 @@ public class CreateOrderCommandTests
     [Fact]
     public void CreateOrderCommand_EmptyClientId_ShouldBeInvalid()
     {
-        var command = new CreateOrderCommand(
-            new ObjectId().ToString(),
-            Guid.Empty,
+        // Arrange
+        var command = OrderCommandFactory.BuildCreateOrderCommand(
             EnumPaymentMethod.PIX,
-            CreateValidAddress()
-        );
+            new ObjectId().ToString(),
+            Guid.Empty);
 
+        // Act
         var isValid = command.IsValid();
 
+        // Assert
         Assert.False(isValid);
         Assert.Contains(command.ValidationResult.Errors, x => x.ErrorMessage == "Invalid client id");
     }
@@ -64,17 +57,17 @@ public class CreateOrderCommandTests
     [Fact]
     public void CreateOrderCommand_InvalidPaymentMethod_ShouldBeInvalid()
     {
+        // Arrange
         var invalidPaymentMethod = (EnumPaymentMethod)999;
-
-        var command = new CreateOrderCommand(
-            new ObjectId().ToString(),
-            Guid.NewGuid(),
+        var command = OrderCommandFactory.BuildCreateOrderCommand(
             invalidPaymentMethod,
-            CreateValidAddress()
-        );
+            new ObjectId().ToString(),
+            Guid.NewGuid());
 
+        // Act
         var isValid = command.IsValid();
 
+        // Assert
         Assert.False(isValid);
         Assert.Contains(command.ValidationResult.Errors, x => x.ErrorMessage == "Invalid payment method");
     }
@@ -82,17 +75,13 @@ public class CreateOrderCommandTests
     [Fact]
     public void CreateOrderCommand_InvalidAddress_ShouldBeInvalid()
     {
-        var invalidAddress = new AddressDto("", "", "", "", 0);
+        // Arrange
+        var command = OrderCommandFactory.BuildValidCreateOrderCommandWithInvalidAddress();
 
-        var command = new CreateOrderCommand(
-            new ObjectId().ToString(),
-            Guid.NewGuid(),
-            EnumPaymentMethod.PIX,
-            invalidAddress
-        );
-
+        // Act
         var isValid = command.IsValid();
 
+        // Assert
         Assert.False(isValid);
         Assert.Contains(command.ValidationResult.Errors, x => x.ErrorMessage == "Invalid addres");
     }

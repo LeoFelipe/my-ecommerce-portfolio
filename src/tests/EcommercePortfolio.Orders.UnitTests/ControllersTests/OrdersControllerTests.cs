@@ -31,6 +31,7 @@ public class OrdersControllerTests
     [Fact]
     public async Task GetById_OrderExists_ShouldReturnOk()
     {
+        // Arrange
         var orderId = Guid.NewGuid();
         var order = new GetOrderResponse(
             orderId,
@@ -41,8 +42,10 @@ public class OrdersControllerTests
 
         _orderQueriesMock.Setup(q => q.GetById(orderId)).ReturnsAsync(order);
 
+        // Act
         var result = await _controller.GetById(orderId) as OkObjectResult;
 
+        // Assert
         Assert.NotNull(result);
         Assert.IsType<OkObjectResult>(result);
         var response = Assert.IsType<ResponseResult>(result.Value);
@@ -54,11 +57,14 @@ public class OrdersControllerTests
     [Fact]
     public async Task GetById_OrderNotFound_ShouldReturnNotFound()
     {
+        // Arrange
         var orderId = Guid.NewGuid();
         _orderQueriesMock.Setup(q => q.GetById(orderId)).ReturnsAsync((GetOrderResponse?)null);
 
+        // Act
         var result = await _controller.GetById(orderId) as NotFoundObjectResult;
 
+        // Assert
         Assert.NotNull(result);
         var response = Assert.IsType<ResponseResult>(result.Value);
         Assert.False(response.Success);
@@ -69,13 +75,16 @@ public class OrdersControllerTests
     [Fact]
     public async Task GetAddressById_AddressExists_ShouldReturnOk()
     {
+        // Arrange
         var orderId = Guid.NewGuid();
         var address = new GetAddressOrderResponse("12345-000", "Sergipe", "Aracaju", "Av. Teste", 100);
 
         _orderQueriesMock.Setup(q => q.GetAddressById(orderId)).ReturnsAsync(address);
 
+        // Act
         var result = await _controller.GetAddressById(orderId) as OkObjectResult;
 
+        // Assert
         Assert.NotNull(result);
         var response = Assert.IsType<ResponseResult>(result.Value);
         Assert.True(response.Success);
@@ -86,11 +95,14 @@ public class OrdersControllerTests
     [Fact]
     public async Task GetAddressById_AddressNotFound_ShouldReturnNotFound()
     {
+        // Arrange
         var orderId = Guid.NewGuid();
         _orderQueriesMock.Setup(q => q.GetAddressById(orderId)).ReturnsAsync((GetAddressOrderResponse?)null);
 
+        // Act
         var result = await _controller.GetAddressById(orderId) as NotFoundObjectResult;
 
+        // Assert
         Assert.NotNull(result);
         var response = Assert.IsType<ResponseResult>(result.Value);
         Assert.False(response.Success);
@@ -101,6 +113,7 @@ public class OrdersControllerTests
     [Fact]
     public async Task GetByClientId_ShouldReturnOrders()
     {
+        // Arrange
         var clientId = Guid.NewGuid();
         var orders = new List<GetOrderResponse>
         {
@@ -116,8 +129,10 @@ public class OrdersControllerTests
 
         _orderQueriesMock.Setup(q => q.GetByClientId(clientId)).ReturnsAsync(orders);
 
+        // Act
         var result = await _controller.GetByClientId(clientId) as OkObjectResult;
 
+        // Assert
         Assert.NotNull(result);
         var response = Assert.IsType<ResponseResult>(result.Value);
         Assert.True(response.Success);
@@ -128,6 +143,7 @@ public class OrdersControllerTests
     [Fact]
     public async Task CreateOrder_ShouldReturnCreated()
     {
+        // Arrange
         var command = new CreateOrderCommand(
             new ObjectId().ToString(),
             Guid.NewGuid(),
@@ -136,8 +152,10 @@ public class OrdersControllerTests
 
         _mediatorHandlerMock.Setup(m => m.SendCommand(command)).Returns(Task.CompletedTask);
 
+        // Act
         var result = await _controller.CreateOrder(command);
 
+        // Assert
         Assert.IsType<CreatedResult>(result);
     }
 }
