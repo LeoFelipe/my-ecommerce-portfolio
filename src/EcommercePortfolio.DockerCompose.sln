@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_aspire", "_aspire", "{BE2AB7EA-7638-4EF6-B210-4882B0A94EF0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.AppHost", "aspire\EcommercePortfolio.AppHost\EcommercePortfolio.AppHost.csproj", "{9C7D0807-641E-463F-93D5-B7BB3D6F3B74}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.ServiceDefaults", "aspire\EcommercePortfolio.ServiceDefaults\EcommercePortfolio.ServiceDefaults.csproj", "{4A9C1931-31A7-529F-A56D-6958F5115FB3}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
