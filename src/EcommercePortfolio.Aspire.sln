@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Core", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Services", "building-blocks\EcommercePortfolio.Services\EcommercePortfolio.Services.csproj", "{344D44BE-07A7-41CD-BFB9-BD1042CC028A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.ExternalServices", "building-blocks\EcommercePortfolio.Core.ExternalServices\EcommercePortfolio.ExternalServices.csproj", "{25C27C05-EEE9-451D-BF20-C4D2E0F4A5C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.ApiGateways", "building-blocks\EcommercePortfolio.ApiGateways\EcommercePortfolio.ApiGateways.csproj", "{25C27C05-EEE9-451D-BF20-C4D2E0F4A5C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A2114EFD-2EBF-4C8E-8F06-FA095D3261CC}"
 EndProject

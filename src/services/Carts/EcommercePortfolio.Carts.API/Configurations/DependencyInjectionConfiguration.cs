@@ -3,7 +3,7 @@ using EcommercePortfolio.Carts.Domain.Carts;
 using EcommercePortfolio.Carts.Infra.Data;
 using EcommercePortfolio.Core.Mediator;
 using EcommercePortfolio.Core.Notification;
-using EcommercePortfolio.ExternalServices.FakeStoreApi;
+using EcommercePortfolio.ApiGateways.FakeStoreApi;
 using EcommercePortfolio.Services.Caching;
 
 namespace EcommercePortfolio.Carts.API.Configurations;

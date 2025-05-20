@@ -1,4 +1,4 @@
-﻿using EcommercePortfolio.ExternalServices.FakeStoreApi;
+﻿using EcommercePortfolio.ApiGateways.FakeStoreApi;
 using EcommercePortfolio.Services.Configurations;
 
 namespace EcommercePortfolio.Carts.API.Configurations;

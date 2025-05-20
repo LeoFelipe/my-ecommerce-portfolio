@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Core.Notification;
 using System.Runtime.Serialization;
 
-namespace EcommercePortfolio.ExternalServices.MyFakePayApi;
+namespace EcommercePortfolio.ApiGateways.MyFakePayApi;
 
 public class PaymentApiService(HttpClient _httpClient, INotificationContext notification) : IPaymentApiService
 {

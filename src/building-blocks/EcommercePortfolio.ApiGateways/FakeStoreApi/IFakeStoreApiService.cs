@@ -1,4 +1,4 @@
-﻿namespace EcommercePortfolio.ExternalServices.FakeStoreApi;
+﻿namespace EcommercePortfolio.ApiGateways.FakeStoreApi;
 
 public interface IFakeStoreApiService
 {

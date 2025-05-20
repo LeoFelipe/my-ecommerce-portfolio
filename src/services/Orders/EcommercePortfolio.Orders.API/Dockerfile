@@ -15,7 +15,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["services/Orders/EcommercePortfolio.Order.API/EcommercePortfolio.Orders.API.csproj", "services/Orders/EcommercePortfolio.Order.API/"]
-COPY ["building-blocks/EcommercePortfolio.Core.ExternalServices/EcommercePortfolio.Core.ExternalServices.csproj", "building-blocks/EcommercePortfolio.Core.ExternalServices/"]
+COPY ["building-blocks/EcommercePortfolio.Core.ApiGateways/EcommercePortfolio.Core.ApiGateways.csproj", "building-blocks/EcommercePortfolio.Core.ApiGateways/"]
 COPY ["building-blocks/EcommercePortfolio.Core/EcommercePortfolio.Core.csproj", "building-blocks/EcommercePortfolio.Core/"]
 COPY ["building-blocks/EcommercePortfolio.Services/EcommercePortfolio.Services.csproj", "building-blocks/EcommercePortfolio.Services/"]
 COPY ["services/Orders/EcommercePortfolio.Order.Infra/EcommercePortfolio.Orders.Infra.csproj", "services/Orders/EcommercePortfolio.Order.Infra/"]

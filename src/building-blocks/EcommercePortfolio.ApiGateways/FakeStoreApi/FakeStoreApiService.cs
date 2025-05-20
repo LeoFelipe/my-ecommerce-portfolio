@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Text.Json;
 using EcommercePortfolio.Services.Configurations;
 
-namespace EcommercePortfolio.ExternalServices.FakeStoreApi;
+namespace EcommercePortfolio.ApiGateways.FakeStoreApi;
 
 public class FakeStoreApiService(HttpClient _httpClient, INotificationContext notification) : IFakeStoreApiService
 {

@@ -27,7 +27,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\aspire\EcommercePortfolio.ServiceDefaults\EcommercePortfolio.ServiceDefaults.csproj" />
-		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Core.ExternalServices\EcommercePortfolio.ExternalServices.csproj" />
+		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.ApiGateways\EcommercePortfolio.ApiGateways.csproj" />
 		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Core\EcommercePortfolio.Core.csproj" />
 		<ProjectReference Include="..\..\..\building-blocks\EcommercePortfolio.Services\EcommercePortfolio.Services.csproj" />
 		<ProjectReference Include="..\EcommercePortfolio.Deliveries.Domain\EcommercePortfolio.Deliveries.Domain.csproj" />

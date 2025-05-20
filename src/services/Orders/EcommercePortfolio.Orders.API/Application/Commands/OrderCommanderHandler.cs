@@ -2,8 +2,7 @@
 using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.Core.Domain.ValueObjects;
-using EcommercePortfolio.ExternalServices.MyFakePay.Enums;
-using EcommercePortfolio.ExternalServices.MyFakePayApi;
+using EcommercePortfolio.ApiGateways.MyFakePayApi;
 using EcommercePortfolio.Orders.API.Application.Events;
 using EcommercePortfolio.Orders.Domain;
 using EcommercePortfolio.Orders.Domain.ApiServices;
@@ -46,7 +45,7 @@ public class OrderCommanderHandler(
             order.TotalValue,
             message.PaymentMethod));
 
-        if (paymentDone.PaymentStatus != EnumPaymentStatus.AUTHORIZED)
+        if (!paymentDone.PaymentStatusIsAuthorized())
         {
             AddError("Payment not authorized", EnumNotificationType.VALIDATION_ERROR);
             return;

@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using EcommercePortfolio.ExternalServices.MyFakePay.Enums;
+using EcommercePortfolio.ApiGateways.MyFakePay.Enums;
 using EcommercePortfolio.Orders.API.Application.Commands;
 using EcommercePortfolio.Orders.API.Application.Dtos;
 

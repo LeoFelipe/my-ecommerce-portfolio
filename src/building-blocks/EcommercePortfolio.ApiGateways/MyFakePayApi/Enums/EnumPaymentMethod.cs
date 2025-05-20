@@ -1,4 +1,4 @@
-﻿namespace EcommercePortfolio.ExternalServices.MyFakePay.Enums;
+﻿namespace EcommercePortfolio.ApiGateways.MyFakePay.Enums;
 
 public enum EnumPaymentMethod
 {

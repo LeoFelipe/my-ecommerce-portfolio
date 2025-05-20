@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.5" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EcommercePortfolio.Core\EcommercePortfolio.Core.csproj" />
     <ProjectReference Include="..\EcommercePortfolio.Services\EcommercePortfolio.Services.csproj" />
   </ItemGroup>

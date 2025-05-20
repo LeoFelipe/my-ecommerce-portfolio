@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Core.Domain;
-using EcommercePortfolio.ExternalServices.MyFakePay.Enums;
+using EcommercePortfolio.ApiGateways.MyFakePay.Enums;
 
-namespace EcommercePortfolio.ExternalServices.MyFakePayApi;
+namespace EcommercePortfolio.ApiGateways.MyFakePayApi;
 
 public class PaymentApiResponse : SqlEntity, IAggregateRoot
 {
@@ -28,4 +28,6 @@ public class PaymentApiResponse : SqlEntity, IAggregateRoot
     public void DenyPayment() => PaymentStatus = EnumPaymentStatus.DENIED;
     public void RefundPayment() => PaymentStatus = EnumPaymentStatus.REFUND;
     public void CancelPayment() => PaymentStatus = EnumPaymentStatus.CANCELED;
+
+    public bool PaymentStatusIsAuthorized() => PaymentStatus == EnumPaymentStatus.AUTHORIZED;
 }

@@ -1,4 +1,4 @@
-﻿using EcommercePortfolio.ExternalServices.MyFakePay.Enums;
+﻿using EcommercePortfolio.ApiGateways.MyFakePay.Enums;
 using EcommercePortfolio.Orders.UnitTests.Factories.Orders;
 using MongoDB.Bson;
 

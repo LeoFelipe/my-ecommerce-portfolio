@@ -1,4 +1,4 @@
-using EcommercePortfolio.ExternalServices.FakeStoreApi;
+using EcommercePortfolio.ApiGateways.FakeStoreApi;
 using EcommercePortfolio.Services.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
