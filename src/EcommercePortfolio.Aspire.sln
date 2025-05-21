@@ -59,7 +59,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.U
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{DB633F9E-339D-21AA-3632-3DA9EA860142}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.IntegrationTests", "tests\EcommercePortfolio.Orders.IntegrationTests\EcommercePortfolio.Orders.IntegrationTests.csproj", "{B2D2C360-5B8A-472F-8545-32361592E40B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.IntegrationTests", "tests\EcommercePortfolio.IntegrationTests\EcommercePortfolio.IntegrationTests.csproj", "{B2D2C360-5B8A-472F-8545-32361592E40B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

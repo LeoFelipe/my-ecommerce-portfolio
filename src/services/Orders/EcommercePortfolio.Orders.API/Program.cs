@@ -3,29 +3,37 @@ using EcommercePortfolio.Orders.API.Configurations;
 using EcommercePortfolio.Orders.Infra.Data;
 using EcommercePortfolio.Services.Configurations;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace EcommercePortfolio.Orders.API;
 
-builder.AddServiceDefaults();
+public class Program
+{
+    public static async Task Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApiConfig();
+        builder.AddServiceDefaults();
 
-builder.Services.AddMessageBus(builder.Configuration);
+        builder.Services.AddApiConfig();
 
-builder.Services.AddPostgresDatabase<OrderPostgresDbContext>(builder.Configuration, "EcommercePortfolioOrder");
+        builder.Services.AddMessageBus(builder.Configuration);
 
-builder.Services.AddCache(builder.Configuration);
+        builder.Services.AddPostgresDatabase<OrderPostgresDbContext>(builder.Configuration, "EcommercePortfolioOrder");
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateOrderCommand).Assembly));
+        builder.Services.AddCache(builder.Configuration);
 
-builder.Services.AddDependencyInjections();
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateOrderCommand).Assembly));
 
-builder.Services.AddHttpClientConfiguration(builder.Configuration, builder.Environment.IsDevelopment());
+        builder.Services.AddDependencyInjections();
+
+        builder.Services.AddHttpClientConfiguration(builder.Configuration, builder.Environment.IsDevelopment());
 
 
-var app = builder.Build();
+        var app = builder.Build();
 
-app.MapDefaultEndpoints();
+        app.MapDefaultEndpoints();
 
-app.UseApiConfiguration(app.Environment);
+        app.UseApiConfiguration(app.Environment);
 
-await app.RunAsync();
+        await app.RunAsync();
+    }
+}
