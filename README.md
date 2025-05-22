@@ -141,6 +141,18 @@ cd src
 dotnet test
 ```
 
+### Testing Standards
+
+We follow a well-defined set of testing standards to ensure code quality and maintainability. Our testing approach includes:
+
+- **Naming Conventions**: Clear and consistent test naming following the pattern `[Feature]_[Action]_[ExpectedResult]`
+- **Test Organization**: Structured separation of unit and integration tests
+- **Factory Patterns**: Reusable test data creation
+- **Assertion Helpers**: Database-specific assertion utilities
+- **Best Practices**: AAA pattern, test isolation, and comprehensive coverage
+
+For detailed information about our testing standards, please refer to [TESTING_STANDARDS.md](TESTING_STANDARDS.md).
+
 ## 🤝 How to Contribute
 
 1. Fork the project

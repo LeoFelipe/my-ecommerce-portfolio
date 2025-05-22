@@ -1,5 +1,6 @@
 ﻿using EcommercePortfolio.ApiGateways.MyFakePay.Enums;
 using EcommercePortfolio.Orders.UnitTests.Factories.Orders;
+using FluentAssertions;
 using MongoDB.Bson;
 
 namespace EcommercePortfolio.Orders.UnitTests.CommandsTests;
@@ -7,7 +8,7 @@ namespace EcommercePortfolio.Orders.UnitTests.CommandsTests;
 public class CreateOrderCommandTests
 {
     [Fact]
-    public void CreateOrderCommand_ValidCommand_ShouldBeValid()
+    public void CreateOrderCommand_Validate_ShouldBeValidWhenAllPropertiesValid()
     {
         // Arrange
         var command = OrderCommandFactory.BuildValidCreateOrderCommand();
@@ -16,12 +17,12 @@ public class CreateOrderCommandTests
         var isValid = command.IsValid();
 
         // Assert
-        Assert.True(isValid);
-        Assert.Empty(command.ValidationResult.Errors);
+        isValid.Should().BeTrue();
+        command.ValidationResult.Errors.Should().BeEmpty();
     }
 
     [Fact]
-    public void CreateOrderCommand_EmptyCartId_ShouldBeInvalid()
+    public void CreateOrderCommand_Validate_ShouldBeInvalidWhenCartIdEmpty()
     {
         // Arrange
         var command = OrderCommandFactory.BuildCreateOrderCommand(
@@ -33,12 +34,12 @@ public class CreateOrderCommandTests
         var isValid = command.IsValid();
 
         // Assert
-        Assert.False(isValid);
-        Assert.Contains(command.ValidationResult.Errors, x => x.ErrorMessage == "Invalid cart id");
+        isValid.Should().BeFalse();
+        command.ValidationResult.Errors.Should().Contain(x => x.ErrorMessage == "Invalid cart id");
     }
 
     [Fact]
-    public void CreateOrderCommand_EmptyClientId_ShouldBeInvalid()
+    public void CreateOrderCommand_Validate_ShouldBeInvalidWhenClientIdEmpty()
     {
         // Arrange
         var command = OrderCommandFactory.BuildCreateOrderCommand(
@@ -50,12 +51,12 @@ public class CreateOrderCommandTests
         var isValid = command.IsValid();
 
         // Assert
-        Assert.False(isValid);
-        Assert.Contains(command.ValidationResult.Errors, x => x.ErrorMessage == "Invalid client id");
+        isValid.Should().BeFalse();
+        command.ValidationResult.Errors.Should().Contain(x => x.ErrorMessage == "Invalid client id");
     }
 
     [Fact]
-    public void CreateOrderCommand_InvalidPaymentMethod_ShouldBeInvalid()
+    public void CreateOrderCommand_Validate_ShouldBeInvalidWhenPaymentMethodInvalid()
     {
         // Arrange
         var invalidPaymentMethod = (EnumPaymentMethod)999;
@@ -68,12 +69,12 @@ public class CreateOrderCommandTests
         var isValid = command.IsValid();
 
         // Assert
-        Assert.False(isValid);
-        Assert.Contains(command.ValidationResult.Errors, x => x.ErrorMessage == "Invalid payment method");
+        isValid.Should().BeFalse();
+        command.ValidationResult.Errors.Should().Contain(x => x.ErrorMessage == "Invalid payment method");
     }
 
     [Fact]
-    public void CreateOrderCommand_InvalidAddress_ShouldBeInvalid()
+    public void CreateOrderCommand_Validate_ShouldBeInvalidWhenAddressInvalid()
     {
         // Arrange
         var command = OrderCommandFactory.BuildValidCreateOrderCommandWithInvalidAddress();
@@ -82,7 +83,7 @@ public class CreateOrderCommandTests
         var isValid = command.IsValid();
 
         // Assert
-        Assert.False(isValid);
-        Assert.Contains(command.ValidationResult.Errors, x => x.ErrorMessage == "Invalid addres");
+        isValid.Should().BeFalse();
+        command.ValidationResult.Errors.Should().Contain(x => x.ErrorMessage == "Invalid addres");
     }
 }

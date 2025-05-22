@@ -3,36 +3,33 @@ using EcommercePortfolio.Carts.API.Configurations;
 using EcommercePortfolio.Carts.Infra.Data;
 using EcommercePortfolio.Services.Configurations;
 
-namespace EcommercePortfolio.Carts.API;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
-{
-    public static async Task Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+builder.AddServiceDefaults();
 
-        builder.AddServiceDefaults();
+builder.Services.AddApiConfig();
 
-        builder.Services.AddApiConfig();
+builder.Services.AddMessageBus(builder.Configuration);
 
-        builder.Services.AddMessageBus(builder.Configuration);
+builder.Services.AddMongoDatabase<MongoDbContext>(builder.Configuration, "MongoDbConnection");
 
-        builder.Services.AddMongoDatabase<MongoDbContext>(builder.Configuration, "EcommercePortfolioCart");
+builder.Services.AddCache(builder.Configuration);
 
-        builder.Services.AddCache(builder.Configuration);
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCartCommand).Assembly));
 
-        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCartCommand).Assembly));
+builder.Services.AddDependencyInjections();
 
-        builder.Services.AddDependencyInjections();
+builder.Services.AddHttpClientConfiguration(builder.Configuration);
 
-        builder.Services.AddHttpClientConfiguration(builder.Configuration);
+var app = builder.Build();
 
-        var app = builder.Build();
+app.MapDefaultEndpoints();
 
-        app.MapDefaultEndpoints();
+app.UseApiConfiguration(app.Environment);
 
-        app.UseApiConfiguration(app.Environment);
+await app.RunAsync();
 
-        await app.RunAsync();
-    }
+
+namespace EcommercePortfolio.Carts.API {
+    public partial class Program { }
 }

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Npgsql;
 
-namespace EcommercePortfolio.IntegrationTests.AssertsHelper;
+namespace EcommercePortfolio.IntegrationTests.Helpers.Asserts;
 
 public static class PostgresAssertHelper
 {

@@ -2,7 +2,7 @@
 using FluentAssertions;
 using MongoDB.Driver;
 
-namespace EcommercePortfolio.IntegrationTests.AssertsHelper;
+namespace EcommercePortfolio.IntegrationTests.Helpers.Asserts;
 
 public static class MongoAssertHelper
 {

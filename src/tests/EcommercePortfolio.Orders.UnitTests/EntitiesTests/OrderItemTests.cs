@@ -1,22 +1,23 @@
 ﻿using EcommercePortfolio.Core.Domain;
 using EcommercePortfolio.Orders.UnitTests.Factories.Orders;
+using FluentAssertions;
 
 namespace EcommercePortfolio.Orders.UnitTests.EntitiesTests;
 
 public class OrderItemTests
 {
     [Fact]
-    public void CreateOrderItem_AllRequiredPropertiesValid_OrderItemCreatedSuccessfully()
+    public void OrderItem_Create_ShouldCreateOrderItemSuccessfully()
     {
         // Arrange + Act
         var orderItem = OrderEntityFactory.BuildValidOrderItem();
 
         // Assert
-        Assert.NotNull(orderItem);
+        orderItem.Should().NotBeNull();
     }
 
     [Fact]
-    public void CreateOrderItem_ProductIdInvalid_ThrowDomainException()
+    public void OrderItem_Create_ShouldThrowExceptionWhenProductIdInvalid()
     {
         // Arrange + Act 
         var exception = Assert.Throws<DomainException>(() =>
@@ -24,11 +25,11 @@ public class OrderItemTests
         );
 
         // Assert
-        Assert.Equal("Product id not informed", exception.Message);
+        exception.Message.Should().Be("Product id not informed");
     }
 
     [Fact]
-    public void CreateOrderItem_ProductNameInvalid_ThrowDomainException()
+    public void OrderItem_Create_ShouldThrowExceptionWhenProductNameInvalid()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -36,11 +37,11 @@ public class OrderItemTests
         );
 
         // Assert
-        Assert.Equal("Product name not informed", exception.Message);
+        exception.Message.Should().Be("Product name not informed");
     }
 
     [Fact]
-    public void CreateOrderItem_CategoryInvalid_ThrowDomainException()
+    public void OrderItem_Create_ShouldThrowExceptionWhenCategoryInvalid()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -48,11 +49,11 @@ public class OrderItemTests
         );
 
         // Assert
-        Assert.Equal("Category not informed", exception.Message);
+        exception.Message.Should().Be("Category not informed");
     }
 
     [Fact]
-    public void CreateOrderItem_QuantityInvalid_ThrowDomainException()
+    public void OrderItem_Create_ShouldThrowExceptionWhenQuantityInvalid()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -60,11 +61,11 @@ public class OrderItemTests
         );
 
         // Assert
-        Assert.Equal("Quantity not informed", exception.Message);
+        exception.Message.Should().Be("Quantity not informed");
     }
 
     [Fact]
-    public void CreateOrderItem_PriceInvalid_ThrowDomainException()
+    public void OrderItem_Create_ShouldThrowExceptionWhenPriceInvalid()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -72,6 +73,6 @@ public class OrderItemTests
         );
 
         // Assert
-        Assert.Equal("Price not informed", exception.Message);
+        exception.Message.Should().Be("Price not informed");
     }
 }

@@ -5,6 +5,7 @@ using EcommercePortfolio.Orders.API.Application.Dtos;
 using EcommercePortfolio.Orders.API.Application.Queries;
 using EcommercePortfolio.Orders.API.Controllers;
 using EcommercePortfolio.Services.ObjectResponses;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Moq;
@@ -29,7 +30,7 @@ public class OrdersControllerTests
     }
 
     [Fact]
-    public async Task GetById_OrderExists_ShouldReturnOk()
+    public async Task OrdersController_GetById_ShouldReturnOkWhenOrderExists()
     {
         // Arrange
         var orderId = Guid.NewGuid();
@@ -46,16 +47,16 @@ public class OrdersControllerTests
         var result = await _controller.GetById(orderId) as OkObjectResult;
 
         // Assert
-        Assert.NotNull(result);
-        Assert.IsType<OkObjectResult>(result);
-        var response = Assert.IsType<ResponseResult>(result.Value);
-        Assert.True(response.Success);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(order, response.Response);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<OkObjectResult>();
+        var response = result.Value.Should().BeOfType<ResponseResult>().Subject;
+        response.Success.Should().BeTrue();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.Response.Should().Be(order);
     }
 
     [Fact]
-    public async Task GetById_OrderNotFound_ShouldReturnNotFound()
+    public async Task OrdersController_GetById_ShouldReturnNotFoundWhenOrderNotExists()
     {
         // Arrange
         var orderId = Guid.NewGuid();
@@ -65,15 +66,15 @@ public class OrdersControllerTests
         var result = await _controller.GetById(orderId) as NotFoundObjectResult;
 
         // Assert
-        Assert.NotNull(result);
-        var response = Assert.IsType<ResponseResult>(result.Value);
-        Assert.False(response.Success);
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        Assert.Equal("Cart not found", response.Response);
+        result.Should().NotBeNull();
+        var response = result.Value.Should().BeOfType<ResponseResult>().Subject;
+        response.Success.Should().BeFalse();
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        response.Response.Should().Be("Cart not found");
     }
 
     [Fact]
-    public async Task GetAddressById_AddressExists_ShouldReturnOk()
+    public async Task OrdersController_GetAddressById_ShouldReturnOkWhenAddressExists()
     {
         // Arrange
         var orderId = Guid.NewGuid();
@@ -85,15 +86,15 @@ public class OrdersControllerTests
         var result = await _controller.GetAddressById(orderId) as OkObjectResult;
 
         // Assert
-        Assert.NotNull(result);
-        var response = Assert.IsType<ResponseResult>(result.Value);
-        Assert.True(response.Success);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(address, response.Response);
+        result.Should().NotBeNull();
+        var response = result.Value.Should().BeOfType<ResponseResult>().Subject;
+        response.Success.Should().BeTrue();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.Response.Should().Be(address);
     }
 
     [Fact]
-    public async Task GetAddressById_AddressNotFound_ShouldReturnNotFound()
+    public async Task OrdersController_GetAddressById_ShouldReturnNotFoundWhenAddressNotExists()
     {
         // Arrange
         var orderId = Guid.NewGuid();
@@ -103,15 +104,15 @@ public class OrdersControllerTests
         var result = await _controller.GetAddressById(orderId) as NotFoundObjectResult;
 
         // Assert
-        Assert.NotNull(result);
-        var response = Assert.IsType<ResponseResult>(result.Value);
-        Assert.False(response.Success);
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        Assert.Equal("Address not found", response.Response);
+        result.Should().NotBeNull();
+        var response = result.Value.Should().BeOfType<ResponseResult>().Subject;
+        response.Success.Should().BeFalse();
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        response.Response.Should().Be("Address not found");
     }
 
     [Fact]
-    public async Task GetByClientId_ShouldReturnOrders()
+    public async Task OrdersController_GetByClientId_ShouldReturnOrdersSuccessfully()
     {
         // Arrange
         var clientId = Guid.NewGuid();
@@ -133,15 +134,15 @@ public class OrdersControllerTests
         var result = await _controller.GetByClientId(clientId) as OkObjectResult;
 
         // Assert
-        Assert.NotNull(result);
-        var response = Assert.IsType<ResponseResult>(result.Value);
-        Assert.True(response.Success);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(orders, response.Response);
+        result.Should().NotBeNull();
+        var response = result.Value.Should().BeOfType<ResponseResult>().Subject;
+        response.Success.Should().BeTrue();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.Response.Should().Be(orders);
     }
 
     [Fact]
-    public async Task CreateOrder_ShouldReturnCreated()
+    public async Task OrdersController_CreateOrder_ShouldReturnCreatedSuccessfully()
     {
         // Arrange
         var command = new CreateOrderCommand(
@@ -156,6 +157,6 @@ public class OrdersControllerTests
         var result = await _controller.CreateOrder(command);
 
         // Assert
-        Assert.IsType<CreatedResult>(result);
+        result.Should().BeOfType<CreatedResult>();
     }
 }

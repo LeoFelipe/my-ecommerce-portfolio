@@ -8,6 +8,7 @@ using EcommercePortfolio.Orders.Domain.Entities;
 using EcommercePortfolio.Orders.UnitTests.Factories.Carts;
 using EcommercePortfolio.Orders.UnitTests.Factories.Orders;
 using EcommercePortfolio.Orders.UnitTests.Factories.Payments;
+using FluentAssertions;
 using Moq;
 
 namespace EcommercePortfolio.Orders.UnitTests.CommandsTests;
@@ -35,7 +36,7 @@ public class OrderCommanderHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ValidCommand_ShouldPersistOrder()
+    public async Task OrderCommand_Handle_ShouldPersistOrderSuccessfully()
     {
         // Arrange
         var quantity = 10;
@@ -53,13 +54,13 @@ public class OrderCommanderHandlerTests
         await _handler.Handle(command, default);
 
         // Assert
-        Assert.False(_notificationContext.Any());
+        _notificationContext.Any().Should().BeFalse();
         _orderRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Order>()), Times.Once);
         _orderRepositoryMock.Verify(x => x.UnitOfWork.Commit(), Times.Once);
     }
 
     [Fact]
-    public async Task Handle_InvalidCommand_ShouldAddValidationErrors()
+    public async Task OrderCommand_Handle_ShouldAddValidationErrorsWhenCommandInvalid()
     {
         // Arrange
         var command = OrderCommandFactory.BuildCreateOrderCommand((EnumPaymentMethod)999, "", Guid.Empty);
@@ -68,12 +69,12 @@ public class OrderCommanderHandlerTests
         await _handler.Handle(command, default);
 
         // Assert
-        Assert.True(_notificationContext.Any());
-        Assert.Contains(_notificationContext.Get(), n => n.Message == "Invalid cart id");
+        _notificationContext.Any().Should().BeTrue();
+        _notificationContext.Get().Should().Contain(n => n.Message == "Invalid cart id");
     }
 
     [Fact]
-    public async Task Handle_CartNotFound_ShouldAddNotification()
+    public async Task OrderCommand_Handle_ShouldAddNotificationWhenCartNotFound()
     {
         // Arrange
         var command = OrderCommandFactory.BuildValidCreateOrderCommand();
@@ -85,12 +86,12 @@ public class OrderCommanderHandlerTests
         await _handler.Handle(command, default);
 
         // Assert
-        Assert.True(_notificationContext.Any());
-        Assert.Contains(_notificationContext.Get(), x => x.Message == "Cart not found");
+        _notificationContext.Any().Should().BeTrue();
+        _notificationContext.Get().Should().Contain(x => x.Message == "Cart not found");
     }
 
     [Fact]
-    public async Task Handle_PaymentNotAuthorized_ShouldAddNotification()
+    public async Task OrderCommand_Handle_ShouldAddNotificationWhenPaymentNotAuthorized()
     {
         // Arrange
         var command = OrderCommandFactory.BuildValidCreateOrderCommand();
@@ -104,7 +105,7 @@ public class OrderCommanderHandlerTests
         await _handler.Handle(command, default);
 
         // Assert
-        Assert.True(_notificationContext.Any());
-        Assert.Contains(_notificationContext.Get(), x => x.Message == "Payment not authorized");
+        _notificationContext.Any().Should().BeTrue();
+        _notificationContext.Get().Should().Contain(x => x.Message == "Payment not authorized");
     }
 }

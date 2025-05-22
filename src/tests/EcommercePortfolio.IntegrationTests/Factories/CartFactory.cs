@@ -1,5 +1,7 @@
 ﻿using EcommercePortfolio.Orders.Domain.ApiServices;
+using EcommercePortfolio.Services.Configurations;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace EcommercePortfolio.IntegrationTests.Factories;
 
@@ -30,7 +32,7 @@ public static class CartFactory
         response.EnsureSuccessStatusCode();
 
         var apiResponse = await response.Content
-            .ReadFromJsonAsync<CartApiResponse<GetCartByClientIdResponse>>();
+            .ReadFromJsonAsync<CartApiResponse<GetCartByClientIdResponse>>(new JsonSerializerOptions().Default());
 
         if (apiResponse?.Response == null)
         {

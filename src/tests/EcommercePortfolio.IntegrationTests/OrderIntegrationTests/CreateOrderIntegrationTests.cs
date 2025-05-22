@@ -1,109 +1,66 @@
-﻿using EcommercePortfolio.IntegrationTests.AssertsHelper;
-using EcommercePortfolio.IntegrationTests.Factories;
+﻿using EcommercePortfolio.IntegrationTests.Factories;
+using EcommercePortfolio.IntegrationTests.Helpers.Asserts;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
 using Testcontainers.MongoDb;
 using Testcontainers.PostgreSql;
 using Testcontainers.RabbitMq;
+using Testcontainers.Redis;
 
 namespace EcommercePortfolio.IntegrationTests.OrderIntegrationTests;
 
 public class CreateOrderIntegrationTests : IAsyncLifetime
 {
-    private readonly WebApplicationFactory<Carts.API.Program> _cartsApiFactory;
-    private readonly WebApplicationFactory<Orders.API.Program> _ordersApiFactory;
-    private readonly WebApplicationFactory<Deliveries.API.Program> _deliveriesApiFactory;
     private readonly MongoDbContainer _mongoDbContainer;
-    private readonly PostgreSqlContainer _postgresDbContainer;
+    private readonly PostgreSqlContainer _orderPostgresDbContainer;
+    private readonly PostgreSqlContainer _deliveryPostgresDbContainer;
     private readonly RabbitMqContainer _rabbitMqContainer;
+    private readonly RedisContainer _redisContainer;
 
-    private HttpClient _cartsHttpClient;
-    private HttpClient _ordersHttpClient;
+    private WebApplicationFactory<Carts.API.Program> _cartsApiFactory = null!;
+    private WebApplicationFactory<Orders.API.Program> _ordersApiFactory = null!;
+    private WebApplicationFactory<Deliveries.API.Program> _deliveriesApiFactory = null!;
+
+    private string _cartMongoConnectionString;
+    private string _orderPostgresConnectionString;
+    private string _deliveryPostgresConnectionString;
+
+    private HttpClient _cartsHttpClient = null!;
+    private HttpClient _ordersHttpClient = null!;
 
     public CreateOrderIntegrationTests()
     {
-        _mongoDbContainer = new MongoDbBuilder()
-            .WithImage("mongo:7")
-            .WithPortBinding(27017, true)
-            .Build();
-
-        _postgresDbContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:16")
-            .WithPortBinding(5432, true)
-            .WithUsername("postgres")
-            .WithPassword("postgres")
-            .WithDatabase("ordersdb")
-            .Build();
-
-        _rabbitMqContainer = new RabbitMqBuilder()
-            .WithImage("rabbitmq:3-management")
-            .WithPortBinding(5672, true)
-            .WithPortBinding(15672, true)
-            .Build();
-
-        _cartsHttpClient = null!;
-        _ordersHttpClient = null!;
-
-        var mongoConnection = _mongoDbContainer.GetConnectionString();
-        var postgresConnection = _postgresDbContainer.GetConnectionString();
-        var rabbitConnection = _rabbitMqContainer.GetConnectionString();
-
-        _cartsApiFactory = new WebApplicationFactory<Carts.API.Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureAppConfiguration((context, config) =>
-                {
-                    var dict = new Dictionary<string, string>
-                    {
-                        ["ConnectionStrings:ecommerceportfolio-mongo-db"] = mongoConnection,
-                        ["ConnectionStrings:ecommerceportfolio-rabbit-mq"] = rabbitConnection
-                    };
-                    config.AddInMemoryCollection(dict);
-                });
-            });
-
-        _ordersApiFactory = new WebApplicationFactory<Orders.API.Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureAppConfiguration((context, config) =>
-                {
-                    var dict = new Dictionary<string, string>
-                    {
-                        ["ConnectionStrings:ecommerceportfolio-postgres-db"] = postgresConnection,
-                        ["ConnectionStrings:ecommerceportfolio-rabbit-mq"] = rabbitConnection
-                    };
-                    config.AddInMemoryCollection(dict);
-                });
-            });
-
-        _deliveriesApiFactory = new WebApplicationFactory<Deliveries.API.Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureAppConfiguration((context, config) =>
-                {
-                    var dict = new Dictionary<string, string>
-                    {
-                        ["ConnectionStrings:ecommerceportfolio-postgres-db"] = postgresConnection,
-                        ["ConnectionStrings:ecommerceportfolio-rabbit-mq"] = rabbitConnection
-                    };
-                    config.AddInMemoryCollection(dict);
-                });
-            });
+        _mongoDbContainer = BuilderContainerFactory.BuildMongoDbContainer();
+        _orderPostgresDbContainer = BuilderContainerFactory.BuildOrderPostgreSqlContainer();
+        _deliveryPostgresDbContainer = BuilderContainerFactory.BuildDeliveryPostgreSqlContainer();
+        _rabbitMqContainer = BuilderContainerFactory.BuildRabbitMqContainer();
+        _redisContainer = BuilderContainerFactory.BuildRedisContainer();
     }
 
     public async Task InitializeAsync()
     {
         await _mongoDbContainer.StartAsync();
-        await _postgresDbContainer.StartAsync();
+        await _orderPostgresDbContainer.StartAsync();
+        await _deliveryPostgresDbContainer.StartAsync();
         await _rabbitMqContainer.StartAsync();
+        await _redisContainer.StartAsync();
 
-        var handler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-        };
+        _cartMongoConnectionString = _mongoDbContainer.GetConnectionString();
+        _orderPostgresConnectionString = _orderPostgresDbContainer.GetConnectionString();
+        _deliveryPostgresConnectionString = _deliveryPostgresDbContainer.GetConnectionString();
+        var rabbitConnection = _rabbitMqContainer.GetConnectionString();
+        var redisConnection = _redisContainer.GetConnectionString();
 
-        _cartsHttpClient = new HttpClient(handler) { BaseAddress = _cartsApiFactory.Server.BaseAddress };
-        _ordersHttpClient = new HttpClient(handler) { BaseAddress = _ordersApiFactory.Server.BaseAddress };
+        _cartsApiFactory = BuilderWebApplicationFactory
+            .BuildCart(rabbitConnection, redisConnection, _cartMongoConnectionString);
+        _cartsHttpClient = _cartsApiFactory.CreateClient();
+
+        _ordersApiFactory = BuilderWebApplicationFactory
+            .BuildOrder(rabbitConnection, redisConnection, _orderPostgresConnectionString, _cartsApiFactory.Server.BaseAddress.ToString());
+        _ordersHttpClient = _ordersApiFactory.CreateClient();
+
+        _deliveriesApiFactory = BuilderWebApplicationFactory
+            .BuildDelivery(rabbitConnection, redisConnection, _deliveryPostgresConnectionString, _ordersApiFactory.Server.BaseAddress.ToString());
+
     }
 
     public async Task DisposeAsync()
@@ -113,9 +70,10 @@ public class CreateOrderIntegrationTests : IAsyncLifetime
         await _deliveriesApiFactory.DisposeAsync();
 
         await _mongoDbContainer.DisposeAsync();
-        await _mongoDbContainer.DisposeAsync();
-        await _postgresDbContainer.DisposeAsync();
+        await _orderPostgresDbContainer.DisposeAsync();
+        await _deliveryPostgresDbContainer.DisposeAsync();
         await _rabbitMqContainer.DisposeAsync();
+        await _redisContainer.DisposeAsync();
     }
 
     [Fact]
@@ -132,8 +90,8 @@ public class CreateOrderIntegrationTests : IAsyncLifetime
         await OrderFactory.PostOrder(_ordersHttpClient, getCartResponse.Id, clientId);
 
         // Asserts
-        await MongoAssertHelper.AssertCartDoesNotExistAsync(_mongoDbContainer.GetConnectionString(), clientId);
-        await PostgresAssertHelper.AssertOrderExistsAsync(_postgresDbContainer.GetConnectionString(), clientId);
-        await PostgresAssertHelper.AssertDeliveryExistsAsync(_postgresDbContainer.GetConnectionString(), clientId);
+        await MongoAssertHelper.AssertCartDoesNotExistAsync(_cartMongoConnectionString, clientId);
+        await PostgresAssertHelper.AssertOrderExistsAsync(_orderPostgresConnectionString, clientId);
+        await PostgresAssertHelper.AssertDeliveryExistsAsync(_deliveryPostgresConnectionString, clientId);
     }
 }

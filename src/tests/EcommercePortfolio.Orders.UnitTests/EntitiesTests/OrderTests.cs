@@ -1,30 +1,28 @@
 ﻿using EcommercePortfolio.Core.Domain;
-using EcommercePortfolio.Orders.Domain.Entities;
 using EcommercePortfolio.Orders.Domain.Enums;
 using EcommercePortfolio.Orders.UnitTests.Factories.Orders;
+using FluentAssertions;
 
 namespace EcommercePortfolio.Orders.UnitTests.EntitiesTests;
 
 public class OrderTests
 {
     [Fact]
-    public void CreateOrder_AllRequiredPropertiesValid_OrderCreatedSuccessfully()
+    public void Order_Create_ShouldCreateOrderSuccessfully()
     {
         // Arrange + Act
         var clientId = Guid.NewGuid();
-
-        // Act
         var order = OrderEntityFactory.BuildValidOrder(clientId);
 
         // Assert
-        Assert.NotNull(order);
-        Assert.Equal(clientId, order.ClientId);
-        Assert.Equal(500.0m, order.TotalValue);
-        Assert.Single(order.OrderItems);
+        order.Should().NotBeNull();
+        order.ClientId.Should().Be(clientId);
+        order.TotalValue.Should().Be(500.0m);
+        order.OrderItems.Should().HaveCount(1);
     }
 
     [Fact]
-    public void CreateOrder_ClientIdInvalid_ThrowDomainException()
+    public void Order_Create_ShouldThrowExceptionWhenClientIdInvalid()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -32,11 +30,11 @@ public class OrderTests
         );
 
         // Assert
-        Assert.Equal("Client id not informed", exception.Message);
+        exception.Message.Should().Be("Client id not informed");
     }
 
     [Fact]
-    public void CreateOrder_EmptyItems_ThrowDomainException()
+    public void Order_Create_ShouldThrowExceptionWhenItemsEmpty()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -44,11 +42,11 @@ public class OrderTests
         );
 
         // Assert
-        Assert.Equal("Order items not informed", exception.Message);
+        exception.Message.Should().Be("Order items not informed");
     }
 
     [Fact]
-    public void CreateOrder_ZeroQuantityItems_ThrowDomainException()
+    public void Order_Create_ShouldThrowExceptionWhenQuantityZero()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -56,11 +54,11 @@ public class OrderTests
         );
 
         // Assert
-        Assert.Equal("Quantity not informed", exception.Message);
+        exception.Message.Should().Be("Quantity not informed");
     }
 
     [Fact]
-    public void CreateOrder_ZeroPriceItems_ThrowDomainException()
+    public void Order_Create_ShouldThrowExceptionWhenPriceZero()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -68,11 +66,11 @@ public class OrderTests
         );
 
         // Assert
-        Assert.Equal("Price not informed", exception.Message);
+        exception.Message.Should().Be("Price not informed");
     }
 
     [Fact]
-    public void Order_PaymentAuthorized_ShouldSetPaymentIdAndAuthorizeStatus()
+    public void Order_AuthorizePayment_ShouldSetPaymentIdAndStatus()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
@@ -82,12 +80,12 @@ public class OrderTests
         order.PaymentAuthorized(paymentId);
 
         // Assert
-        Assert.Equal(paymentId, order.PaymentId);
-        Assert.Equal(EnumOrderStatus.AUTHORIZED, order.OrderStatus);
+        order.PaymentId.Should().Be(paymentId);
+        order.OrderStatus.Should().Be(EnumOrderStatus.AUTHORIZED);
     }
 
     [Fact]
-    public void Order_Canceled_ShouldSetStatusToCanceled()
+    public void Order_Cancel_ShouldSetStatusToCanceled()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
@@ -96,11 +94,11 @@ public class OrderTests
         order.Cancel();
 
         // Assert
-        Assert.Equal(EnumOrderStatus.CANCELED, order.OrderStatus);
+        order.OrderStatus.Should().Be(EnumOrderStatus.CANCELED);
     }
 
     [Fact]
-    public void Order_Approved_ShouldSetStatusToApproved()
+    public void Order_Approve_ShouldSetStatusToApproved()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
@@ -109,11 +107,11 @@ public class OrderTests
         order.Approve();
 
         // Assert
-        Assert.Equal(EnumOrderStatus.APPROVED, order.OrderStatus);
+        order.OrderStatus.Should().Be(EnumOrderStatus.APPROVED);
     }
 
     [Fact]
-    public void ValidateForCreation_InvalidTotalValue_ShouldReturnMessageError()
+    public void Order_ValidateCreation_ShouldReturnErrorWhenTotalValueInvalid()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
@@ -123,11 +121,11 @@ public class OrderTests
         var error = order.ValidateForCreation(999.0m);
 
         // Assert
-        Assert.Equal("The order total value is different from cart total value", error);
+        error.Should().Be("The order total value is different from cart total value");
     }
 
     [Fact]
-    public void ValidateForCreation_UnauthorizedOrder_ShouldReturnMessageError()
+    public void Order_ValidateCreation_ShouldReturnErrorWhenUnauthorized()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
@@ -136,11 +134,11 @@ public class OrderTests
         var error = order.ValidateForCreation(order.TotalValue);
 
         // Assert
-        Assert.Equal("The order is not authorized", error);
+        error.Should().Be("The order is not authorized");
     }
 
     [Fact]
-    public void ValidateForCreation_WithoutAddress_ShouldReturnMessageError()
+    public void Order_ValidateCreation_ShouldReturnErrorWhenAddressNotInformed()
     {
         // Arrange
         var order = OrderEntityFactory.BuildWithoutAddress();
@@ -150,6 +148,6 @@ public class OrderTests
         var error = order.ValidateForCreation(order.TotalValue);
 
         // Assert
-        Assert.Equal("The address order is not informed", error);
+        error.Should().Be("The address order is not informed");
     }
 }
