@@ -59,6 +59,9 @@ This is a modular monolith structured by Bounded Contexts, inspired by DDD (Doma
 
 The project offers observability via Aspire and can be run using either Aspire or Docker Compose. Just choose your preferred execution mode and follow the instructions for your environment (Visual Studio, CLI, or Docker Desktop).
 
+> ℹ️ See [ENVIRONMENT_GUIDE.md](ENVIRONMENT_GUIDE.md) for details about using Aspire, Docker Compose, or Testcontainers safely and interchangeably.
+
+
 ## 📁 Project Structure
 
 ```
@@ -151,7 +154,13 @@ We follow a well-defined set of testing standards to ensure code quality and mai
 - **Assertion Helpers**: Database-specific assertion utilities
 - **Best Practices**: AAA pattern, test isolation, and comprehensive coverage
 
-For detailed information about our testing standards, please refer to [TESTING_STANDARDS.md](TESTING_STANDARDS.md).
+> ℹ️ See [TESTING_STANDARDS.md](TESTING_STANDARDS.md) for details about about our testing standards.
+
+## 📚 Additional Documentation
+
+- [TESTING_STANDARDS.md](TESTING_STANDARDS.md): Guidelines for unit and integration testing, naming conventions, organization, and best practices.
+- [ENVIRONMENT_GUIDE.md](ENVIRONMENT_GUIDE.md): How to run the project with Aspire, Docker Compose, or Testcontainers without conflict.
+
 
 ## 🤝 How to Contribute
 

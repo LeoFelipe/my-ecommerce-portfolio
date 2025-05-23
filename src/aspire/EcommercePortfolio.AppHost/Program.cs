@@ -1,13 +1,11 @@
-using Aspire.Hosting;
-
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
 var postgresDb = builder.AddPostgres("ecommerceportfolio-postgres-db")
-    .WithDataVolume()
+    .WithDataVolume("postgres_data")
     .WithPgAdmin();
 
 var mongoDb = builder.AddMongoDB("ecommerceportfolio-mongo-db")
-    .WithDataVolume()
+    .WithDataVolume("mongo_data")
     .WithMongoExpress();
 
 var redisDb = builder.AddRedis("ecommerceportfolio-redis-db");

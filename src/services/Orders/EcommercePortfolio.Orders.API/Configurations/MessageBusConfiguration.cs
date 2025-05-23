@@ -16,7 +16,10 @@ public static class MessageBusConfiguration
                 // Disables exchange creation for base types
                 config.MessageTopology.SetEntityNameFormatter(new CustomEntityNameFormatter());
 
-                config.Host(configuration.GetConnectionString("RabbitMqConnection"));
+                var rabbitMqConnectionString = configuration.GetConnectionString("RabbitMqConnection")
+                    ?? throw new InvalidOperationException("RabbitMQ connection string not found.");
+
+                config.Host(rabbitMqConnectionString);
             });
         });
     }

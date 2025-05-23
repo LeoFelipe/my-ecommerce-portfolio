@@ -1,4 +1,5 @@
 ﻿using EcommercePortfolio.IntegrationTests.Factories;
+using EcommercePortfolio.IntegrationTests.Factories.Configurations;
 using EcommercePortfolio.IntegrationTests.Helpers.Asserts;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Testcontainers.MongoDb;
@@ -11,8 +12,7 @@ namespace EcommercePortfolio.IntegrationTests.OrderIntegrationTests;
 public class CreateOrderIntegrationTests : IAsyncLifetime
 {
     private readonly MongoDbContainer _mongoDbContainer;
-    private readonly PostgreSqlContainer _orderPostgresDbContainer;
-    private readonly PostgreSqlContainer _deliveryPostgresDbContainer;
+    private readonly PostgreSqlContainer _postgresDbContainer;
     private readonly RabbitMqContainer _rabbitMqContainer;
     private readonly RedisContainer _redisContainer;
 
@@ -30,23 +30,22 @@ public class CreateOrderIntegrationTests : IAsyncLifetime
     public CreateOrderIntegrationTests()
     {
         _mongoDbContainer = BuilderContainerFactory.BuildMongoDbContainer();
-        _orderPostgresDbContainer = BuilderContainerFactory.BuildOrderPostgreSqlContainer();
-        _deliveryPostgresDbContainer = BuilderContainerFactory.BuildDeliveryPostgreSqlContainer();
+        _postgresDbContainer = BuilderContainerFactory.BuildPostgresDbContainer();
         _rabbitMqContainer = BuilderContainerFactory.BuildRabbitMqContainer();
         _redisContainer = BuilderContainerFactory.BuildRedisContainer();
     }
 
     public async Task InitializeAsync()
     {
+        await DockerNetworkFactory.EnsureNetworkExistsAsync();
         await _mongoDbContainer.StartAsync();
-        await _orderPostgresDbContainer.StartAsync();
-        await _deliveryPostgresDbContainer.StartAsync();
+        await _postgresDbContainer.StartAsync();
         await _rabbitMqContainer.StartAsync();
         await _redisContainer.StartAsync();
 
         _cartMongoConnectionString = _mongoDbContainer.GetConnectionString();
-        _orderPostgresConnectionString = _orderPostgresDbContainer.GetConnectionString();
-        _deliveryPostgresConnectionString = _deliveryPostgresDbContainer.GetConnectionString();
+        _orderPostgresConnectionString = _postgresDbContainer.GetConnectionString().Replace("Database=ignore", "Database=EcommercePortfolioOrder");
+        _deliveryPostgresConnectionString = _postgresDbContainer.GetConnectionString().Replace("Database=ignore", "Database=EcommercePortfolioDelivery");
         var rabbitConnection = _rabbitMqContainer.GetConnectionString();
         var redisConnection = _redisContainer.GetConnectionString();
 
@@ -55,12 +54,11 @@ public class CreateOrderIntegrationTests : IAsyncLifetime
         _cartsHttpClient = _cartsApiFactory.CreateClient();
 
         _ordersApiFactory = BuilderWebApplicationFactory
-            .BuildOrder(rabbitConnection, redisConnection, _orderPostgresConnectionString, _cartsApiFactory.Server.BaseAddress.ToString());
+            .BuildOrder(rabbitConnection, redisConnection, _orderPostgresConnectionString, _cartsHttpClient.BaseAddress.ToString());
         _ordersHttpClient = _ordersApiFactory.CreateClient();
 
         _deliveriesApiFactory = BuilderWebApplicationFactory
-            .BuildDelivery(rabbitConnection, redisConnection, _deliveryPostgresConnectionString, _ordersApiFactory.Server.BaseAddress.ToString());
-
+            .BuildDelivery(rabbitConnection, redisConnection, _deliveryPostgresConnectionString, _ordersHttpClient.BaseAddress.ToString());
     }
 
     public async Task DisposeAsync()
@@ -70,8 +68,7 @@ public class CreateOrderIntegrationTests : IAsyncLifetime
         await _deliveriesApiFactory.DisposeAsync();
 
         await _mongoDbContainer.DisposeAsync();
-        await _orderPostgresDbContainer.DisposeAsync();
-        await _deliveryPostgresDbContainer.DisposeAsync();
+        await _postgresDbContainer.DisposeAsync();
         await _rabbitMqContainer.DisposeAsync();
         await _redisContainer.DisposeAsync();
     }

@@ -1,56 +1,71 @@
 services:
   ecommerceportfolio-orders-api:
-    image: ${DOCKER_REGISTRY-}ecommerceportfolioordersapi
-    restart: always
+    image: ${DOCKER_REGISTRY-}ecommerceportfolio-orders-api
+    container_name: ecommerceportfolio-orders-api
     build:
       context: .
       dockerfile: services/Orders/EcommercePortfolio.Orders.API/Dockerfile
     ports:
-      - "5010:5010"
-      - "5011:5011"
+      - "5050:5050"
+      - "5051:5051"
     networks:
       - ecommerce_network
     depends_on:
       - ecommerceportfolio-postgres-db
       - ecommerceportfolio-redis-db
       - ecommerceportfolio-rabbit-mq
+    environment:
+      - ConnectionStrings__OrderPostgresDbContext=Host=ecommerceportfolio-postgres-db;Port=5432;Database=EcommercePortfolioOrder;Username=postgres;Password=postgres
+      - ConnectionStrings__RedisConnection=redis://ecommerceportfolio-redis-db:6379
+      - ConnectionStrings__RabbitMqConnection=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
+      - ApiSettings__CartApiUrl=http://ecommerceportfolio-carts-api:5070
 
   ecommerceportfolio-deliveries-api:
-    image: ${DOCKER_REGISTRY-}ecommerceportfoliodeliveriesapi
-    restart: always
+    image: ${DOCKER_REGISTRY-}ecommerceportfolio-deliveries-api
+    container_name: ecommerceportfolio-deliveries-api
     build:
       context: .
       dockerfile: services/Deliveries/EcommercePortfolio.Deliveries.API/Dockerfile
     ports:
-      - "5020:5020"
-      - "5021:5021"
+      - "5060:5060"
+      - "5061:5061"
     networks:
       - ecommerce_network
     depends_on:
       - ecommerceportfolio-postgres-db
       - ecommerceportfolio-redis-db
       - ecommerceportfolio-rabbit-mq
+    environment:
+      - ConnectionStrings__DeliveryPostgresDbContext=Host=ecommerceportfolio-postgres-db;Port=5432;Database=EcommercePortfolioDelivery;Username=postgres;Password=postgres
+      - ConnectionStrings__RedisConnection=redis://ecommerceportfolio-redis-db:6379
+      - ConnectionStrings__RabbitMqConnection=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
+      - ApiSettings__OrderApiUrl=http://ecommerceportfolio-orders-api:5050
 
   ecommerceportfolio-carts-api:
-    image: ${DOCKER_REGISTRY-}ecommerceportfoliocartsapi
-    restart: always
+    image: ${DOCKER_REGISTRY-}ecommerceportfolio-carts-api
+    container_name: ecommerceportfolio-carts-api
     build:
       context: .
       dockerfile: services/Carts/EcommercePortfolio.Carts.API/Dockerfile
     ports:
-      - "5030:5030"
-      - "5031:5031"
+      - "5070:5070"
+      - "5071:5071"
     networks:
       - ecommerce_network
     depends_on:
       - ecommerceportfolio-mongo-db
       - ecommerceportfolio-redis-db
       - ecommerceportfolio-rabbit-mq
-  
-  ecommerceportfolio-postgres-db:
-    image: postgres:latest
     environment:
-      POSTGRES_DB: EcommercePortfolio
+      - ConnectionStrings__MongoDbConnection=mongodb://mongo:mongo_password@ecommerceportfolio-mongo-db:27017
+      - ConnectionStrings__RedisConnection=redis://ecommerceportfolio-redis-db:6379
+      - ConnectionStrings__RabbitMqConnection=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
+      - ApiSettings__FakeStoreApiUrl=https://fakestoreapi.com
+
+  ecommerceportfolio-postgres-db:
+    image: postgres:17.5
+    container_name: ecommerceportfolio-postgres-db
+    environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -61,42 +76,44 @@ services:
       - ecommerce_network
 
   ecommerceportfolio-mongo-db:
-    image: mongo:latest
+    image: mongo:7.0.5
+    container_name: ecommerceportfolio-mongo-db
     ports:
       - "27017:27017"
-    environment: 
+    environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: mongo_password
     volumes:
-      - mongo_data:/var/lib/mongo/data
-    networks: 
+      - mongo_data:/data/db
+    networks:
       - ecommerce_network
 
   ecommerceportfolio-redis-db:
-    image: redis:latest
+    image: redis:8.0.0
+    container_name: ecommerceportfolio-redis-db
     ports:
-      - 6379:6379
+      - "6379:6379"
     volumes:
-      - redis_data:/var/lib/redis/data
+      - redis_data:/data
     networks:
       - ecommerce_network
 
   ecommerceportfolio-rabbit-mq:
-    image: rabbitmq:4.0.8-management-alpine
+    image: rabbitmq:4.0.9-management
+    container_name: ecommerceportfolio-rabbit-mq
     ports:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq/mnesia
-    networks: 
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
       - ecommerce_network
 
-volumes:  
-  postgres_data: {}
-  mongo_data: {}
-  redis_data: {}
-  rabbitmq_data: {}
+volumes:
+  postgres_data:
+  mongo_data:
+  redis_data:
+  rabbitmq_data:
 
 networks:
   ecommerce_network:
-    

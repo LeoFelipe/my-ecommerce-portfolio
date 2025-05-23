@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 
-namespace EcommercePortfolio.IntegrationTests.Factories;
+namespace EcommercePortfolio.IntegrationTests.Factories.Configurations;
 
 public static class BuilderWebApplicationFactory
 {
@@ -17,9 +17,10 @@ public static class BuilderWebApplicationFactory
                 {
                     var dict = new Dictionary<string, string>
                     {
-                        ["ConnectionStrings:MongoDbConnection"] = mongoConnection,
-                        ["ConnectionStrings:RabbitMqConnection"] = rabbitConnection,
-                        ["ConnectionStrings:RedisConnection"] = redisConnection
+                        ["ConnectionStrings__MongoDbConnection"] = mongoConnection,
+                        ["ConnectionStrings__RabbitMqConnection"] = rabbitConnection,
+                        ["ConnectionStrings__RedisConnection"] = redisConnection,
+                        ["ApiSettings__FakeStoreApiUrl"] = "https://fakestoreapi.com"
                     };
                     config.AddInMemoryCollection(dict);
                 });
@@ -39,10 +40,10 @@ public static class BuilderWebApplicationFactory
                 {
                     var dict = new Dictionary<string, string>
                     {
-                        ["ConnectionStrings:OrderPostgresDbContext"] = postgresConnection,
-                        ["ConnectionStrings:RabbitMqConnection"] = rabbitConnection,
-                        ["ConnectionStrings:RedisConnection"] = redisConnection,
-                        ["ApiSettings:CartApiUrl"] = cartApiUrl
+                        ["ConnectionStrings__OrderPostgresDbContext"] = postgresConnection,
+                        ["ConnectionStrings__RabbitMqConnection"] = rabbitConnection,
+                        ["ConnectionStrings__RedisConnection"] = redisConnection,
+                        ["ApiSettings__CartApiUrl"] = cartApiUrl
                     };
                     config.AddInMemoryCollection(dict);
                 });
@@ -62,10 +63,10 @@ public static class BuilderWebApplicationFactory
                 {
                     var dict = new Dictionary<string, string>
                     {
-                        ["ConnectionStrings:DeliveryPostgresDbContext"] = postgresConnection,
-                        ["ConnectionStrings:RabbitMqConnection"] = rabbitConnection,
-                        ["ConnectionStrings:RedisConnection"] = redisConnection,
-                        ["ApiSettings:OrderApiUrl"] = orderApiUrl
+                        ["ConnectionStrings__DeliveryPostgresDbContext"] = postgresConnection,
+                        ["ConnectionStrings__RabbitMqConnection"] = rabbitConnection,
+                        ["ConnectionStrings__RedisConnection"] = redisConnection,
+                        ["ApiSettings__OrderApiUrl"] = orderApiUrl
                     };
                     config.AddInMemoryCollection(dict);
                 });
