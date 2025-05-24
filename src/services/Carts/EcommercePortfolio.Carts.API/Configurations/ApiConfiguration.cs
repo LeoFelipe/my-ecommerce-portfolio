@@ -27,7 +27,7 @@ public static class ApiConfiguration
         services.AddOpenApi();
     }
 
-    public static void UseApiConfiguration(this WebApplication app, IWebHostEnvironment env)
+    public static void UseApiConfiguration(this WebApplication app, IWebHostEnvironment env, IConfigurationBuilder configuration)
     {
         if (env.IsDevelopment())
         {

@@ -29,7 +29,7 @@ var ordersApi = builder.AddProject<Projects.EcommercePortfolio_Orders_API>("ecom
     .WaitFor(postgresDb)
     .WaitFor(redisDb)
     .WaitFor(rabbitMq)
-    .WithReference(orderDb, "OrderPostgresDbContext")
+    .WithReference(orderDb, "OrderPostgresDbConnection")
     .WithReference(redisDb, "RedisDbConnection")
     .WithReference(rabbitMq, "RabbitMqConnection")
     .WithEnvironment("ApiSettings__CartApiUrl", () => cartsApi.GetEndpoint("http").Url);
@@ -38,7 +38,7 @@ builder.AddProject<Projects.EcommercePortfolio_Deliveries_API>("ecommerceportfol
     .WaitFor(postgresDb)
     .WaitFor(redisDb)
     .WaitFor(rabbitMq)
-    .WithReference(deliveryDb, "DeliveryPostgresDbContext")
+    .WithReference(deliveryDb, "DeliveryPostgresDbConnection")
     .WithReference(redisDb, "RedisDbConnection")
     .WithReference(rabbitMq, "RabbitMqConnection")
     .WithEnvironment("ApiSettings__OrderApiUrl", () => ordersApi.GetEndpoint("http").Url);

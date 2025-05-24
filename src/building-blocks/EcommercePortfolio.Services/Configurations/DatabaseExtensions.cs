@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace EcommercePortfolio.Services.Configurations;
 
@@ -19,20 +20,29 @@ public static class DatabaseExtensions
     }
 
     public static void AddPostgresDatabase<TDbContext>(
-        this IServiceCollection services, 
+        this IServiceCollection services,
         IConfiguration configuration,
-        string databaseName) where TDbContext : DbContext
+        IHostEnvironment environment,
+        string postgresDbConnection) where TDbContext : DbContext
     {
+        var connectionString = configuration.GetConnectionString(postgresDbConnection)
+            ?? throw new InvalidOperationException("PostgresDB connection string not found.");
+
         services.AddDbContextPool<TDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString(databaseName)));
+            options.UseNpgsql(connectionString));
     }
 
     public static void AddMongoDatabase<TDbContext>(
-        this IServiceCollection services, 
+        this IServiceCollection services,
         IConfiguration configuration,
+        IHostEnvironment environment,
+        string mongoDbConnection,
         string databaseName) where TDbContext : DbContext
     {
+        var connectionString = configuration.GetConnectionString(mongoDbConnection)
+            ?? throw new InvalidOperationException("MongoDB connection string not found.");
+
         services.AddDbContextPool<TDbContext>(options =>
-            options.UseMongoDB(configuration.GetConnectionString(databaseName), databaseName));
+            options.UseMongoDB(connectionString, databaseName));
     }
 }

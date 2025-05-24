@@ -48,9 +48,9 @@ http://ecommerceportfolio-carts-api:5070
 
 | Service        | Internal Port | Docker Compose | Testcontainers | Aspire  |
 | -------------- | ------------- | -------------- | -------------- | ------- |
-| Orders API     | 5050          | 5050:5050      | 5050           | dynamic |
-| Deliveries API | 5060          | 5060:5060      | 5060           | dynamic |
-| Carts API      | 5070          | 5070:5070      | 5070           | dynamic |
+| Orders API     | 5050          | 5050:5051      | 5050           | dynamic |
+| Deliveries API | 5060          | 5060:5061      | 5060           | dynamic |
+| Carts API      | 5070          | 5070:5071      | 5070           | dynamic |
 
 * Docker Compose and Testcontainers use **fixed ports**.
 * Aspire uses **dynamic ports**, automatically resolved using `.GetEndpoint("http").Url`.
@@ -99,7 +99,7 @@ Configuration keys follow the standard hierarchical convention:
 
 ```json
 "ConnectionStrings": {
-  "OrderPostgresDbContext": "...",
+  "OrderPostgresDbConnection": "...",
   "RabbitMqConnection": "..."
 },
 "ApiSettings": {
@@ -110,7 +110,7 @@ Configuration keys follow the standard hierarchical convention:
 Environment or CLI use `__` (double underscore):
 
 ```
-ConnectionStrings__OrderPostgresDbContext
+ConnectionStrings__OrderPostgresDbConnection
 ApiSettings__CartApiUrl
 ```
 

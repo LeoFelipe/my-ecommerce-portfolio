@@ -43,22 +43,19 @@ public class CreateOrderIntegrationTests : IAsyncLifetime
         await _rabbitMqContainer.StartAsync();
         await _redisContainer.StartAsync();
 
-        _cartMongoConnectionString = _mongoDbContainer.GetConnectionString();
-        _orderPostgresConnectionString = _postgresDbContainer.GetConnectionString().Replace("Database=ignore", "Database=EcommercePortfolioOrder");
-        _deliveryPostgresConnectionString = _postgresDbContainer.GetConnectionString().Replace("Database=ignore", "Database=EcommercePortfolioDelivery");
-        var rabbitConnection = _rabbitMqContainer.GetConnectionString();
-        var redisConnection = _redisContainer.GetConnectionString();
+        _cartMongoConnectionString = ConnectionStringFactory.BuildMongoDbConnectionString(_mongoDbContainer);
+        _orderPostgresConnectionString = ConnectionStringFactory.BuildPostgresDbConnectionString(_postgresDbContainer, "EcommercePortfolioOrder");
+        _deliveryPostgresConnectionString = ConnectionStringFactory.BuildPostgresDbConnectionString(_postgresDbContainer, "EcommercePortfolioDelivery");
+        var rabbitMqConnectionString = ConnectionStringFactory.BuildRabbitMqConnectionString(_rabbitMqContainer);
+        var redisConnectionString = ConnectionStringFactory.BuildRedisDbConnectionString(_redisContainer);
 
-        _cartsApiFactory = BuilderWebApplicationFactory
-            .BuildCart(rabbitConnection, redisConnection, _cartMongoConnectionString);
+        _cartsApiFactory = new CartApiFactory(rabbitMqConnectionString, redisConnectionString, _cartMongoConnectionString, "EcommercePortfolioCart");
         _cartsHttpClient = _cartsApiFactory.CreateClient();
 
-        _ordersApiFactory = BuilderWebApplicationFactory
-            .BuildOrder(rabbitConnection, redisConnection, _orderPostgresConnectionString, _cartsHttpClient.BaseAddress.ToString());
+        _ordersApiFactory = new OrderApiFactory(rabbitMqConnectionString, redisConnectionString, _orderPostgresConnectionString, _cartsHttpClient.BaseAddress.ToString());
         _ordersHttpClient = _ordersApiFactory.CreateClient();
 
-        _deliveriesApiFactory = BuilderWebApplicationFactory
-            .BuildDelivery(rabbitConnection, redisConnection, _deliveryPostgresConnectionString, _ordersHttpClient.BaseAddress.ToString());
+        _deliveriesApiFactory = new DeliveryApiFactory(rabbitMqConnectionString, redisConnectionString, _deliveryPostgresConnectionString, _ordersHttpClient.BaseAddress.ToString());
     }
 
     public async Task DisposeAsync()

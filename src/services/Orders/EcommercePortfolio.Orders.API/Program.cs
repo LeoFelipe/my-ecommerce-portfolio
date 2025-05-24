@@ -11,7 +11,10 @@ builder.Services.AddApiConfig();
 
 builder.Services.AddMessageBus(builder.Configuration);
 
-builder.Services.AddPostgresDatabase<OrderPostgresDbContext>(builder.Configuration, "OrderPostgresDbContext");
+builder.Services.AddPostgresDatabase<OrderPostgresDbContext>(
+    builder.Configuration, 
+    builder.Environment, 
+    "OrderPostgresDbConnection");
 
 builder.Services.AddCache(builder.Configuration);
 
