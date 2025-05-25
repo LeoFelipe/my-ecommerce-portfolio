@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Core.Mediator;
 using EcommercePortfolio.Core.MessageBus;
 using EcommercePortfolio.Core.Notification;
-using EcommercePortfolio.ApiGateways.MyFakePayApi;
+using EcommercePortfolio.ApiGateways.MyFakePaymentApi;
 using EcommercePortfolio.Orders.API.Application.Queries;
 using EcommercePortfolio.Orders.Domain;
 using EcommercePortfolio.Orders.Domain.ApiServices;

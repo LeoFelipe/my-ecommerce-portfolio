@@ -6,23 +6,22 @@ USER root
 WORKDIR /app
 RUN apt-get update && apt-get install -y curl
 USER $APP_UID
-EXPOSE 5060
-EXPOSE 5061
+EXPOSE 5250
 
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["services/Deliveries/EcommercePortfolio.Delivery.API/EcommercePortfolio.Deliveries.API.csproj", "services/Deliveries/EcommercePortfolio.Delivery.API/"]
-COPY ["building-blocks/EcommercePortfolio.Core.ApiGateways/EcommercePortfolio.Core.ApiGateways.csproj", "building-blocks/EcommercePortfolio.Core.ApiGateways/"]
+COPY ["services/Deliveries/EcommercePortfolio.Deliveries.API/EcommercePortfolio.Deliveries.API.csproj", "services/Deliveries/EcommercePortfolio.Deliveries.API/"]
+COPY ["building-blocks/EcommercePortfolio.ApiGateways/EcommercePortfolio.ApiGateways.csproj", "building-blocks/EcommercePortfolio.ApiGateways/"]
 COPY ["building-blocks/EcommercePortfolio.Core/EcommercePortfolio.Core.csproj", "building-blocks/EcommercePortfolio.Core/"]
 COPY ["building-blocks/EcommercePortfolio.Services/EcommercePortfolio.Services.csproj", "building-blocks/EcommercePortfolio.Services/"]
-COPY ["services/Deliveries/EcommercePortfolio.Delivery.Domain/EcommercePortfolio.Deliveries.Domain.csproj", "services/Deliveries/EcommercePortfolio.Delivery.Domain/"]
-COPY ["services/Deliveries/EcommercePortfolio.Delivery.Infra/EcommercePortfolio.Deliveries.Infra.csproj", "services/Deliveries/EcommercePortfolio.Delivery.Infra/"]
-RUN dotnet restore "./services/Deliveries/EcommercePortfolio.Delivery.API/EcommercePortfolio.Deliveries.API.csproj"
+COPY ["services/Deliveries/EcommercePortfolio.Deliveries.Domain/EcommercePortfolio.Deliveries.Domain.csproj", "services/Deliveries/EcommercePortfolio.Deliveries.Domain/"]
+COPY ["services/Deliveries/EcommercePortfolio.Deliveries.Infra/EcommercePortfolio.Deliveries.Infra.csproj", "services/Deliveries/EcommercePortfolio.Deliveries.Infra/"]
+RUN dotnet restore "./services/Deliveries/EcommercePortfolio.Deliveries.API/EcommercePortfolio.Deliveries.API.csproj"
 COPY . .
-WORKDIR "/src/services/Deliveries/EcommercePortfolio.Delivery.API"
+WORKDIR "/src/services/Deliveries/EcommercePortfolio.Deliveries.API"
 RUN dotnet build "./EcommercePortfolio.Deliveries.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

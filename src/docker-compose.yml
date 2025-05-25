@@ -1,55 +1,12 @@
 services:
-  ecommerceportfolio-orders-api:
-    image: ${DOCKER_REGISTRY-}ecommerceportfolio-orders-api
-    container_name: ecommerceportfolio-orders-api
-    build:
-      context: .
-      dockerfile: services/Orders/EcommercePortfolio.Orders.API/Dockerfile
-    ports:
-      - "5050:5050"
-      - "5051:5051"
-    networks:
-      - ecommerce_network
-    depends_on:
-      - ecommerceportfolio-postgres-db
-      - ecommerceportfolio-redis-db
-      - ecommerceportfolio-rabbit-mq
-    environment:
-      - ConnectionStrings__OrderPostgresDbContext=Host=ecommerceportfolio-postgres-db;Port=5432;Database=EcommercePortfolioOrder;Username=postgres;Password=postgres
-      - ConnectionStrings__RedisConnection=redis://ecommerceportfolio-redis-db:6379
-      - ConnectionStrings__RabbitMqConnection=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
-      - ApiSettings__CartApiUrl=http://ecommerceportfolio-carts-api:5070
-
-  ecommerceportfolio-deliveries-api:
-    image: ${DOCKER_REGISTRY-}ecommerceportfolio-deliveries-api
-    container_name: ecommerceportfolio-deliveries-api
-    build:
-      context: .
-      dockerfile: services/Deliveries/EcommercePortfolio.Deliveries.API/Dockerfile
-    ports:
-      - "5060:5060"
-      - "5061:5061"
-    networks:
-      - ecommerce_network
-    depends_on:
-      - ecommerceportfolio-postgres-db
-      - ecommerceportfolio-redis-db
-      - ecommerceportfolio-rabbit-mq
-    environment:
-      - ConnectionStrings__DeliveryPostgresDbContext=Host=ecommerceportfolio-postgres-db;Port=5432;Database=EcommercePortfolioDelivery;Username=postgres;Password=postgres
-      - ConnectionStrings__RedisConnection=redis://ecommerceportfolio-redis-db:6379
-      - ConnectionStrings__RabbitMqConnection=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
-      - ApiSettings__OrderApiUrl=http://ecommerceportfolio-orders-api:5050
-
-  ecommerceportfolio-carts-api:
-    image: ${DOCKER_REGISTRY-}ecommerceportfolio-carts-api
-    container_name: ecommerceportfolio-carts-api
+  ecommerceportfolio.carts.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfoliocartsapi
     build:
       context: .
       dockerfile: services/Carts/EcommercePortfolio.Carts.API/Dockerfile
+    container_name: ecommerceportfolio-carts-api
     ports:
-      - "5070:5070"
-      - "5071:5071"
+      - "5050:5050"
     networks:
       - ecommerce_network
     depends_on:
@@ -57,10 +14,51 @@ services:
       - ecommerceportfolio-redis-db
       - ecommerceportfolio-rabbit-mq
     environment:
-      - ConnectionStrings__MongoDbConnection=mongodb://mongo:mongo_password@ecommerceportfolio-mongo-db:27017
-      - ConnectionStrings__RedisConnection=redis://ecommerceportfolio-redis-db:6379
-      - ConnectionStrings__RabbitMqConnection=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
+      - ConnectionStrings__MongoDb=mongodb://mongo:mongo_password@ecommerceportfolio-mongo-db:27017
+      - ConnectionStrings__RedisCache=redis://ecommerceportfolio-redis-db:6379
+      - ConnectionStrings__RabbitMq=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
       - ApiSettings__FakeStoreApiUrl=https://fakestoreapi.com
+
+  ecommerceportfolio.orders.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfolioordersapi
+    build:
+      context: .
+      dockerfile: services/Orders/EcommercePortfolio.Orders.API/Dockerfile
+    container_name: ecommerceportfolio-orders-api
+    ports:
+      - "5150:5150"
+    networks:
+      - ecommerce_network
+    depends_on:
+      - ecommerceportfolio-postgres-db
+      - ecommerceportfolio-redis-db
+      - ecommerceportfolio-rabbit-mq
+    environment:
+      - ConnectionStrings__PostgresDb=Host=ecommerceportfolio-postgres-db;Port=5432;Database=EcommercePortfolioOrder;Username=postgres;Password=postgres
+      - ConnectionStrings__RedisCache=redis://ecommerceportfolio-redis-db:6379
+      - ConnectionStrings__RabbitMq=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
+      - ApiSettings__CartApiUrl=http://ecommerceportfolio-carts-api:5050
+      - ApiSettings__PaymentApiUrl=https://fakestoreapi.com
+
+  ecommerceportfolio.deliveries.api:
+    image: ${DOCKER_REGISTRY-}ecommerceportfoliodeliveriesapi
+    build:
+      context: .
+      dockerfile: services/Deliveries/EcommercePortfolio.Deliveries.API/Dockerfile
+    container_name: ecommerceportfolio-deliveries-api
+    ports:
+      - "5250:5250"
+    networks:
+      - ecommerce_network
+    depends_on:
+      - ecommerceportfolio-postgres-db
+      - ecommerceportfolio-redis-db
+      - ecommerceportfolio-rabbit-mq
+    environment:
+      - ConnectionStrings__PostgresDb=Host=ecommerceportfolio-postgres-db;Port=5432;Database=EcommercePortfolioDelivery;Username=postgres;Password=postgres
+      - ConnectionStrings__RedisCache=redis://ecommerceportfolio-redis-db:6379
+      - ConnectionStrings__RabbitMq=amqp://guest:guest@ecommerceportfolio-rabbit-mq:5672/
+      - ApiSettings__OrderApiUrl=http://ecommerceportfolio-orders-api:5150
 
   ecommerceportfolio-postgres-db:
     image: postgres:17.5
@@ -117,3 +115,4 @@ volumes:
 
 networks:
   ecommerce_network:
+

@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Core.Domain;
 using EcommercePortfolio.ApiGateways.MyFakePay.Enums;
 
-namespace EcommercePortfolio.ApiGateways.MyFakePayApi;
+namespace EcommercePortfolio.ApiGateways.MyFakePaymentApi;
 
 public class PaymentApiResponse : SqlEntity, IAggregateRoot
 {

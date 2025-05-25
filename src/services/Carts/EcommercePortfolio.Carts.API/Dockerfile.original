@@ -14,11 +14,10 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["services/Carts/EcommercePortfolio.Carts.API/EcommercePortfolio.Carts.API.csproj", "services/Carts/EcommercePortfolio.Carts.API/"]
-COPY ["building-blocks/EcommercePortfolio.ApiGateways/EcommercePortfolio.ApiGateways.csproj", "building-blocks/EcommercePortfolio.ApiGateways/"]
 COPY ["building-blocks/EcommercePortfolio.Core/EcommercePortfolio.Core.csproj", "building-blocks/EcommercePortfolio.Core/"]
 COPY ["building-blocks/EcommercePortfolio.Services/EcommercePortfolio.Services.csproj", "building-blocks/EcommercePortfolio.Services/"]
-COPY ["services/Orders/EcommercePortfolio.Orders.Domain/EcommercePortfolio.Orders.Domain.csproj", "services/Orders/EcommercePortfolio.Orders.Domain/"]
-COPY ["services/Orders/EcommercePortfolio.Orders.Infra/EcommercePortfolio.Orders.Infra.csproj", "services/Orders/EcommercePortfolio.Orders.Infra/"]
+COPY ["services/Orders/EcommercePortfolio.Order.Domain/EcommercePortfolio.Orders.Domain.csproj", "services/Orders/EcommercePortfolio.Order.Domain/"]
+COPY ["services/Orders/EcommercePortfolio.Order.Infra/EcommercePortfolio.Orders.Infra.csproj", "services/Orders/EcommercePortfolio.Order.Infra/"]
 COPY ["services/Carts/EcommercePortfolio.Carts.Domain/EcommercePortfolio.Carts.Domain.csproj", "services/Carts/EcommercePortfolio.Carts.Domain/"]
 COPY ["services/Carts/EcommercePortfolio.Carts.Infra/EcommercePortfolio.Carts.Infra.csproj", "services/Carts/EcommercePortfolio.Carts.Infra/"]
 RUN dotnet restore "./services/Carts/EcommercePortfolio.Carts.API/EcommercePortfolio.Carts.API.csproj"

@@ -1,4 +1,4 @@
-@EcommercePortfolio.Carts.API_HostAddress = http://localhost:5101
+@EcommercePortfolio.Carts.API_HostAddress = http://localhost:5050
 
 GET {{EcommercePortfolio.Carts.API_HostAddress}}/weatherforecast/
 Accept: application/json

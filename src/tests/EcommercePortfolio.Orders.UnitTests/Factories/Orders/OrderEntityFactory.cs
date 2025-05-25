@@ -64,8 +64,8 @@ public static class OrderEntityFactory
 
     public static Order BuildOrder(
         int productId = 0,
-        string? productName = null,
-        string? category = null,
+        string productName = null,
+        string category = null,
         int quantity = 0,
         decimal price = 0m)
     {
@@ -102,8 +102,8 @@ public static class OrderEntityFactory
 
     public static OrderItem BuildOrderItem(
         int productId = 0,
-        string? productName = null,
-        string? category = null,
+        string productName = null,
+        string category = null,
         int quantity = 0,
         decimal price = 0m)
     {

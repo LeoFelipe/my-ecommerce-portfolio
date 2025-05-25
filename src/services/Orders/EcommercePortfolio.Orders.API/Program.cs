@@ -14,7 +14,7 @@ builder.Services.AddMessageBus(builder.Configuration);
 builder.Services.AddPostgresDatabase<OrderPostgresDbContext>(
     builder.Configuration, 
     builder.Environment, 
-    "OrderPostgresDbConnection");
+    "PostgresDb");
 
 builder.Services.AddCache(builder.Configuration);
 

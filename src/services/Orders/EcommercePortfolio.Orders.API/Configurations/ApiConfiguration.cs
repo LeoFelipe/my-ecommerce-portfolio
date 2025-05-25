@@ -38,12 +38,14 @@ public static class ApiConfiguration
             app.Services.ApplyMigration<OrderPostgresDbContext>();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.UseAuthorization();
 
         app.UseCors("OpenPolicy");
 
         app.MapControllers();
+
+        app.MapHealthChecks("/health");
     }
 }

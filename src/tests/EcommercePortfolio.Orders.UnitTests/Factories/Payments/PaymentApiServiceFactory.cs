@@ -1,6 +1,6 @@
 ﻿using Bogus;
 using EcommercePortfolio.ApiGateways.MyFakePay.Enums;
-using EcommercePortfolio.ApiGateways.MyFakePayApi;
+using EcommercePortfolio.ApiGateways.MyFakePaymentApi;
 
 namespace EcommercePortfolio.Orders.UnitTests.Factories.Payments;
 

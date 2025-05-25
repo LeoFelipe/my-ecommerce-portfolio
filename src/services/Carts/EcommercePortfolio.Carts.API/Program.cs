@@ -15,7 +15,7 @@ builder.Services.AddMessageBus(builder.Configuration);
 builder.Services.AddMongoDatabase<MongoDbContext>(
     builder.Configuration, 
     builder.Environment, 
-    "MongoDbConnection", 
+    "MongoDb", 
     "EcommercePortfolioCart");
 
 foreach (var kv in builder.Configuration.AsEnumerable())

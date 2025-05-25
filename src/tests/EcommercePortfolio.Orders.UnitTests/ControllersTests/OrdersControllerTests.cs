@@ -60,7 +60,7 @@ public class OrdersControllerTests
     {
         // Arrange
         var orderId = Guid.NewGuid();
-        _orderQueriesMock.Setup(q => q.GetById(orderId)).ReturnsAsync((GetOrderResponse?)null);
+        _orderQueriesMock.Setup(q => q.GetById(orderId)).ReturnsAsync((GetOrderResponse)null);
 
         // Act
         var result = await _controller.GetById(orderId) as NotFoundObjectResult;
@@ -98,7 +98,7 @@ public class OrdersControllerTests
     {
         // Arrange
         var orderId = Guid.NewGuid();
-        _orderQueriesMock.Setup(q => q.GetAddressById(orderId)).ReturnsAsync((GetAddressOrderResponse?)null);
+        _orderQueriesMock.Setup(q => q.GetAddressById(orderId)).ReturnsAsync((GetAddressOrderResponse)null);
 
         // Act
         var result = await _controller.GetAddressById(orderId) as NotFoundObjectResult;

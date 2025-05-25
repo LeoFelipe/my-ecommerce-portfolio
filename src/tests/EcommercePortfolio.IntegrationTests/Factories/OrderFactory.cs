@@ -1,5 +1,4 @@
-﻿using EcommercePortfolio.Carts.API.Application.Queries;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 
 namespace EcommercePortfolio.IntegrationTests.Factories;
 

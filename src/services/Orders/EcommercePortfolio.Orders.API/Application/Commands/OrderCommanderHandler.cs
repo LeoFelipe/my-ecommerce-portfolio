@@ -2,7 +2,7 @@
 using EcommercePortfolio.Core.Messaging;
 using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.Core.Domain.ValueObjects;
-using EcommercePortfolio.ApiGateways.MyFakePayApi;
+using EcommercePortfolio.ApiGateways.MyFakePaymentApi;
 using EcommercePortfolio.Orders.API.Application.Events;
 using EcommercePortfolio.Orders.Domain;
 using EcommercePortfolio.Orders.Domain.ApiServices;

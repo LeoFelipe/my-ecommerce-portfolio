@@ -21,26 +21,26 @@ var cartsApi = builder.AddProject<Projects.EcommercePortfolio_Carts_API>("ecomme
     .WaitFor(mongoDb)
     .WaitFor(redisDb)
     .WaitFor(rabbitMq)
-    .WithReference(cartDb, "MongoDbConnection")
-    .WithReference(redisDb, "RedisDbConnection")
-    .WithReference(rabbitMq, "RabbitMqConnection");
+    .WithReference(cartDb, "MongoDb")
+    .WithReference(redisDb, "RedisCache")
+    .WithReference(rabbitMq, "RabbitMq");
 
 var ordersApi = builder.AddProject<Projects.EcommercePortfolio_Orders_API>("ecommerceportfolio-orders-api")
     .WaitFor(postgresDb)
     .WaitFor(redisDb)
     .WaitFor(rabbitMq)
-    .WithReference(orderDb, "OrderPostgresDbConnection")
-    .WithReference(redisDb, "RedisDbConnection")
-    .WithReference(rabbitMq, "RabbitMqConnection")
+    .WithReference(orderDb, "PostgresDb")
+    .WithReference(redisDb, "RedisCache")
+    .WithReference(rabbitMq, "RabbitMq")
     .WithEnvironment("ApiSettings__CartApiUrl", () => cartsApi.GetEndpoint("http").Url);
 
 builder.AddProject<Projects.EcommercePortfolio_Deliveries_API>("ecommerceportfolio-deliveries-api")
     .WaitFor(postgresDb)
     .WaitFor(redisDb)
     .WaitFor(rabbitMq)
-    .WithReference(deliveryDb, "DeliveryPostgresDbConnection")
-    .WithReference(redisDb, "RedisDbConnection")
-    .WithReference(rabbitMq, "RabbitMqConnection")
+    .WithReference(deliveryDb, "PostgresDb")
+    .WithReference(redisDb, "RedisCache")
+    .WithReference(rabbitMq, "RabbitMq")
     .WithEnvironment("ApiSettings__OrderApiUrl", () => ordersApi.GetEndpoint("http").Url);
 
 await builder.Build().RunAsync();

@@ -99,8 +99,8 @@ Configuration keys follow the standard hierarchical convention:
 
 ```json
 "ConnectionStrings": {
-  "OrderPostgresDbConnection": "...",
-  "RabbitMqConnection": "..."
+  "PostgresDb": "...",
+  "RabbitMq": "..."
 },
 "ApiSettings": {
   "CartApiUrl": "http://..."
@@ -110,7 +110,7 @@ Configuration keys follow the standard hierarchical convention:
 Environment or CLI use `__` (double underscore):
 
 ```
-ConnectionStrings__OrderPostgresDbConnection
+ConnectionStrings__PostgresDb
 ApiSettings__CartApiUrl
 ```
 

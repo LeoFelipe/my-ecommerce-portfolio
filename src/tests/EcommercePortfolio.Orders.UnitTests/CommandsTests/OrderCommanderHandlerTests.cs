@@ -1,6 +1,6 @@
 ﻿using EcommercePortfolio.Core.Notification;
 using EcommercePortfolio.ApiGateways.MyFakePay.Enums;
-using EcommercePortfolio.ApiGateways.MyFakePayApi;
+using EcommercePortfolio.ApiGateways.MyFakePaymentApi;
 using EcommercePortfolio.Orders.API.Application.Commands;
 using EcommercePortfolio.Orders.Domain;
 using EcommercePortfolio.Orders.Domain.ApiServices;
@@ -80,7 +80,7 @@ public class OrderCommanderHandlerTests
         var command = OrderCommandFactory.BuildValidCreateOrderCommand();
 
         _cartApiServiceMock.Setup(x => x.GetCartByClientId(command.ClientId))
-                           .ReturnsAsync((GetCartByClientIdResponse?)null);
+                           .ReturnsAsync((GetCartByClientIdResponse)null);
 
         // Act
         await _handler.Handle(command, default);

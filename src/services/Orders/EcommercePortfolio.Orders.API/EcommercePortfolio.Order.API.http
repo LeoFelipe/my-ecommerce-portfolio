@@ -1,4 +1,4 @@
-@EcommercePortfolio.Orders.API_HostAddress = http://localhost:5154
+@EcommercePortfolio.Orders.API_HostAddress = http://localhost:5150
 
 GET {{EcommercePortfolio.Orders.API_HostAddress}}/weatherforecast/
 Accept: application/json

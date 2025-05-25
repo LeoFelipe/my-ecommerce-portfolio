@@ -25,7 +25,7 @@ public static class OrderCommandFactory
 
     public static CreateOrderCommand BuildCreateOrderCommand(
         EnumPaymentMethod enumPaymentMethod,
-        string? cartId = null,
+        string cartId = null,
         Guid? clientId = null)
     {
         return new CreateOrderCommand(

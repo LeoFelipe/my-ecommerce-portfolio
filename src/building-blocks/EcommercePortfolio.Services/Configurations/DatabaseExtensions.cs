@@ -36,10 +36,10 @@ public static class DatabaseExtensions
         this IServiceCollection services,
         IConfiguration configuration,
         IHostEnvironment environment,
-        string mongoDbConnection,
+        string MongoDb,
         string databaseName) where TDbContext : DbContext
     {
-        var connectionString = configuration.GetConnectionString(mongoDbConnection)
+        var connectionString = configuration.GetConnectionString(MongoDb)
             ?? throw new InvalidOperationException("MongoDB connection string not found.");
 
         services.AddDbContextPool<TDbContext>(options =>

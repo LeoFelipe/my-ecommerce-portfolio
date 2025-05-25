@@ -1,4 +1,4 @@
-﻿namespace EcommercePortfolio.ApiGateways.MyFakePayApi;
+﻿namespace EcommercePortfolio.ApiGateways.MyFakePaymentApi;
 
 public class PaymentService(
     IPaymentApiService paymentApiService) : IPaymentService

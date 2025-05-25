@@ -1,7 +1,7 @@
 ﻿using EcommercePortfolio.Core.Notification;
 using System.Runtime.Serialization;
 
-namespace EcommercePortfolio.ApiGateways.MyFakePayApi;
+namespace EcommercePortfolio.ApiGateways.MyFakePaymentApi;
 
 public class PaymentApiService(HttpClient _httpClient, INotificationContext notification) : IPaymentApiService
 {
@@ -11,12 +11,10 @@ public class PaymentApiService(HttpClient _httpClient, INotificationContext noti
     {
         try
         {
-            //var response = await _httpClient.GetAsync("/checkout/authorize");
-
-            var response = new HttpResponseMessage();
+            var response = await _httpClient.GetAsync("/products/categories"); // mocked endpoint for example
             response.EnsureSuccessStatusCode();
 
-            return await Task.FromResult(true);
+            return await Task.FromResult(response.IsSuccessStatusCode);
         }
         catch (Exception ex)
         {

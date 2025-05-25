@@ -1,29 +1,24 @@
-﻿using Testcontainers.MongoDb;
-using Testcontainers.PostgreSql;
-using Testcontainers.RabbitMq;
-using Testcontainers.Redis;
-
-namespace EcommercePortfolio.IntegrationTests.Factories.Configurations;
+﻿namespace EcommercePortfolio.IntegrationTests.Factories.Configurations;
 
 public static class ConnectionStringFactory
 {
-    public static string BuildPostgresDbConnectionString(PostgreSqlContainer postgresDbContainer, string dabaseName)
+    public static string BuildPostgresDbConnectionString(string dabaseName)
     {
-        return $"Host={postgresDbContainer.Hostname};Port={postgresDbContainer.GetMappedPublicPort(5432)};Database={dabaseName};Username=postgres;Password=postgres";
+        return $"Host=ecommerceportfolio-postgres-db-test;Port=5432;Database={dabaseName};Username=postgres;Password=postgres";
     }
 
-    public static string BuildMongoDbConnectionString(MongoDbContainer mongoDbContainer)
+    public static string BuildMongoDbString()
     {
-        return $"mongodb://mongo:mongo_password@{mongoDbContainer.Hostname}:{mongoDbContainer.GetMappedPublicPort(27017)}";
+        return $"mongodb://mongo:mongo_password@ecommerceportfolio-mongo-db-test:27017";
     }
 
-    public static string BuildRedisDbConnectionString(RedisContainer redisDbContainer)
+    public static string BuildRedisCacheString()
     {
-        return $"redis://{redisDbContainer.Hostname}:{redisDbContainer.GetMappedPublicPort(6379)}";
+        return $"redis://ecommerceportfolio-redis-db-test:6379";
     }
 
-    public static string BuildRabbitMqConnectionString(RabbitMqContainer rabbitMqContainer)
+    public static string BuildRabbitMqString()
     {
-        return $"amqp://guest:guest@{rabbitMqContainer.Hostname}:{rabbitMqContainer.GetMappedPublicPort(5672)}";
+        return $"amqp://guest:guest@ecommerceportfolio-rabbit-mq-test:5672/";
     }
 }

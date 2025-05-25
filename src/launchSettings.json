@@ -4,7 +4,6 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "ecommerceportfolio.api": "StartDebugging",
         "ecommerceportfolio.orders.api": "StartDebugging",
         "ecommerceportfolio.deliveries.api": "StartDebugging",
         "ecommerceportfolio.carts.api": "StartDebugging"

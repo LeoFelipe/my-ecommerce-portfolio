@@ -19,10 +19,10 @@ public static class MessageBusConfiguration
                 // Disables exchange creation for base types
                 config.MessageTopology.SetEntityNameFormatter(new CustomEntityNameFormatter());
 
-                var rabbitMqConnectionString = configuration.GetConnectionString("RabbitMqConnection")
+                var RabbitMqString = configuration.GetConnectionString("RabbitMq")
                     ?? throw new InvalidOperationException("RabbitMQ connection string not found.");
 
-                config.Host(rabbitMqConnectionString);
+                config.Host(RabbitMqString);
 
                 config.ReceiveEndpoint("create-delivery-for-order-authorized", endpoint =>
                 {

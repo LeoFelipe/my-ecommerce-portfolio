@@ -35,12 +35,14 @@ public static class ApiConfiguration
             app.MapScalarApiReference();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.UseAuthorization();
 
         app.UseCors("OpenPolicy");
 
         app.MapControllers();
+
+        app.MapHealthChecks("/health");
     }
 }
