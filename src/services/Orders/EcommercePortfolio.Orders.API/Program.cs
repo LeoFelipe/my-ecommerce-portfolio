@@ -13,8 +13,10 @@ builder.Services.AddMessageBus(builder.Configuration);
 
 builder.Services.AddPostgresDatabase<OrderPostgresDbContext>(
     builder.Configuration, 
-    builder.Environment, 
     "PostgresDb");
+
+var testConnectionString = builder.Configuration.GetConnectionString("PostgresDb");
+Console.WriteLine($"[DEBUG] PostgresDb: {testConnectionString}");
 
 builder.Services.AddCache(builder.Configuration);
 
@@ -22,7 +24,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Creat
 
 builder.Services.AddDependencyInjections();
 
-builder.Services.AddHttpClientConfiguration(builder.Configuration, builder.Environment.IsDevelopment());
+builder.Services.AddHttpClientConfiguration(builder.Configuration);
 
 
 var app = builder.Build();

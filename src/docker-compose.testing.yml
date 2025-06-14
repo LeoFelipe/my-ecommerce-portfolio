@@ -36,7 +36,7 @@ services:
       - ecommerceportfolio-rabbit-mq-test
     environment:
       - ASPNETCORE_ENVIRONMENT=Testing
-      - ConnectionStrings__PostgresDb=Host=ecommerceportfolio-postgres-db-test;Port=5432;Database=EcommercePortfolioOrderTest;Username=postgres;Password=postgres
+      - ConnectionStrings__PostgresDb=Host=ecommerceportfolio-postgres-db-test;Port=5432;Database=EcommercePortfolioOrder;Username=postgres;Password=postgres
       - ConnectionStrings__RedisCache=redis://ecommerceportfolio-redis-db-test:6379
       - ConnectionStrings__RabbitMq=amqp://guest:guest@ecommerceportfolio-rabbit-mq-test:5672/
       - ApiSettings__CartApiUrl=http://ecommerceportfolio-carts-api-test:6050
@@ -58,7 +58,7 @@ services:
       - ecommerceportfolio-rabbit-mq-test
     environment:
       - ASPNETCORE_ENVIRONMENT=Testing
-      - ConnectionStrings__PostgresDb=Host=ecommerceportfolio-postgres-db-test;Port=5432;Database=EcommercePortfolioDeliveryTest;Username=postgres;Password=postgres
+      - ConnectionStrings__PostgresDb=Host=ecommerceportfolio-postgres-db-test;Port=5432;Database=EcommercePortfolioDelivery;Username=postgres;Password=postgres
       - ConnectionStrings__RedisCache=redis://ecommerceportfolio-redis-db-test:6379
       - ConnectionStrings__RabbitMq=amqp://guest:guest@ecommerceportfolio-rabbit-mq-test:5672/
       - ApiSettings__OrderApiUrl=http://ecommerceportfolio-orders-api-test:6150

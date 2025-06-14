@@ -15,6 +15,6 @@ public class DeliveriesController(
     public async Task<IActionResult> GetDeliveryByOrderId(Guid orderId)
     {
         var delivery = await _deliveryQuery.GetByOrderId(orderId);
-        return Ok(delivery);
+        return OkResponse(delivery);
     }
 }

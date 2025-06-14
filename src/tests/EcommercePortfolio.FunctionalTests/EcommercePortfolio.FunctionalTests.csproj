@@ -17,6 +17,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
     <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="Moq.AutoMock" Version="3.5.0" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="Testcontainers" Version="4.4.0" />
     <PackageReference Include="Testcontainers.MongoDb" Version="4.4.0" />
@@ -31,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\building-blocks\EcommercePortfolio.Services\EcommercePortfolio.Services.csproj" />
     <ProjectReference Include="..\..\services\Carts\EcommercePortfolio.Carts.API\EcommercePortfolio.Carts.API.csproj" />
     <ProjectReference Include="..\..\services\Carts\EcommercePortfolio.Carts.Domain\EcommercePortfolio.Carts.Domain.csproj" />
     <ProjectReference Include="..\..\services\Deliveries\EcommercePortfolio.Deliveries.API\EcommercePortfolio.Deliveries.API.csproj" />

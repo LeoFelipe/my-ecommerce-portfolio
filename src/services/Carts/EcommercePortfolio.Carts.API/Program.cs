@@ -2,7 +2,6 @@ using EcommercePortfolio.Carts.API.Application.Commands;
 using EcommercePortfolio.Carts.API.Configurations;
 using EcommercePortfolio.Carts.Infra.Data;
 using EcommercePortfolio.Services.Configurations;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +13,11 @@ builder.Services.AddMessageBus(builder.Configuration);
 
 builder.Services.AddMongoDatabase<MongoDbContext>(
     builder.Configuration, 
-    builder.Environment, 
     "MongoDb", 
     "EcommercePortfolioCart");
+
+var testConnectionString = builder.Configuration.GetConnectionString("MongoDb");
+Console.WriteLine($"[DEBUG] MongoDb: {testConnectionString}");
 
 foreach (var kv in builder.Configuration.AsEnumerable())
 {

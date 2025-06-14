@@ -61,9 +61,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.Orders.UnitTests", "tests\EcommercePortfolio.Orders.UnitTests\EcommercePortfolio.Orders.UnitTests.csproj", "{256FC5D9-52AB-4474-B6F1-A26DEBF4E552}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{DB633F9E-339D-21AA-3632-3DA9EA860142}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunctionalTests", "FunctionalTests", "{DB633F9E-339D-21AA-3632-3DA9EA860142}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.IntegrationTests", "tests\EcommercePortfolio.IntegrationTests\EcommercePortfolio.IntegrationTests.csproj", "{B2D2C360-5B8A-472F-8545-32361592E40B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommercePortfolio.FunctionalTests", "tests\EcommercePortfolio.FunctionalTests\EcommercePortfolio.FunctionalTests.csproj", "{B2D2C360-5B8A-472F-8545-32361592E40B}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject

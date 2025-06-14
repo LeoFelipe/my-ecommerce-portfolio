@@ -30,9 +30,9 @@ public async Task OrderCommand_Handle_ShouldPersistOrder()
 #### Directory Structure:
 ```
 tests/
-├── EcommercePortfolio.IntegrationTests/
-│   ├── [Feature]IntegrationTests/
-│   │   └── [Feature]IntegrationTests.cs
+├── EcommercePortfolio.FunctionalTests/
+│   ├── [Feature]FunctionalTests/
+│   │   └── [Feature]FunctionalTests.cs
 │   ├── Factories/
 │   │   └── [Feature]Factory.cs
 │   └── AssertsHelper/
@@ -54,7 +54,7 @@ tests/
 
 #### 3.1. Integration Tests
 ```csharp
-public class [Feature]IntegrationTests : IAsyncLifetime
+public class [Feature]FunctionalTests : IAsyncLifetime
 {
     // 1. Containers
     private readonly [Database]Container _[database]Container;

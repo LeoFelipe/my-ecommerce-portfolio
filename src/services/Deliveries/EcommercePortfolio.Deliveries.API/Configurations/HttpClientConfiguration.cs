@@ -6,7 +6,7 @@ namespace EcommercePortfolio.Deliveries.API.Configurations;
 
 public static class HttpClientConfiguration
 {
-    public static void AddHttpClientConfiguration(this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
+    public static void AddHttpClientConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         var apiSettings = configuration.GetSection("ApiSettings").Get<ApiSettings>();
 

@@ -33,7 +33,7 @@ public class NotificationFilter(
             var response = CreateResponseError(_notification.Get(EnumNotificationType.VALIDATION_ERROR), StatusCodes.Status422UnprocessableEntity);
             await context.HttpContext.Response.WriteAsync(response);
 
-            _logger.LogWarning(response);
+            _logger.LogWarning("Validation error occurred: {Response}", response);
 
             return;
         }
@@ -44,7 +44,7 @@ public class NotificationFilter(
             var response = CreateResponseError(_notification.Get(EnumNotificationType.NOT_FOUND_ERROR), StatusCodes.Status404NotFound);
             await context.HttpContext.Response.WriteAsync(response);
 
-            _logger.LogWarning(response);
+            _logger.LogWarning("Not found error occurred: {Response}", response);
 
             return;
         }
@@ -55,7 +55,7 @@ public class NotificationFilter(
             var response = CreateResponseError(_notification.GetAllExcept(EnumNotificationType.INFORMATION), StatusCodes.Status500InternalServerError);
             await context.HttpContext.Response.WriteAsync(response);
 
-            _logger.LogWarning(response);
+            _logger.LogWarning("Internal server error occurred: {Response}", response);
 
             return;
         }

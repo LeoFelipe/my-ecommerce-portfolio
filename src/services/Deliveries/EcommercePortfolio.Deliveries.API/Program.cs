@@ -13,7 +13,6 @@ builder.Services.AddMessageBus(builder.Configuration);
 
 builder.Services.AddPostgresDatabase<DeliveryPostgresDbContext>(
     builder.Configuration, 
-    builder.Environment,
     "PostgresDb");
 
 builder.Services.AddCache(builder.Configuration);
@@ -22,7 +21,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Creat
 
 builder.Services.AddDependencyInjections();
 
-builder.Services.AddHttpClientConfiguration(builder.Configuration, builder.Environment.IsDevelopment());
+builder.Services.AddHttpClientConfiguration(builder.Configuration);
 
 var app = builder.Build();
 

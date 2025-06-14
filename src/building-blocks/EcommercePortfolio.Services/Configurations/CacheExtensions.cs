@@ -10,7 +10,7 @@ public static class CacheExtensions
     public static void AddCache(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddStackExchangeRedisCache(options =>
-            options.Configuration = configuration.GetConnectionString("ecommerceportfolio-redis-db"));
+            options.Configuration = configuration.GetConnectionString("RedisCache"));
 
         services.AddHybridCache(options =>
         {

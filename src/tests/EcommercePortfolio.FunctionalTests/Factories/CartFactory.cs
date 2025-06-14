@@ -3,7 +3,7 @@ using EcommercePortfolio.Services.Configurations;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace EcommercePortfolio.IntegrationTests.Factories;
+namespace EcommercePortfolio.FunctionalTests.Factories;
 
 public static class CartFactory
 {
@@ -20,10 +20,9 @@ public static class CartFactory
         };
     }
 
-    public static async Task PostCart(HttpClient cartsHttpClient, Guid clientId)
+    public static async Task<HttpResponseMessage> PostCart(HttpClient cartsHttpClient, Guid clientId)
     {
-        var postCartResponse = await cartsHttpClient.PostAsJsonAsync("/carts", BuildCartPayload(clientId));
-        postCartResponse.EnsureSuccessStatusCode();
+        return await cartsHttpClient.PostAsJsonAsync("/carts", BuildCartPayload(clientId));
     }
 
     public static async Task<GetCartByClientIdResponse> GetCartByClientIdAsync(HttpClient cartsHttpClient, Guid clientId)
@@ -32,7 +31,7 @@ public static class CartFactory
         response.EnsureSuccessStatusCode();
 
         var apiResponse = await response.Content
-            .ReadFromJsonAsync<CartApiResponse<GetCartByClientIdResponse>>(new JsonSerializerOptions().Default());
+            .ReadFromJsonAsync<ApiResponse<GetCartByClientIdResponse>>(new JsonSerializerOptions().Default());
 
         if (apiResponse?.Response == null)
         {
