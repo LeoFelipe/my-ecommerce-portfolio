@@ -30,13 +30,13 @@ public class OrdersControllerTests
     }
 
     [Fact]
-    public async Task OrdersController_GetById_ShouldReturnOkWhenOrderExists()
+    public async Task OrdersController_GetById_ShouldReturnOk_WhenOrderExists()
     {
         // Arrange
-        var orderId = Guid.NewGuid();
+        var orderId = Guid.CreateVersion7();
         var order = new GetOrderResponse(
             orderId,
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             DateTime.Now,
             10.0m,
             [new OrderItemDto(1, "Product A", "Category A", 2, 10.0m)]);
@@ -56,10 +56,10 @@ public class OrdersControllerTests
     }
 
     [Fact]
-    public async Task OrdersController_GetById_ShouldReturnNotFoundWhenOrderNotExists()
+    public async Task OrdersController_GetById_ShouldReturnNotFound_WhenOrderDoesNotExist()
     {
         // Arrange
-        var orderId = Guid.NewGuid();
+        var orderId = Guid.CreateVersion7();
         _orderQueriesMock.Setup(q => q.GetById(orderId)).ReturnsAsync((GetOrderResponse)null);
 
         // Act
@@ -74,10 +74,10 @@ public class OrdersControllerTests
     }
 
     [Fact]
-    public async Task OrdersController_GetAddressById_ShouldReturnOkWhenAddressExists()
+    public async Task OrdersController_GetAddressById_ShouldReturnOk_WhenAddressExistsForOrder()
     {
         // Arrange
-        var orderId = Guid.NewGuid();
+        var orderId = Guid.CreateVersion7();
         var address = new GetAddressOrderResponse("12345-000", "Sergipe", "Aracaju", "Av. Teste", 100);
 
         _orderQueriesMock.Setup(q => q.GetAddressById(orderId)).ReturnsAsync(address);
@@ -94,10 +94,10 @@ public class OrdersControllerTests
     }
 
     [Fact]
-    public async Task OrdersController_GetAddressById_ShouldReturnNotFoundWhenAddressNotExists()
+    public async Task OrdersController_GetAddressById_ShouldReturnNotFound_WhenAddressDoesNotExistForOrder()
     {
         // Arrange
-        var orderId = Guid.NewGuid();
+        var orderId = Guid.CreateVersion7();
         _orderQueriesMock.Setup(q => q.GetAddressById(orderId)).ReturnsAsync((GetAddressOrderResponse)null);
 
         // Act
@@ -112,15 +112,15 @@ public class OrdersControllerTests
     }
 
     [Fact]
-    public async Task OrdersController_GetByClientId_ShouldReturnOrdersSuccessfully()
+    public async Task OrdersController_GetByClientId_ShouldReturnOrdersSuccessfully_WhenClientHasOrders()
     {
         // Arrange
-        var clientId = Guid.NewGuid();
+        var clientId = Guid.CreateVersion7();
         var orders = new List<GetOrderResponse>
         {
             new (
                 clientId,
-                Guid.NewGuid(),
+                Guid.CreateVersion7(),
                 DateTime.Now,
                 100.0m,
                 [
@@ -142,12 +142,12 @@ public class OrdersControllerTests
     }
 
     [Fact]
-    public async Task OrdersController_CreateOrder_ShouldReturnCreatedSuccessfully()
+    public async Task OrdersController_CreateOrder_ShouldReturnCreatedSuccessfully_WhenValidOrderDataProvided()
     {
         // Arrange
         var command = new CreateOrderCommand(
             new ObjectId().ToString(),
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             EnumPaymentMethod.PIX,
             new AddressDto("12345-000", "Sergipe", "Aracaju", "Av. Teste", 100));
 

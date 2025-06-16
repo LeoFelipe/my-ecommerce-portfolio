@@ -42,6 +42,8 @@ public static class BuilderContainerFactory
             .WithImage("rabbitmq:4.0.9-management")
             .WithPortBinding(5672, true)
             .WithPortBinding(15672, true)
+            .WithUsername("guest")
+            .WithPassword("guest")
             .Build();
     }
 }

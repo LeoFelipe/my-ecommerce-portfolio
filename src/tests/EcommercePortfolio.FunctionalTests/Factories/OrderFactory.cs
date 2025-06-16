@@ -25,10 +25,9 @@ public static class OrderFactory
         };
     }
 
-    public static async Task PostOrder(HttpClient ordersHttpClient, string cartId, Guid clientId)
+    public static async Task<HttpResponseMessage> PostOrder(HttpClient ordersHttpClient, string cartId, Guid clientId)
     {
-        var orderResponse = await ordersHttpClient.PostAsJsonAsync("/orders", BuildOrderPayload(cartId, clientId));
-        orderResponse.EnsureSuccessStatusCode();
+        return await ordersHttpClient.PostAsJsonAsync("/orders", BuildOrderPayload(cartId, clientId));
     }
 
     public static async Task<GetOrderResponse> GetOrderByClientId(HttpClient ordersHttpClient, Guid clientId)

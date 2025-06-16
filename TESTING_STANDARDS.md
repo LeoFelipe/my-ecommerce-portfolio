@@ -1,44 +1,66 @@
-# Testing Standards - Ecommerce Portfolio
+# 🧪 Testing Standards - Ecommerce Portfolio
 
-## 📋 Naming Conventions
+## 📋 Overview
 
-### 1. General Test Naming Pattern
+This document defines the testing standards for the Ecommerce Portfolio project, ensuring consistency and quality across all test implementations.
+
+### Test Categories
+
+1. **Unit Tests** (`EcommercePortfolio.*.UnitTests`)
+   - Test individual components in isolation
+   - Use mocks for external dependencies
+   - Fast execution, no infrastructure required
+
+2. **Functional Tests** (`EcommercePortfolio.FunctionalTests`)
+   - Test complete service workflows
+   - Use Testcontainers for infrastructure
+   - Verify cross-service communication
+
+## 📝 Naming Conventions
+
+### 1. Test Method Pattern
 ```csharp
-public async Task [Feature]_[Action]_[ExpectedResult]()
+public async Task [Feature]_[Action]_Should[ExpectedResult]_When[Condition]()
 ```
 
 #### Components:
-- **Feature**: Name of the functionality/entity being tested (e.g., Order, Cart, Payment)
-- **Action**: Action being executed (e.g., Create, Get, Update, Delete)
-- **ExpectedResult**: Expected result, always starting with "Should"
+- **Feature**: Entity/Service being tested (Order, Cart, Payment)
+- **Action**: Operation being performed (Create, Get, Update, Delete)
+- **Should[ExpectedResult]**: Expected outcome, always starting with "Should"
+- **When[Condition]**: Test scenario or condition
 
 #### Examples:
 ```csharp
-// Integration Tests
-public async Task Order_Create_ShouldCreateOrderAndDeliveryAndDeleteCart()
-public async Task Cart_Update_ShouldUpdateCartItems()
-public async Task Payment_Process_ShouldAuthorizePayment()
+// Functional Tests
+public async Task Order_Create_ShouldCreateOrderAndDeliveryAndDeleteCart_WhenValidCartExists()
+public async Task Cart_Update_ShouldUpdateCartItems_WhenItemsAreModified()
+public async Task Payment_Process_ShouldAuthorizePayment_WhenValidPaymentMethodProvided()
 
 // Unit Tests
-public void Order_Create_ShouldCreateOrderSuccessfully()
-public void Order_Validate_ShouldReturnErrorWhenTotalValueInvalid()
-public async Task OrderCommand_Handle_ShouldPersistOrder()
+public void Order_Create_ShouldCreateOrderWithValidProperties_WhenAllRequiredDataProvided()
+public void Order_Validate_ShouldReturnValidationError_WhenTotalValueIsInvalid()
+public async Task OrderCommand_Handle_ShouldPersistOrderAndReturnSuccess_WhenValidCommandReceived()
 ```
 
-### 2. File Organization
+### 2. Project Structure
 
-#### Directory Structure:
 ```
 tests/
 ├── EcommercePortfolio.FunctionalTests/
-│   ├── [Feature]FunctionalTests/
-│   │   └── [Feature]FunctionalTests.cs
+│   ├── OrderFunctionalTests/
+│   │   └── OrderFunctionalTests.cs
+│   ├── CartFunctionalTests/
+│   │   └── CartFunctionalTests.cs
 │   ├── Factories/
-│   │   └── [Feature]Factory.cs
+│   │   ├── Configurations/
+│   │   │   └── BuilderContainerFactory.cs
+│   │   ├── OrderFactory.cs
+│   │   └── CartFactory.cs
 │   └── AssertsHelper/
-│       └── [Database]AssertHelper.cs
+│       ├── MongoAssertHelper.cs
+│       └── PostgresAssertHelper.cs
 │
-└── EcommercePortfolio.[Feature].UnitTests/
+└── EcommercePortfolio.[Service].UnitTests/
     ├── EntitiesTests/
     │   └── [Entity]Tests.cs
     ├── CommandsTests/
@@ -46,159 +68,256 @@ tests/
     ├── ControllersTests/
     │   └── [Controller]Tests.cs
     └── Factories/
-        └── [Feature]/
-            └── [Entity]Factory.cs
+        └── [Entity]Factory.cs
 ```
 
-### 3. Implementation Patterns
+## 🏗️ Implementation Patterns
 
-#### 3.1. Integration Tests
+### 1. Functional Tests
 ```csharp
-public class [Feature]FunctionalTests : IAsyncLifetime
+public class OrderFunctionalTests : IAsyncLifetime
 {
-    // 1. Containers
-    private readonly [Database]Container _[database]Container;
+    // 1. Infrastructure
+    private readonly PostgresContainer _postgresContainer;
+    private readonly MongoContainer _mongoContainer;
+    private readonly RabbitMqContainer _rabbitMqContainer;
     
-    // 2. Factories
-    private readonly WebApplicationFactory<[API].Program> _[api]Factory;
+    // 2. API Clients
+    private readonly WebApplicationFactory<Orders.Program> _ordersFactory;
+    private readonly WebApplicationFactory<Carts.Program> _cartsFactory;
+    private HttpClient _ordersHttpClient;
+    private HttpClient _cartsHttpClient;
     
-    // 3. HTTP Clients
-    private HttpClient _[api]HttpClient;
+    // 3. Connections
+    private string _postgresConnection;
+    private string _mongoConnection;
     
     // 4. Setup/Teardown
-    public async Task InitializeAsync() { ... }
-    public async Task DisposeAsync() { ... }
+    public async Task InitializeAsync()
+    {
+        // Start containers
+        // Configure clients
+        // Setup connections
+    }
+    
+    public async Task DisposeAsync()
+    {
+        // Cleanup containers
+        // Dispose clients
+    }
     
     // 5. Tests
     [Fact]
-    public async Task [Feature]_[Action]_[ExpectedResult]()
+    public async Task Order_Create_ShouldCreateOrderAndDeliveryAndDeleteCart_WhenValidCartExists()
     {
         // Arrange
+        var clientId = Guid.CreateVersion7();
+        
         // Act
+        await CartFactory.PostCart(_cartsHttpClient, clientId);
+        var cart = await CartFactory.GetCartByClientIdAsync(_cartsHttpClient, clientId);
+        await OrderFactory.PostOrder(_ordersHttpClient, cart.Id, clientId);
+        
         // Assert
+        await MongoAssertHelper.AssertCartDoesNotExistAsync(_mongoConnection, clientId);
+        await PostgresAssertHelper.AssertOrderExistsAsync(_postgresConnection, clientId);
+        await PostgresAssertHelper.AssertDeliveryExistsAsync(_postgresConnection, clientId);
     }
 }
 ```
 
-#### 3.2. Unit Tests
+### 2. Unit Tests
 ```csharp
-public class [Entity]Tests
+public class OrderTests
 {
-    // 1. Dependencies (if needed)
-    private readonly Mock<[Interface]> _[interface]Mock;
+    // 1. Dependencies
+    private readonly Mock<IPaymentService> _paymentServiceMock;
+    private readonly Mock<ICartService> _cartServiceMock;
     
-    // 2. Setup (if needed)
-    public [Entity]Tests()
+    // 2. Setup
+    public OrderTests()
     {
-        _[interface]Mock = new Mock<[Interface]>();
+        _paymentServiceMock = new Mock<IPaymentService>();
+        _cartServiceMock = new Mock<ICartService>();
     }
     
     // 3. Tests
     [Fact]
-    public void [Feature]_[Action]_[ExpectedResult]()
+    public void Order_Create_ShouldCreateOrderWithValidProperties_WhenAllRequiredDataProvided()
     {
         // Arrange
+        var clientId = Guid.CreateVersion7();
+        var orderData = OrderFactory.BuildValidOrderData(clientId);
+        
         // Act
+        var order = Order.Create(orderData);
+        
         // Assert
+        order.Should().NotBeNull();
+        order.ClientId.Should().Be(clientId);
+        order.Status.Should().Be(OrderStatus.Created);
+        order.OrderItems.Should().HaveCount(orderData.Items.Count);
     }
 }
 ```
 
-### 4. Factories
+## 🏭 Factories
 
-#### 4.1. Factory Pattern
+### 1. Entity Factory Pattern
 ```csharp
-public static class [Entity]Factory
+public static class OrderFactory
 {
     private static readonly Faker _faker = new("en");
     
-    // Creation methods
-    public static [Entity] BuildValid[Entity]()
-    public static [Entity] Build[Entity]With[Condition]()
-    public static [Entity] BuildInvalid[Entity]()
+    public static OrderData BuildValidOrderData(Guid clientId)
+    {
+        return new OrderData
+        {
+            ClientId = clientId,
+            Items = new List<OrderItemData>
+            {
+                new()
+                {
+                    ProductId = Guid.NewGuid(),
+                    Quantity = _faker.Random.Int(1, 5),
+                    UnitPrice = _faker.Random.Decimal(10, 100)
+                }
+            }
+        };
+    }
+    
+    public static OrderData BuildOrderDataWithInvalidTotal()
+    {
+        var data = BuildValidOrderData(Guid.NewGuid());
+        data.Items.First().UnitPrice = -1;
+        return data;
+    }
 }
 ```
 
-#### 4.2. Factory Method Naming
-- `BuildValid[Entity]()` - Creates a valid entity
-- `Build[Entity]With[Condition]()` - Creates an entity with specific condition
-- `BuildInvalid[Entity]()` - Creates an invalid entity
-
-### 5. Assertions
-
-#### 5.1. Assertion Helper Pattern
+### 2. API Factory Pattern
 ```csharp
-public static class [Database]AssertHelper
+public static class OrderApiFactory
 {
-    public static async Task Assert[Entity]ExistsAsync(string connectionString, ...)
-    public static async Task Assert[Entity]DoesNotExistAsync(string connectionString, ...)
-    public static async Task Assert[Entity]Has[Property]Async(string connectionString, ...)
+    public static async Task<OrderResponse> PostOrder(
+        HttpClient client,
+        Guid cartId,
+        Guid clientId)
+    {
+        var request = new CreateOrderRequest
+        {
+            CartId = cartId,
+            ClientId = clientId
+        };
+        
+        var response = await client.PostAsJsonAsync("/api/orders", request);
+        response.EnsureSuccessStatusCode();
+        
+        return await response.Content.ReadFromJsonAsync<OrderResponse>();
+    }
 }
 ```
 
-### 6. Best Practices
+## ✅ Assertions
 
-1. **AAA Pattern**
-   - Arrange: Prepare the scenario
-   - Act: Execute the action
-   - Assert: Verify the result
+### 1. Fluent Assertions
+```csharp
+// Entity assertions
+order.Should().NotBeNull();
+order.ClientId.Should().Be(clientId);
+order.Status.Should().Be(OrderStatus.Created);
+order.OrderItems.Should().HaveCount(1);
 
-2. **Isolation**
-   - Each test should be independent
-   - Use isolated containers for integration tests
-   - Clean up data after each test
+// Collection assertions
+orders.Should().NotBeEmpty();
+orders.Should().Contain(o => o.ClientId == clientId);
+orders.Should().BeInDescendingOrder(o => o.CreatedAt);
 
-3. **Test Data**
-   - Use Bogus for fake data
-   - Keep factories organized
-   - Avoid hardcoded data
+// Exception assertions
+var act = () => Order.Create(invalidData);
+act.Should().Throw<DomainException>()
+   .WithMessage("Total value must be greater than zero");
+```
 
-4. **Assertions**
-   - Use FluentAssertions for expressive assertions
-   - Be specific in error messages
-   - Verify only what's necessary
+## 🎯 Best Practices
 
-5. **Coverage**
-   - Test success and error cases
-   - Test domain validations
-   - Test service integrations
+### 1. Test Organization
+- One test class per entity/feature
+- Group related tests using nested classes
+- Use meaningful test data
+- Follow AAA pattern consistently
 
-### 7. Implementation Examples
+### 2. Test Data
+- Use Bogus for generating test data
+- Keep factories in dedicated classes
+- Avoid magic numbers/strings
+- Use constants for common values
 
-#### 7.1. Integration Test
+### 3. Assertions
+- Use FluentAssertions for readable assertions
+- Be specific in error messages
+- Verify only what's necessary
+- Use appropriate assertion methods
+
+### 4. Infrastructure
+- Use Testcontainers for functional tests
+- Clean up resources in DisposeAsync
+- Handle container lifecycle properly
+- Use appropriate database assertions
+
+### 5. Code Coverage
+- Aim for high coverage of business logic
+- Test success and error cases
+- Test domain validations
+- Test service integrations
+
+### 6. Performance
+- Keep tests fast and focused
+- Use appropriate test categories
+- Avoid unnecessary setup
+- Clean up resources properly
+
+## 🔍 Common Test Scenarios
+
+### 1. Entity Creation
 ```csharp
 [Fact]
-public async Task Order_Create_ShouldCreateOrderAndDeliveryAndDeleteCart()
+public void Order_Create_ShouldCreateOrderWithValidProperties_WhenAllRequiredDataProvided()
 {
     // Arrange
-    var clientId = Guid.NewGuid();
+    var orderData = OrderFactory.BuildValidOrderData(clientId);
     
     // Act
-    await CartFactory.PostCart(_cartsHttpClient, clientId);
-    var cart = await CartFactory.GetCartByClientIdAsync(_cartsHttpClient, clientId);
-    await OrderFactory.PostOrder(_ordersHttpClient, cart.Id, clientId);
-    
-    // Assert
-    await MongoAssertHelper.AssertCartDoesNotExistAsync(_mongoConnection, clientId);
-    await PostgresAssertHelper.AssertOrderExistsAsync(_postgresConnection, clientId);
-    await PostgresAssertHelper.AssertDeliveryExistsAsync(_postgresConnection, clientId);
-}
-```
-
-#### 7.2. Unit Test
-```csharp
-[Fact]
-public void Order_Create_ShouldCreateOrderSuccessfully()
-{
-    // Arrange
-    var clientId = Guid.NewGuid();
-    
-    // Act
-    var order = OrderEntityFactory.BuildValidOrder(clientId);
+    var order = Order.Create(orderData);
     
     // Assert
     order.Should().NotBeNull();
     order.ClientId.Should().Be(clientId);
-    order.TotalValue.Should().Be(500.0m);
-    order.OrderItems.Should().HaveCount(1);
-} 
+    order.Status.Should().Be(OrderStatus.Created);
+}
+```
+
+### 2. Validation
+```csharp
+[Fact]
+public void Order_Validate_ShouldReturnValidationError_WhenTotalValueIsInvalid()
+{
+    // Arrange
+    var orderData = OrderFactory.BuildOrderDataWithInvalidTotal();
+    
+    // Act
+    var act = () => Order.Create(orderData);
+    
+    // Assert
+    act.Should().Throw<DomainException>()
+       .WithMessage("Total value must be greater than zero");
+}
+```
+
+## 📚 References
+
+- [xUnit Documentation](https://xunit.net/)
+- [FluentAssertions](https://fluentassertions.com/)
+- [Bogus](https://github.com/bchavez/Bogus)
+- [Testcontainers for .NET](https://github.com/testcontainers/testcontainers-dotnet)
+- [MassTransit Testing](https://masstransit.io/documentation/patterns/testing)

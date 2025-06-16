@@ -38,7 +38,8 @@ public static class ApiConfiguration
             app.Services.ApplyMigration<OrderPostgresDbContext>();
         }
 
-        //app.UseHttpsRedirection();
+        if (env.IsProduction())
+            app.UseHttpsRedirection();
 
         app.UseAuthorization();
 

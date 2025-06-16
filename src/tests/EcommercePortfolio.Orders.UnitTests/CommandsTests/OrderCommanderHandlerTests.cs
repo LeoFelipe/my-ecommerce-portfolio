@@ -36,7 +36,7 @@ public class OrderCommanderHandlerTests
     }
 
     [Fact]
-    public async Task OrderCommand_Handle_ShouldPersistOrderSuccessfully()
+    public async Task OrderCommand_Handle_ShouldPersistOrderAndReturnSuccess_WhenValidCommandReceived()
     {
         // Arrange
         var quantity = 10;
@@ -60,7 +60,7 @@ public class OrderCommanderHandlerTests
     }
 
     [Fact]
-    public async Task OrderCommand_Handle_ShouldAddValidationErrorsWhenCommandInvalid()
+    public async Task OrderCommand_Handle_ShouldAddValidationErrors_WhenCommandHasInvalidProperties()
     {
         // Arrange
         var command = OrderCommandFactory.BuildCreateOrderCommand((EnumPaymentMethod)999, "", Guid.Empty);
@@ -74,7 +74,7 @@ public class OrderCommanderHandlerTests
     }
 
     [Fact]
-    public async Task OrderCommand_Handle_ShouldAddNotificationWhenCartNotFound()
+    public async Task OrderCommand_Handle_ShouldAddNotification_WhenCartNotFoundForClient()
     {
         // Arrange
         var command = OrderCommandFactory.BuildValidCreateOrderCommand();
@@ -91,7 +91,7 @@ public class OrderCommanderHandlerTests
     }
 
     [Fact]
-    public async Task OrderCommand_Handle_ShouldAddNotificationWhenPaymentNotAuthorized()
+    public async Task OrderCommand_Handle_ShouldAddNotification_WhenPaymentIsNotAuthorized()
     {
         // Arrange
         var command = OrderCommandFactory.BuildValidCreateOrderCommand();

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Testcontainers.MongoDb;
@@ -19,6 +20,17 @@ public class CartFunctionalTestWebApplicationFactory : WebApplicationFactory<Car
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.ConfigureAppConfiguration((context, config) =>
+        {
+            var testSettings = new Dictionary<string, string>
+            {
+                ["ConnectionStrings:RedisCache"] = _redisContainer.GetConnectionString(),
+                ["ConnectionStrings:RabbitMq"] = _rabbitMqContainer.GetConnectionString()
+            };
+
+            config.AddInMemoryCollection(testSettings);
+        });
+
         builder.ConfigureTestServices(services =>
         {
             services.RemoveAll<DbContextOptions<MongoDbContext>>();

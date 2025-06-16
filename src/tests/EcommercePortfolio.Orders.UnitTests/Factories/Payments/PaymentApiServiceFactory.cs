@@ -9,7 +9,7 @@ public static class PaymentApiServiceFactory
     public static PaymentApiResponse BuildValidPayment(Guid clientId, decimal paymentTotalValue)
     {
         var payment = new PaymentApiResponse(
-             Guid.NewGuid(),
+             Guid.CreateVersion7(),
              clientId,
              paymentTotalValue,
              EnumPaymentMethod.PIX);
@@ -22,7 +22,7 @@ public static class PaymentApiServiceFactory
     public static PaymentApiResponse BuildPaymentNotAuthorized(Guid clientId)
     {
         var payment = new PaymentApiResponse(
-             Guid.NewGuid(),
+             Guid.CreateVersion7(),
              clientId,
              20.0m,
              EnumPaymentMethod.PIX);

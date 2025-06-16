@@ -10,7 +10,7 @@ public static class OrderEntityFactory
     public static Order BuildValidOrder(Guid? clientId = null, int quantity = 10, decimal price = 50)
     {
         var order = Order.CreateOrder(
-            clientId ?? Guid.NewGuid(),
+            clientId ?? Guid.CreateVersion7(),
             [
                 BuildOrderItem(
                     _faker.Commerce.Random.Number(100, 1000),
@@ -42,7 +42,7 @@ public static class OrderEntityFactory
     public static Order BuildWithoutAddress()
     {
         return Order.CreateOrder(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             [
                 BuildValidOrderItem()
             ]);
@@ -50,7 +50,7 @@ public static class OrderEntityFactory
 
     public static Order BuildWithoutItems()
     {
-        var order = Order.CreateOrder(Guid.NewGuid(), []);
+        var order = Order.CreateOrder(Guid.CreateVersion7(), []);
 
         order.SetAddress(Core.Domain.ValueObjects.Address.CreateAddress(
             _faker.Address.ZipCode(),
@@ -70,7 +70,7 @@ public static class OrderEntityFactory
         decimal price = 0m)
     {
         var order = Order.CreateOrder(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             [
                 BuildOrderItem(
                     productId,

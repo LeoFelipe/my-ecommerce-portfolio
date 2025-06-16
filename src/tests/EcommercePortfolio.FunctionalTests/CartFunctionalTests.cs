@@ -11,10 +11,10 @@ public class CartFunctionalTest(
     private readonly HttpClient _cartsHttpClient = cartFactory.CreateClient();
 
     [Fact]
-    public async Task PostCart_ShouldCreateCart_WhenRequestIsValid()
+    public async Task Cart_Create_ShouldCreateCart_WhenRequestIsValid()
     {
         // Arrange
-        var clientId = Guid.NewGuid();
+        var clientId = Guid.CreateVersion7();
 
         // Act
         var response = await CartFactory.PostCart(_cartsHttpClient, clientId);
@@ -24,10 +24,10 @@ public class CartFunctionalTest(
     }
 
     [Fact]
-    public async Task PostCart_ShouldReturnsUnprocessableEntity_WhenCartAlreadyExists()
+    public async Task Cart_Create_ShouldReturnUnprocessableEntity_WhenCartAlreadyExists()
     {
         // Arrange
-        var clientId = Guid.NewGuid();
+        var clientId = Guid.CreateVersion7();
 
         await CartFactory.PostCart(_cartsHttpClient, clientId);
 

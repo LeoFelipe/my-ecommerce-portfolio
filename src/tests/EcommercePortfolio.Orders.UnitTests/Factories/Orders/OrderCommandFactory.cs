@@ -13,7 +13,7 @@ public static class OrderCommandFactory
     {
         return new CreateOrderCommand(
             _faker.Commerce.Random.AlphaNumeric(10),
-            clientId ?? Guid.NewGuid(),
+            clientId ?? Guid.CreateVersion7(),
             EnumPaymentMethod.PIX,
             new AddressDto(
                 _faker.Address.ZipCode(),
@@ -30,7 +30,7 @@ public static class OrderCommandFactory
     {
         return new CreateOrderCommand(
             cartId,
-            clientId ?? Guid.NewGuid(),
+            clientId ?? Guid.CreateVersion7(),
             enumPaymentMethod,
             new AddressDto(
                 _faker.Address.ZipCode(),
@@ -44,7 +44,7 @@ public static class OrderCommandFactory
     {
         return new CreateOrderCommand(
             _faker.Commerce.Random.AlphaNumeric(10),
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             _faker.PickRandom<EnumPaymentMethod>(),
             new AddressDto("", "", "", "", 0));
     }

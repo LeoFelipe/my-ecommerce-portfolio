@@ -38,7 +38,8 @@ public static class ApiConfiguration
             app.Services.ApplyMigration<DeliveryPostgresDbContext>();
         }
 
-        //app.UseHttpsRedirection();
+        if (env.IsProduction())
+            app.UseHttpsRedirection();
 
         app.UseAuthorization();
 

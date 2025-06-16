@@ -12,7 +12,7 @@ public static class CartApiServiceFactory
     {
         return new GetCartByClientIdResponse(
             new ObjectId().ToString(),
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             DateTime.Now,
             quantity * price,
             [

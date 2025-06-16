@@ -35,7 +35,8 @@ public static class ApiConfiguration
             app.MapScalarApiReference();
         }
 
-        //app.UseHttpsRedirection();
+        if (env.IsProduction())
+            app.UseHttpsRedirection();
 
         app.UseAuthorization();
 

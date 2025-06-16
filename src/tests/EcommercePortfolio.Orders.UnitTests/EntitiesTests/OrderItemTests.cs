@@ -7,7 +7,7 @@ namespace EcommercePortfolio.Orders.UnitTests.EntitiesTests;
 public class OrderItemTests
 {
     [Fact]
-    public void OrderItem_Create_ShouldCreateOrderItemSuccessfully()
+    public void OrderItem_Create_ShouldCreateOrderItemWithValidProperties_WhenAllRequiredDataProvided()
     {
         // Arrange + Act
         var orderItem = OrderEntityFactory.BuildValidOrderItem();
@@ -17,7 +17,7 @@ public class OrderItemTests
     }
 
     [Fact]
-    public void OrderItem_Create_ShouldThrowExceptionWhenProductIdInvalid()
+    public void OrderItem_Create_ShouldThrowException_WhenProductIdIsZero()
     {
         // Arrange + Act 
         var exception = Assert.Throws<DomainException>(() =>
@@ -29,7 +29,7 @@ public class OrderItemTests
     }
 
     [Fact]
-    public void OrderItem_Create_ShouldThrowExceptionWhenProductNameInvalid()
+    public void OrderItem_Create_ShouldThrowException_WhenProductNameIsEmpty()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -41,7 +41,7 @@ public class OrderItemTests
     }
 
     [Fact]
-    public void OrderItem_Create_ShouldThrowExceptionWhenCategoryInvalid()
+    public void OrderItem_Create_ShouldThrowException_WhenCategoryIsEmpty()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -53,7 +53,7 @@ public class OrderItemTests
     }
 
     [Fact]
-    public void OrderItem_Create_ShouldThrowExceptionWhenQuantityInvalid()
+    public void OrderItem_Create_ShouldThrowException_WhenQuantityIsZero()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>

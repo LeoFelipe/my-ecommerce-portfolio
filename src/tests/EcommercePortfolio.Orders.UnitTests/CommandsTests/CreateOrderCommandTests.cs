@@ -8,7 +8,7 @@ namespace EcommercePortfolio.Orders.UnitTests.CommandsTests;
 public class CreateOrderCommandTests
 {
     [Fact]
-    public void CreateOrderCommand_Validate_ShouldBeValidWhenAllPropertiesValid()
+    public void CreateOrderCommand_Validate_ShouldBeValid_WhenAllPropertiesAreValid()
     {
         // Arrange
         var command = OrderCommandFactory.BuildValidCreateOrderCommand();
@@ -22,13 +22,13 @@ public class CreateOrderCommandTests
     }
 
     [Fact]
-    public void CreateOrderCommand_Validate_ShouldBeInvalidWhenCartIdEmpty()
+    public void CreateOrderCommand_Validate_ShouldBeInvalid_WhenCartIdIsEmpty()
     {
         // Arrange
         var command = OrderCommandFactory.BuildCreateOrderCommand(
             EnumPaymentMethod.CREDIT_CARD,
             "",
-            Guid.NewGuid());
+            Guid.CreateVersion7());
 
         // Act
         var isValid = command.IsValid();
@@ -39,7 +39,7 @@ public class CreateOrderCommandTests
     }
 
     [Fact]
-    public void CreateOrderCommand_Validate_ShouldBeInvalidWhenClientIdEmpty()
+    public void CreateOrderCommand_Validate_ShouldBeInvalid_WhenClientIdIsEmpty()
     {
         // Arrange
         var command = OrderCommandFactory.BuildCreateOrderCommand(
@@ -56,14 +56,14 @@ public class CreateOrderCommandTests
     }
 
     [Fact]
-    public void CreateOrderCommand_Validate_ShouldBeInvalidWhenPaymentMethodInvalid()
+    public void CreateOrderCommand_Validate_ShouldBeInvalid_WhenPaymentMethodIsInvalid()
     {
         // Arrange
         var invalidPaymentMethod = (EnumPaymentMethod)999;
         var command = OrderCommandFactory.BuildCreateOrderCommand(
             invalidPaymentMethod,
             new ObjectId().ToString(),
-            Guid.NewGuid());
+            Guid.CreateVersion7());
 
         // Act
         var isValid = command.IsValid();
@@ -74,7 +74,7 @@ public class CreateOrderCommandTests
     }
 
     [Fact]
-    public void CreateOrderCommand_Validate_ShouldBeInvalidWhenAddressInvalid()
+    public void CreateOrderCommand_Validate_ShouldBeInvalid_WhenAddressIsInvalid()
     {
         // Arrange
         var command = OrderCommandFactory.BuildValidCreateOrderCommandWithInvalidAddress();

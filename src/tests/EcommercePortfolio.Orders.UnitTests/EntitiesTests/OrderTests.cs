@@ -8,10 +8,12 @@ namespace EcommercePortfolio.Orders.UnitTests.EntitiesTests;
 public class OrderTests
 {
     [Fact]
-    public void Order_Create_ShouldCreateOrderSuccessfully()
+    public void Order_Create_ShouldCreateOrderWithValidProperties_WhenAllRequiredDataProvided()
     {
-        // Arrange + Act
-        var clientId = Guid.NewGuid();
+        // Arrange
+        var clientId = Guid.CreateVersion7();
+
+        // Act
         var order = OrderEntityFactory.BuildValidOrder(clientId);
 
         // Assert
@@ -22,7 +24,7 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_Create_ShouldThrowExceptionWhenClientIdInvalid()
+    public void Order_Create_ShouldThrowException_WhenClientIdIsNotProvided()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -34,7 +36,7 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_Create_ShouldThrowExceptionWhenItemsEmpty()
+    public void Order_Create_ShouldThrowException_WhenOrderItemsListIsEmpty()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -46,7 +48,7 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_Create_ShouldThrowExceptionWhenQuantityZero()
+    public void Order_Create_ShouldThrowException_WhenItemQuantityIsZero()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -58,7 +60,7 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_Create_ShouldThrowExceptionWhenPriceZero()
+    public void Order_Create_ShouldThrowException_WhenItemPriceIsZero()
     {
         // Arrange + Act
         var exception = Assert.Throws<DomainException>(() =>
@@ -70,11 +72,11 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_AuthorizePayment_ShouldSetPaymentIdAndStatus()
+    public void Order_AuthorizePayment_ShouldUpdatePaymentIdAndStatus_WhenPaymentIsAuthorized()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
-        var paymentId = Guid.NewGuid();
+        var paymentId = Guid.CreateVersion7();
 
         // Act
         order.PaymentAuthorized(paymentId);
@@ -85,7 +87,7 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_Cancel_ShouldSetStatusToCanceled()
+    public void Order_Cancel_ShouldUpdateStatusToCanceled_WhenOrderIsCanceled()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
@@ -98,7 +100,7 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_Approve_ShouldSetStatusToApproved()
+    public void Order_Approve_ShouldUpdateStatusToApproved_WhenOrderIsApproved()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
@@ -111,11 +113,11 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_ValidateCreation_ShouldReturnErrorWhenTotalValueInvalid()
+    public void Order_ValidateCreation_ShouldReturnError_WhenTotalValueDiffersFromCart()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
-        order.PaymentAuthorized(Guid.NewGuid());
+        order.PaymentAuthorized(Guid.CreateVersion7());
 
         // Act
         var error = order.ValidateForCreation(999.0m);
@@ -125,7 +127,7 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_ValidateCreation_ShouldReturnErrorWhenUnauthorized()
+    public void Order_ValidateCreation_ShouldReturnError_WhenOrderIsNotAuthorized()
     {
         // Arrange
         var order = OrderEntityFactory.BuildValidOrder();
@@ -138,11 +140,11 @@ public class OrderTests
     }
 
     [Fact]
-    public void Order_ValidateCreation_ShouldReturnErrorWhenAddressNotInformed()
+    public void Order_ValidateCreation_ShouldReturnError_WhenAddressIsNotProvided()
     {
         // Arrange
         var order = OrderEntityFactory.BuildWithoutAddress();
-        order.PaymentAuthorized(Guid.NewGuid());
+        order.PaymentAuthorized(Guid.CreateVersion7());
 
         // Act
         var error = order.ValidateForCreation(order.TotalValue);
